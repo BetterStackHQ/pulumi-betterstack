@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_splunk_on_call_integration.example 12345

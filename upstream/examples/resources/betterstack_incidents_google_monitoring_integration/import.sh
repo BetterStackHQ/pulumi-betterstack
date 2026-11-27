@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_google_monitoring_integration.example 12345

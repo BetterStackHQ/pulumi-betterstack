@@ -1,0 +1,1 @@
+terraform import betterstack_collector.example 12345

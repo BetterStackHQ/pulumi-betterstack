@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_prometheus_integration.example 12345

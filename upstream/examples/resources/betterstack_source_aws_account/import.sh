@@ -1,0 +1,1 @@
+terraform import betterstack_source_aws_account.example 12345

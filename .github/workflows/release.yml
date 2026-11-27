@@ -1,0 +1,163 @@
+# Publishes a release of the Better Stack Pulumi provider. This file runs in the vendor repository
+# BetterStackHQ/pulumi-betterstack, never in unified-api: unified-api's pulumi-release workflow
+# exports this tree there with its SDKs already generated for the version, then pushes the vX.Y.Z
+# tag (and sdk/go/vX.Y.Z for the Go module). What is tagged is exactly what is published.
+#
+# Repository secret: NPM_TOKEN (publish rights on @better_stack/pulumi). PyPI and NuGet need none:
+# pulumi_betterstack on PyPI and the better_stack account on NuGet.org trust this repository's
+# release.yml as their Trusted Publisher, and the job proves who it is with a GitHub OIDC token.
+# Maven Central has no trusted publishing, so the Java job runs in the "maven-central" environment
+# (v* tags only, with required reviewers: approving it is the Java release gate) and reads:
+#   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD  a Central Portal user token
+#   GPG_PRIVATE_KEY, GPG_PASSPHRASE                  the ASCII-armored signing key and its passphrase
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  PROVIDER: betterstack
+
+jobs:
+  check:
+    if: github.repository == 'BetterStackHQ/pulumi-betterstack'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: The tag matches the version the SDKs were generated with
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]] || { echo "::error::bad tag $GITHUB_REF_NAME"; exit 1; }
+          test "$(jq -r .version provider/cmd/pulumi-resource-betterstack/schema.json)" = "$version"
+          test "$(jq -r .version sdk/nodejs/package.json)" = "$version"
+          grep -qx "VERSION = \"$version\"" sdk/python/setup.py
+          test "$(cat sdk/dotnet/version.txt)" = "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  provider:
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build provider binaries
+        run: |
+          for target in linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64; do
+            dir="dist/pulumi-resource-${PROVIDER}-v${VERSION}-${target}"
+            GOOS="${target%-*}" GOARCH="${target#*-}" CGO_ENABLED=0 \
+              go build -C provider -ldflags "-X github.com/betterstackhq/pulumi-betterstack/provider.Version=${VERSION}" \
+              -o "../${dir}/pulumi-resource-${PROVIDER}$([ "${target%-*}" = windows ] && echo .exe)" \
+              "./cmd/pulumi-resource-${PROVIDER}"
+            cp LICENSE README.md "$dir/"
+            tar -czf "${dir}.tar.gz" -C "$dir" .
+          done
+          (cd dist && sha256sum ./*.tar.gz > "pulumi-${PROVIDER}_${VERSION}_checksums.txt")
+      - name: Attach binaries to the GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*_checksums.txt
+
+  publish_sdks:
+    # After the binaries: a package must never point at a plugin version that can't be downloaded.
+    needs: [check, provider]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # PyPI and NuGet Trusted Publishing
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Build and check the packages
+        run: |
+          python3 -m pip install build twine
+          REQUIRE_ALL=1 release/package_sdks.sh dist
+          python3 -m twine check dist/*.whl dist/*.tar.gz
+      - name: Publish the npm package
+        run: npm publish dist/*.tgz --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # The publish action uploads every file in its directory, so the Python files get their own.
+      - name: Separate the Python packages
+        run: mkdir pydist && mv dist/*.whl dist/*.tar.gz pydist/
+      - name: Publish the Python package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: pydist/
+      # Trades the job's OIDC token for a short-lived key of the better_stack account on NuGet.org.
+      - name: Sign in to NuGet.org
+        id: nuget
+        uses: NuGet/login@v1
+        with:
+          user: better_stack
+      - name: Publish the .NET package
+        run: dotnet nuget push "dist/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY"
+        env:
+          NUGET_API_KEY: ${{ steps.nuget.outputs.NUGET_API_KEY }}
+
+  publish_java:
+    # After the binaries, like the other SDKs: the jar's plugin.json points at this release's plugin.
+    needs: [check, provider]
+    runs-on: ubuntu-latest
+    environment: maven-central
+    timeout-minutes: 60
+    env:
+      PACKAGE_VERSION: ${{ needs.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # The generated build compiles with a Java 11 toolchain; Gradle itself runs on 21.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            11
+            21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+          cache-disabled: true
+      # The generated build publishes through the Central Portal's OSSRH staging API with the Portal
+      # user token, signs with the in-memory key, then closes and releases the staging repository.
+      - name: Publish the Java package to Maven Central
+        env:
+          PUBLISH_REPO_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          PUBLISH_REPO_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          test -n "$PUBLISH_REPO_USERNAME" -a -n "$SIGNING_KEY" || { echo "::error::the maven-central environment lacks its secrets"; exit 1; }
+          gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
+            publishToSonatype closeAndReleaseSonatypeStagingRepository

@@ -1,0 +1,1 @@
+terraform import betterstack_metadata.example 12345

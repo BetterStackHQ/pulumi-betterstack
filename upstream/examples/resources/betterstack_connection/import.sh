@@ -1,0 +1,1 @@
+terraform import betterstack_connection.example 12345

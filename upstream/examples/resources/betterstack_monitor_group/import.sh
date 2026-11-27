@@ -1,0 +1,1 @@
+terraform import betterstack_monitor_group.example 12345

@@ -1,0 +1,1 @@
+terraform import betterstack_on_call_schedule.example 12345

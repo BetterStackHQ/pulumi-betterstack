@@ -1,0 +1,3 @@
+name: betterstack
+description: A Pulumi resource provider for betterstack.
+language: dotnet

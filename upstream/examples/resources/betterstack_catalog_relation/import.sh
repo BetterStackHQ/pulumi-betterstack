@@ -1,0 +1,1 @@
+terraform import betterstack_catalog_relation.example 12345

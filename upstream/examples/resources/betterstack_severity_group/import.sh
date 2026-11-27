@@ -1,0 +1,1 @@
+terraform import betterstack_severity_group.example 12345

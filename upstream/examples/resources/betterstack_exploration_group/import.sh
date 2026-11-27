@@ -1,0 +1,1 @@
+terraform import betterstack_exploration_group.example 12345

@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_azure_integration.example 12345

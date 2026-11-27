@@ -1,0 +1,1 @@
+terraform import betterstack_alert.example 12345

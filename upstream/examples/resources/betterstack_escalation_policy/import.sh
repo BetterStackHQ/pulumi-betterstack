@@ -1,0 +1,1 @@
+terraform import betterstack_escalation_policy.example 12345

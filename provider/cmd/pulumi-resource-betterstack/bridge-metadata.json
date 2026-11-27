@@ -1,0 +1,2086 @@
+{
+    "auto-aliasing": {
+        "resources": {
+            "betterstack_alert": {
+                "current": "betterstack:index/alert:Alert",
+                "majorVersion": 1,
+                "fields": {
+                    "additional_conditions": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "series_names": {
+                                    "maxItemsOne": false
+                                },
+                                "series_names_except": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "metadata": {
+                        "elem": {
+                            "maxItemsOne": false
+                        }
+                    },
+                    "series_names": {
+                        "maxItemsOne": false
+                    },
+                    "series_names_except": {
+                        "maxItemsOne": false
+                    },
+                    "source_platforms": {
+                        "maxItemsOne": false
+                    },
+                    "variable_values": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_application": {
+                "current": "betterstack:index/application:Application",
+                "majorVersion": 1,
+                "fields": {
+                    "js_tag_configuration": {
+                        "fields": {
+                            "exclude_selectors": {
+                                "maxItemsOne": false
+                            },
+                            "mask_selectors": {
+                                "maxItemsOne": false
+                            },
+                            "shared_session_domains": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    },
+                    "source_types": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_application_group": {
+                "current": "betterstack:index/applicationGroup:ApplicationGroup",
+                "majorVersion": 1
+            },
+            "betterstack_aws_log_group_subscription": {
+                "current": "betterstack:index/awsLogGroupSubscription:AwsLogGroupSubscription",
+                "majorVersion": 1
+            },
+            "betterstack_catalog_record": {
+                "current": "betterstack:index/catalogRecord:CatalogRecord",
+                "majorVersion": 1,
+                "fields": {
+                    "attributes": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_catalog_relation": {
+                "current": "betterstack:index/catalogRelation:CatalogRelation",
+                "majorVersion": 1,
+                "fields": {
+                    "attributes": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_collector": {
+                "current": "betterstack:index/collector:Collector",
+                "majorVersion": 1,
+                "fields": {
+                    "blocked_metrics": {
+                        "maxItemsOne": false
+                    },
+                    "connected_source_ids": {
+                        "maxItemsOne": false
+                    },
+                    "service_fields": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_collector_target": {
+                "current": "betterstack:index/collectorTarget:CollectorTarget",
+                "majorVersion": 1
+            },
+            "betterstack_connection": {
+                "current": "betterstack:index/connection:Connection",
+                "majorVersion": 1,
+                "fields": {
+                    "clusters": {
+                        "maxItemsOne": false
+                    },
+                    "data_sources": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "data_sources": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "ip_allowlist": {
+                        "maxItemsOne": false
+                    },
+                    "team_ids": {
+                        "maxItemsOne": false
+                    },
+                    "team_names": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_dashboard": {
+                "current": "betterstack:index/dashboard:Dashboard",
+                "majorVersion": 1,
+                "fields": {
+                    "charts": {
+                        "maxItemsOne": false
+                    },
+                    "sections": {
+                        "maxItemsOne": false
+                    },
+                    "variables": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "default_values": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "source_ids": {
+                                    "maxItemsOne": false
+                                },
+                                "structured_value": {
+                                    "fields": {
+                                        "canonical_source_ids": {
+                                            "maxItemsOne": false
+                                        },
+                                        "filters": {
+                                            "maxItemsOne": false
+                                        },
+                                        "service_ids": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_dashboard_chart": {
+                "current": "betterstack:index/dashboardChart:DashboardChart",
+                "majorVersion": 1,
+                "fields": {
+                    "queries": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "coordinates": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "funnel_query": {
+                                    "fields": {
+                                        "steps": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "group_by": {
+                                    "maxItemsOne": false
+                                },
+                                "having": {
+                                    "maxItemsOne": false
+                                },
+                                "order_by": {
+                                    "maxItemsOne": false
+                                },
+                                "point_size": {
+                                    "maxItemsOne": false
+                                },
+                                "where": {
+                                    "maxItemsOne": false
+                                },
+                                "x_axis": {
+                                    "maxItemsOne": false
+                                },
+                                "y_axis": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "settings": {
+                        "fields": {
+                            "filtered_releases": {
+                                "maxItemsOne": false
+                            },
+                            "filtered_series": {
+                                "maxItemsOne": false
+                            },
+                            "group_by_columns": {
+                                "maxItemsOne": false
+                            },
+                            "percentage_highlight_columns": {
+                                "maxItemsOne": false
+                            },
+                            "series_order": {
+                                "maxItemsOne": false
+                            },
+                            "value_columns": {
+                                "maxItemsOne": false
+                            },
+                            "x_axis_annotations": {
+                                "maxItemsOne": false
+                            },
+                            "y_axis_annotations": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_dashboard_group": {
+                "current": "betterstack:index/dashboardGroup:DashboardGroup",
+                "majorVersion": 1
+            },
+            "betterstack_dashboard_section": {
+                "current": "betterstack:index/dashboardSection:DashboardSection",
+                "majorVersion": 1
+            },
+            "betterstack_errors_jira_integration": {
+                "current": "betterstack:index/errorsJiraIntegration:ErrorsJiraIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_linear_integration": {
+                "current": "betterstack:index/errorsLinearIntegration:ErrorsLinearIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "linear_label_ids": {
+                        "maxItemsOne": false
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_microsoft_teams_integration": {
+                "current": "betterstack:index/errorsMicrosoftTeamsIntegration:ErrorsMicrosoftTeamsIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "routes": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "applications": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "environments": {
+                                                "maxItemsOne": false
+                                            }
+                                        }
+                                    }
+                                },
+                                "channels": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_slack_integration": {
+                "current": "betterstack:index/errorsSlackIntegration:ErrorsSlackIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_escalation_policy": {
+                "current": "betterstack:index/escalationPolicy:EscalationPolicy",
+                "majorVersion": 1,
+                "fields": {
+                    "steps": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "days": {
+                                    "maxItemsOne": false
+                                },
+                                "metadata_values": {
+                                    "maxItemsOne": false
+                                },
+                                "step_members": {
+                                    "maxItemsOne": false
+                                },
+                                "wait_until_days": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_escalation_policy_group": {
+                "current": "betterstack:index/escalationPolicyGroup:EscalationPolicyGroup",
+                "majorVersion": 1
+            },
+            "betterstack_exploration": {
+                "current": "betterstack:index/exploration:Exploration",
+                "majorVersion": 1,
+                "fields": {
+                    "chart": {
+                        "fields": {
+                            "settings": {
+                                "fields": {
+                                    "filtered_releases": {
+                                        "maxItemsOne": false
+                                    },
+                                    "filtered_series": {
+                                        "maxItemsOne": false
+                                    },
+                                    "group_by_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "percentage_highlight_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "series_order": {
+                                        "maxItemsOne": false
+                                    },
+                                    "value_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "x_axis_annotations": {
+                                        "maxItemsOne": false
+                                    },
+                                    "y_axis_annotations": {
+                                        "maxItemsOne": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "queries": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "coordinates": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "funnel_query": {
+                                    "fields": {
+                                        "steps": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "group_by": {
+                                    "maxItemsOne": false
+                                },
+                                "having": {
+                                    "maxItemsOne": false
+                                },
+                                "order_by": {
+                                    "maxItemsOne": false
+                                },
+                                "point_size": {
+                                    "maxItemsOne": false
+                                },
+                                "where": {
+                                    "maxItemsOne": false
+                                },
+                                "x_axis": {
+                                    "maxItemsOne": false
+                                },
+                                "y_axis": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "variables": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "default_values": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "source_ids": {
+                                    "maxItemsOne": false
+                                },
+                                "structured_value": {
+                                    "fields": {
+                                        "canonical_source_ids": {
+                                            "maxItemsOne": false
+                                        },
+                                        "filters": {
+                                            "maxItemsOne": false
+                                        },
+                                        "service_ids": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_exploration_group": {
+                "current": "betterstack:index/explorationGroup:ExplorationGroup",
+                "majorVersion": 1
+            },
+            "betterstack_extracted_metric": {
+                "current": "betterstack:index/extractedMetric:ExtractedMetric",
+                "majorVersion": 1,
+                "fields": {
+                    "aggregations": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_heartbeat": {
+                "current": "betterstack:index/heartbeat:Heartbeat",
+                "majorVersion": 1,
+                "fields": {
+                    "maintenance_days": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_heartbeat_group": {
+                "current": "betterstack:index/heartbeatGroup:HeartbeatGroup",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_amazon_sns_integration": {
+                "current": "betterstack:index/incidentsAmazonSnsIntegration:IncidentsAmazonSnsIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_aws_cloudwatch_integration": {
+                "current": "betterstack:index/incidentsAwsCloudWatchIntegration:IncidentsAwsCloudWatchIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_azure_integration": {
+                "current": "betterstack:index/incidentsAzureIntegration:IncidentsAzureIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_datadog_integration": {
+                "current": "betterstack:index/incidentsDatadogIntegration:IncidentsDatadogIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_elastic_integration": {
+                "current": "betterstack:index/incidentsElasticIntegration:IncidentsElasticIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_google_monitoring_integration": {
+                "current": "betterstack:index/incidentsGoogleMonitoringIntegration:IncidentsGoogleMonitoringIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_grafana_integration": {
+                "current": "betterstack:index/incidentsGrafanaIntegration:IncidentsGrafanaIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_incoming_email_integration": {
+                "current": "betterstack:index/incidentsIncomingEmailIntegration:IncidentsIncomingEmailIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_incoming_webhook_integration": {
+                "current": "betterstack:index/incidentsIncomingWebhookIntegration:IncidentsIncomingWebhookIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_jira_integration": {
+                "current": "betterstack:index/incidentsJiraIntegration:IncidentsJiraIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_new_relic_integration": {
+                "current": "betterstack:index/incidentsNewRelicIntegration:IncidentsNewRelicIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_outgoing_email_integration": {
+                "current": "betterstack:index/incidentsOutgoingEmailIntegration:IncidentsOutgoingEmailIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "recipients": {
+                        "maxItemsOne": false
+                    },
+                    "templates": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_outgoing_pagerduty_integration": {
+                "current": "betterstack:index/incidentsOutgoingPagerDutyIntegration:IncidentsOutgoingPagerDutyIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_outgoing_webhook_integration": {
+                "current": "betterstack:index/incidentsOutgoingWebhookIntegration:IncidentsOutgoingWebhookIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "custom_webhook_template": {
+                        "fields": {
+                            "headers_template": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    },
+                    "custom_webhook_template_attributes": {
+                        "fields": {
+                            "headers_template": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_incidents_prometheus_integration": {
+                "current": "betterstack:index/incidentsPrometheusIntegration:IncidentsPrometheusIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_splunk_on_call_integration": {
+                "current": "betterstack:index/incidentsSplunkOnCallIntegration:IncidentsSplunkOnCallIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_metadata": {
+                "current": "betterstack:index/metadata:Metadata",
+                "majorVersion": 1,
+                "fields": {
+                    "values": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_monitor": {
+                "current": "betterstack:index/monitor:Monitor",
+                "majorVersion": 1,
+                "fields": {
+                    "expected_status_codes": {
+                        "maxItemsOne": false
+                    },
+                    "maintenance_days": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "regions": {
+                        "maxItemsOne": false
+                    },
+                    "request_headers": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_monitor_group": {
+                "current": "betterstack:index/monitorGroup:MonitorGroup",
+                "majorVersion": 1
+            },
+            "betterstack_on_call_rotation": {
+                "current": "betterstack:index/onCallRotation:OnCallRotation",
+                "majorVersion": 1,
+                "fields": {
+                    "users": {
+                        "maxItemsOne": false
+                    },
+                    "working_hours": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_on_call_schedule": {
+                "current": "betterstack:index/onCallSchedule:OnCallSchedule",
+                "majorVersion": 1,
+                "fields": {
+                    "on_call_users": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "phone_numbers": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "shifts": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "users": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "phone_numbers": {
+                                                "maxItemsOne": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "slack_groups": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "unconnected_users": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_release": {
+                "current": "betterstack:index/release:Release",
+                "majorVersion": 1,
+                "fields": {
+                    "environment": {
+                        "maxItemsOne": false
+                    },
+                    "environments": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_severity": {
+                "current": "betterstack:index/severity:Severity",
+                "majorVersion": 1
+            },
+            "betterstack_severity_group": {
+                "current": "betterstack:index/severityGroup:SeverityGroup",
+                "majorVersion": 1
+            },
+            "betterstack_source": {
+                "current": "betterstack:index/source:Source",
+                "majorVersion": 1,
+                "fields": {
+                    "blocked_metrics": {
+                        "maxItemsOne": false
+                    },
+                    "connected_source_ids": {
+                        "maxItemsOne": false
+                    },
+                    "gcp_metrics_filters": {
+                        "maxItemsOne": false
+                    },
+                    "scrape_request_headers": {
+                        "maxItemsOne": false
+                    },
+                    "scrape_urls": {
+                        "maxItemsOne": false
+                    },
+                    "service_fields": {
+                        "maxItemsOne": false
+                    },
+                    "source_types": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_source_aws_account": {
+                "current": "betterstack:index/sourceAwsAccount:SourceAwsAccount",
+                "majorVersion": 1
+            },
+            "betterstack_source_gcp_project": {
+                "current": "betterstack:index/sourceGcpProject:SourceGcpProject",
+                "majorVersion": 1
+            },
+            "betterstack_source_group": {
+                "current": "betterstack:index/sourceGroup:SourceGroup",
+                "majorVersion": 1
+            },
+            "betterstack_status_page": {
+                "current": "betterstack:index/statusPage:StatusPage",
+                "majorVersion": 1,
+                "fields": {
+                    "ip_allowlist": {
+                        "maxItemsOne": false
+                    },
+                    "navigation_links": {
+                        "maxItemsOne": false
+                    },
+                    "sections": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "resources": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "mark_as_degraded_metadata_rule": {
+                                                "fields": {
+                                                    "values": {
+                                                        "maxItemsOne": false
+                                                    }
+                                                }
+                                            },
+                                            "mark_as_down_metadata_rule": {
+                                                "fields": {
+                                                    "values": {
+                                                        "maxItemsOne": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_status_page_group": {
+                "current": "betterstack:index/statusPageGroup:StatusPageGroup",
+                "majorVersion": 1
+            },
+            "betterstack_team": {
+                "current": "betterstack:index/team:Team",
+                "majorVersion": 1,
+                "fields": {
+                    "incident_grouping_metadata_scope": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_team_member": {
+                "current": "betterstack:index/teamMember:TeamMember",
+                "majorVersion": 1,
+                "fields": {
+                    "mobile_app_platforms": {
+                        "maxItemsOne": false
+                    }
+                }
+            }
+        },
+        "datasources": {
+            "betterstack_alert": {
+                "current": "betterstack:index/getAlert:getAlert",
+                "majorVersion": 1,
+                "fields": {
+                    "additional_conditions": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "series_names": {
+                                    "maxItemsOne": false
+                                },
+                                "series_names_except": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "metadata": {
+                        "elem": {
+                            "maxItemsOne": false
+                        }
+                    },
+                    "series_names": {
+                        "maxItemsOne": false
+                    },
+                    "series_names_except": {
+                        "maxItemsOne": false
+                    },
+                    "source_platforms": {
+                        "maxItemsOne": false
+                    },
+                    "variable_values": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_application": {
+                "current": "betterstack:index/getApplication:getApplication",
+                "majorVersion": 1,
+                "fields": {
+                    "js_tag_configuration": {
+                        "fields": {
+                            "exclude_selectors": {
+                                "maxItemsOne": false
+                            },
+                            "mask_selectors": {
+                                "maxItemsOne": false
+                            },
+                            "shared_session_domains": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    },
+                    "source_types": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_application_group": {
+                "current": "betterstack:index/getApplicationGroup:getApplicationGroup",
+                "majorVersion": 1
+            },
+            "betterstack_aws_log_group_subscription": {
+                "current": "betterstack:index/getAwsLogGroupSubscription:getAwsLogGroupSubscription",
+                "majorVersion": 1
+            },
+            "betterstack_catalog_record": {
+                "current": "betterstack:index/getCatalogRecord:getCatalogRecord",
+                "majorVersion": 1,
+                "fields": {
+                    "attributes": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_catalog_relation": {
+                "current": "betterstack:index/getCatalogRelation:getCatalogRelation",
+                "majorVersion": 1,
+                "fields": {
+                    "attributes": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_collector": {
+                "current": "betterstack:index/getCollector:getCollector",
+                "majorVersion": 1,
+                "fields": {
+                    "blocked_metrics": {
+                        "maxItemsOne": false
+                    },
+                    "connected_source_ids": {
+                        "maxItemsOne": false
+                    },
+                    "service_fields": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_collector_target": {
+                "current": "betterstack:index/getCollectorTarget:getCollectorTarget",
+                "majorVersion": 1
+            },
+            "betterstack_connection": {
+                "current": "betterstack:index/getConnection:getConnection",
+                "majorVersion": 1,
+                "fields": {
+                    "clusters": {
+                        "maxItemsOne": false
+                    },
+                    "data_sources": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "data_sources": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "ip_allowlist": {
+                        "maxItemsOne": false
+                    },
+                    "team_ids": {
+                        "maxItemsOne": false
+                    },
+                    "team_names": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_dashboard": {
+                "current": "betterstack:index/getDashboard:getDashboard",
+                "majorVersion": 1,
+                "fields": {
+                    "charts": {
+                        "maxItemsOne": false
+                    },
+                    "sections": {
+                        "maxItemsOne": false
+                    },
+                    "variables": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "default_values": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "source_ids": {
+                                    "maxItemsOne": false
+                                },
+                                "structured_value": {
+                                    "fields": {
+                                        "canonical_source_ids": {
+                                            "maxItemsOne": false
+                                        },
+                                        "filters": {
+                                            "maxItemsOne": false
+                                        },
+                                        "service_ids": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_dashboard_chart": {
+                "current": "betterstack:index/getDashboardChart:getDashboardChart",
+                "majorVersion": 1,
+                "fields": {
+                    "queries": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "coordinates": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "funnel_query": {
+                                    "fields": {
+                                        "steps": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "group_by": {
+                                    "maxItemsOne": false
+                                },
+                                "having": {
+                                    "maxItemsOne": false
+                                },
+                                "order_by": {
+                                    "maxItemsOne": false
+                                },
+                                "point_size": {
+                                    "maxItemsOne": false
+                                },
+                                "where": {
+                                    "maxItemsOne": false
+                                },
+                                "x_axis": {
+                                    "maxItemsOne": false
+                                },
+                                "y_axis": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "settings": {
+                        "fields": {
+                            "filtered_releases": {
+                                "maxItemsOne": false
+                            },
+                            "filtered_series": {
+                                "maxItemsOne": false
+                            },
+                            "group_by_columns": {
+                                "maxItemsOne": false
+                            },
+                            "percentage_highlight_columns": {
+                                "maxItemsOne": false
+                            },
+                            "series_order": {
+                                "maxItemsOne": false
+                            },
+                            "value_columns": {
+                                "maxItemsOne": false
+                            },
+                            "x_axis_annotations": {
+                                "maxItemsOne": false
+                            },
+                            "y_axis_annotations": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_dashboard_group": {
+                "current": "betterstack:index/getDashboardGroup:getDashboardGroup",
+                "majorVersion": 1
+            },
+            "betterstack_dashboard_section": {
+                "current": "betterstack:index/getDashboardSection:getDashboardSection",
+                "majorVersion": 1
+            },
+            "betterstack_dashboard_template": {
+                "current": "betterstack:index/getDashboardTemplate:getDashboardTemplate",
+                "majorVersion": 1,
+                "fields": {
+                    "categories": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_errors_jira_integration": {
+                "current": "betterstack:index/getErrorsJiraIntegration:getErrorsJiraIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_linear_integration": {
+                "current": "betterstack:index/getErrorsLinearIntegration:getErrorsLinearIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "linear_label_ids": {
+                        "maxItemsOne": false
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_microsoft_teams_integration": {
+                "current": "betterstack:index/getErrorsMicrosoftTeamsIntegration:getErrorsMicrosoftTeamsIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "routes": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "applications": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "environments": {
+                                                "maxItemsOne": false
+                                            }
+                                        }
+                                    }
+                                },
+                                "channels": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_errors_slack_integration": {
+                "current": "betterstack:index/getErrorsSlackIntegration:getErrorsSlackIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "applications": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "environments": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "tag_filter": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_escalation_policy": {
+                "current": "betterstack:index/getEscalationPolicy:getEscalationPolicy",
+                "majorVersion": 1,
+                "fields": {
+                    "steps": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "days": {
+                                    "maxItemsOne": false
+                                },
+                                "metadata_values": {
+                                    "maxItemsOne": false
+                                },
+                                "step_members": {
+                                    "maxItemsOne": false
+                                },
+                                "wait_until_days": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_escalation_policy_group": {
+                "current": "betterstack:index/getEscalationPolicyGroup:getEscalationPolicyGroup",
+                "majorVersion": 1
+            },
+            "betterstack_exploration": {
+                "current": "betterstack:index/getExploration:getExploration",
+                "majorVersion": 1,
+                "fields": {
+                    "chart": {
+                        "fields": {
+                            "settings": {
+                                "fields": {
+                                    "filtered_releases": {
+                                        "maxItemsOne": false
+                                    },
+                                    "filtered_series": {
+                                        "maxItemsOne": false
+                                    },
+                                    "group_by_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "percentage_highlight_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "series_order": {
+                                        "maxItemsOne": false
+                                    },
+                                    "value_columns": {
+                                        "maxItemsOne": false
+                                    },
+                                    "x_axis_annotations": {
+                                        "maxItemsOne": false
+                                    },
+                                    "y_axis_annotations": {
+                                        "maxItemsOne": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "queries": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "coordinates": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "funnel_query": {
+                                    "fields": {
+                                        "steps": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "group_by": {
+                                    "maxItemsOne": false
+                                },
+                                "having": {
+                                    "maxItemsOne": false
+                                },
+                                "order_by": {
+                                    "maxItemsOne": false
+                                },
+                                "point_size": {
+                                    "maxItemsOne": false
+                                },
+                                "where": {
+                                    "maxItemsOne": false
+                                },
+                                "x_axis": {
+                                    "maxItemsOne": false
+                                },
+                                "y_axis": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "variables": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "default_values": {
+                                    "maxItemsOne": false
+                                },
+                                "filters": {
+                                    "maxItemsOne": false
+                                },
+                                "source_ids": {
+                                    "maxItemsOne": false
+                                },
+                                "structured_value": {
+                                    "fields": {
+                                        "canonical_source_ids": {
+                                            "maxItemsOne": false
+                                        },
+                                        "filters": {
+                                            "maxItemsOne": false
+                                        },
+                                        "service_ids": {
+                                            "maxItemsOne": false
+                                        }
+                                    }
+                                },
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_exploration_group": {
+                "current": "betterstack:index/getExplorationGroup:getExplorationGroup",
+                "majorVersion": 1
+            },
+            "betterstack_extracted_metric": {
+                "current": "betterstack:index/getExtractedMetric:getExtractedMetric",
+                "majorVersion": 1,
+                "fields": {
+                    "aggregations": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_gcp_metric": {
+                "current": "betterstack:index/getGcpMetric:getGcpMetric",
+                "majorVersion": 1
+            },
+            "betterstack_heartbeat": {
+                "current": "betterstack:index/getHeartbeat:getHeartbeat",
+                "majorVersion": 1,
+                "fields": {
+                    "maintenance_days": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_heartbeat_group": {
+                "current": "betterstack:index/getHeartbeatGroup:getHeartbeatGroup",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_amazon_sns_integration": {
+                "current": "betterstack:index/getIncidentsAmazonSnsIntegration:getIncidentsAmazonSnsIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_aws_cloudwatch_integration": {
+                "current": "betterstack:index/getIncidentsAwsCloudWatchIntegration:getIncidentsAwsCloudWatchIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_azure_integration": {
+                "current": "betterstack:index/getIncidentsAzureIntegration:getIncidentsAzureIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_datadog_integration": {
+                "current": "betterstack:index/getIncidentsDatadogIntegration:getIncidentsDatadogIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_elastic_integration": {
+                "current": "betterstack:index/getIncidentsElasticIntegration:getIncidentsElasticIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_google_monitoring_integration": {
+                "current": "betterstack:index/getIncidentsGoogleMonitoringIntegration:getIncidentsGoogleMonitoringIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_grafana_integration": {
+                "current": "betterstack:index/getIncidentsGrafanaIntegration:getIncidentsGrafanaIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_incoming_email_integration": {
+                "current": "betterstack:index/getIncidentsIncomingEmailIntegration:getIncidentsIncomingEmailIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_incoming_webhook_integration": {
+                "current": "betterstack:index/getIncidentsIncomingWebhookIntegration:getIncidentsIncomingWebhookIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "acknowledged_rules": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "other_acknowledged_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_resolved_fields": {
+                        "maxItemsOne": false
+                    },
+                    "other_started_fields": {
+                        "maxItemsOne": false
+                    },
+                    "resolved_rules": {
+                        "maxItemsOne": false
+                    },
+                    "started_rules": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_jira_integration": {
+                "current": "betterstack:index/getIncidentsJiraIntegration:getIncidentsJiraIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_new_relic_integration": {
+                "current": "betterstack:index/getIncidentsNewRelicIntegration:getIncidentsNewRelicIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_outgoing_email_integration": {
+                "current": "betterstack:index/getIncidentsOutgoingEmailIntegration:getIncidentsOutgoingEmailIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "recipients": {
+                        "maxItemsOne": false
+                    },
+                    "templates": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_outgoing_pagerduty_integration": {
+                "current": "betterstack:index/getIncidentsOutgoingPagerDutyIntegration:getIncidentsOutgoingPagerDutyIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_outgoing_webhook_integration": {
+                "current": "betterstack:index/getIncidentsOutgoingWebhookIntegration:getIncidentsOutgoingWebhookIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "custom_webhook_template": {
+                        "fields": {
+                            "headers_template": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    },
+                    "custom_webhook_template_attributes": {
+                        "fields": {
+                            "headers_template": {
+                                "maxItemsOne": false
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_incidents_prometheus_integration": {
+                "current": "betterstack:index/getIncidentsPrometheusIntegration:getIncidentsPrometheusIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_incidents_slack_integration": {
+                "current": "betterstack:index/getIncidentsSlackIntegration:getIncidentsSlackIntegration",
+                "majorVersion": 1,
+                "fields": {
+                    "alert_options": {
+                        "maxItemsOne": false
+                    },
+                    "channel_invitees": {
+                        "maxItemsOne": false
+                    },
+                    "status_page_update_resources": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_incidents_splunk_on_call_integration": {
+                "current": "betterstack:index/getIncidentsSplunkOnCallIntegration:getIncidentsSplunkOnCallIntegration",
+                "majorVersion": 1
+            },
+            "betterstack_ip_list": {
+                "current": "betterstack:index/getIpList:getIpList",
+                "majorVersion": 1,
+                "fields": {
+                    "all_clusters": {
+                        "maxItemsOne": false
+                    },
+                    "filter_clusters": {
+                        "maxItemsOne": false
+                    },
+                    "ips": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_metadata": {
+                "current": "betterstack:index/getMetadata:getMetadata",
+                "majorVersion": 1,
+                "fields": {
+                    "values": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_monitor": {
+                "current": "betterstack:index/getMonitor:getMonitor",
+                "majorVersion": 1,
+                "fields": {
+                    "expected_status_codes": {
+                        "maxItemsOne": false
+                    },
+                    "maintenance_days": {
+                        "maxItemsOne": false
+                    },
+                    "metadata": {
+                        "elem": {
+                            "fields": {
+                                "values": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "regions": {
+                        "maxItemsOne": false
+                    },
+                    "request_headers": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_monitor_group": {
+                "current": "betterstack:index/getMonitorGroup:getMonitorGroup",
+                "majorVersion": 1
+            },
+            "betterstack_on_call_rotation": {
+                "current": "betterstack:index/getOnCallRotation:getOnCallRotation",
+                "majorVersion": 1,
+                "fields": {
+                    "users": {
+                        "maxItemsOne": false
+                    },
+                    "working_hours": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_on_call_schedule": {
+                "current": "betterstack:index/getOnCallSchedule:getOnCallSchedule",
+                "majorVersion": 1,
+                "fields": {
+                    "on_call_users": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "phone_numbers": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    },
+                    "shifts": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "users": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "phone_numbers": {
+                                                "maxItemsOne": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "slack_groups": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "unconnected_users": {
+                                    "maxItemsOne": false
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_release": {
+                "current": "betterstack:index/getRelease:getRelease",
+                "majorVersion": 1,
+                "fields": {
+                    "environment": {
+                        "maxItemsOne": false
+                    },
+                    "environments": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_role": {
+                "current": "betterstack:index/getRole:getRole",
+                "majorVersion": 1
+            },
+            "betterstack_severity": {
+                "current": "betterstack:index/getSeverity:getSeverity",
+                "majorVersion": 1
+            },
+            "betterstack_severity_group": {
+                "current": "betterstack:index/getSeverityGroup:getSeverityGroup",
+                "majorVersion": 1
+            },
+            "betterstack_source": {
+                "current": "betterstack:index/getSource:getSource",
+                "majorVersion": 1,
+                "fields": {
+                    "blocked_metrics": {
+                        "maxItemsOne": false
+                    },
+                    "connected_source_ids": {
+                        "maxItemsOne": false
+                    },
+                    "gcp_metrics_filters": {
+                        "maxItemsOne": false
+                    },
+                    "scrape_request_headers": {
+                        "maxItemsOne": false
+                    },
+                    "scrape_urls": {
+                        "maxItemsOne": false
+                    },
+                    "service_fields": {
+                        "maxItemsOne": false
+                    },
+                    "source_types": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_source_group": {
+                "current": "betterstack:index/getSourceGroup:getSourceGroup",
+                "majorVersion": 1
+            },
+            "betterstack_status_page": {
+                "current": "betterstack:index/getStatusPage:getStatusPage",
+                "majorVersion": 1,
+                "fields": {
+                    "ip_allowlist": {
+                        "maxItemsOne": false
+                    },
+                    "navigation_links": {
+                        "maxItemsOne": false
+                    },
+                    "sections": {
+                        "maxItemsOne": false,
+                        "elem": {
+                            "fields": {
+                                "resources": {
+                                    "maxItemsOne": false,
+                                    "elem": {
+                                        "fields": {
+                                            "mark_as_degraded_metadata_rule": {
+                                                "fields": {
+                                                    "values": {
+                                                        "maxItemsOne": false
+                                                    }
+                                                }
+                                            },
+                                            "mark_as_down_metadata_rule": {
+                                                "fields": {
+                                                    "values": {
+                                                        "maxItemsOne": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "betterstack_status_page_group": {
+                "current": "betterstack:index/getStatusPageGroup:getStatusPageGroup",
+                "majorVersion": 1
+            },
+            "betterstack_team": {
+                "current": "betterstack:index/getTeam:getTeam",
+                "majorVersion": 1,
+                "fields": {
+                    "incident_grouping_metadata_scope": {
+                        "maxItemsOne": false
+                    }
+                }
+            },
+            "betterstack_team_member": {
+                "current": "betterstack:index/getTeamMember:getTeamMember",
+                "majorVersion": 1,
+                "fields": {
+                    "mobile_app_platforms": {
+                        "maxItemsOne": false
+                    }
+                }
+            }
+        }
+    },
+    "auto-settings": {},
+    "default-resource-schema-fixups": {
+        "resources": {
+            "betterstack_alert": {},
+            "betterstack_application": {},
+            "betterstack_application_group": {},
+            "betterstack_aws_log_group_subscription": {},
+            "betterstack_catalog_record": {},
+            "betterstack_catalog_relation": {},
+            "betterstack_collector": {},
+            "betterstack_collector_target": {},
+            "betterstack_connection": {},
+            "betterstack_dashboard": {},
+            "betterstack_dashboard_chart": {},
+            "betterstack_dashboard_group": {},
+            "betterstack_dashboard_section": {},
+            "betterstack_errors_jira_integration": {
+                "fields": {
+                    "id": {
+                        "name": "errorsJiraIntegrationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "errorsJiraIntegrationId"
+                }
+            },
+            "betterstack_errors_linear_integration": {
+                "fields": {
+                    "id": {
+                        "name": "errorsLinearIntegrationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "errorsLinearIntegrationId"
+                }
+            },
+            "betterstack_errors_microsoft_teams_integration": {
+                "fields": {
+                    "id": {
+                        "name": "errorsMicrosoftTeamsIntegrationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "errorsMicrosoftTeamsIntegrationId"
+                }
+            },
+            "betterstack_errors_slack_integration": {
+                "fields": {
+                    "id": {
+                        "name": "errorsSlackIntegrationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "errorsSlackIntegrationId"
+                }
+            },
+            "betterstack_escalation_policy": {},
+            "betterstack_escalation_policy_group": {},
+            "betterstack_exploration": {},
+            "betterstack_exploration_group": {},
+            "betterstack_extracted_metric": {},
+            "betterstack_heartbeat": {},
+            "betterstack_heartbeat_group": {},
+            "betterstack_incidents_amazon_sns_integration": {},
+            "betterstack_incidents_aws_cloudwatch_integration": {},
+            "betterstack_incidents_azure_integration": {},
+            "betterstack_incidents_datadog_integration": {},
+            "betterstack_incidents_elastic_integration": {},
+            "betterstack_incidents_google_monitoring_integration": {},
+            "betterstack_incidents_grafana_integration": {},
+            "betterstack_incidents_incoming_email_integration": {},
+            "betterstack_incidents_incoming_webhook_integration": {},
+            "betterstack_incidents_jira_integration": {
+                "fields": {
+                    "id": {
+                        "name": "incidentsJiraIntegrationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "incidentsJiraIntegrationId"
+                }
+            },
+            "betterstack_incidents_new_relic_integration": {},
+            "betterstack_incidents_outgoing_email_integration": {},
+            "betterstack_incidents_outgoing_pagerduty_integration": {},
+            "betterstack_incidents_outgoing_webhook_integration": {},
+            "betterstack_incidents_prometheus_integration": {},
+            "betterstack_incidents_splunk_on_call_integration": {},
+            "betterstack_metadata": {},
+            "betterstack_monitor": {},
+            "betterstack_monitor_group": {},
+            "betterstack_on_call_rotation": {
+                "fields": {
+                    "id": {
+                        "name": "onCallRotationId"
+                    }
+                },
+                "computeID": {
+                    "kind": "delegate",
+                    "field": "onCallRotationId"
+                }
+            },
+            "betterstack_on_call_schedule": {},
+            "betterstack_release": {},
+            "betterstack_severity": {},
+            "betterstack_severity_group": {},
+            "betterstack_source": {},
+            "betterstack_source_aws_account": {
+                "computeID": {
+                    "kind": "missing"
+                }
+            },
+            "betterstack_source_gcp_project": {
+                "computeID": {
+                    "kind": "missing"
+                }
+            },
+            "betterstack_source_group": {},
+            "betterstack_status_page": {},
+            "betterstack_status_page_group": {},
+            "betterstack_team": {},
+            "betterstack_team_member": {}
+        }
+    }
+}

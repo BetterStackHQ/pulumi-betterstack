@@ -1,0 +1,5 @@
+/bin/
+/.baseline/
+/.gen-tmp/
+/sdk/java/build/
+/sdk/java/.gradle/

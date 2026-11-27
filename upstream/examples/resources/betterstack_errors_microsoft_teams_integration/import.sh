@@ -1,0 +1,1 @@
+terraform import betterstack_errors_microsoft_teams_integration.example 12345

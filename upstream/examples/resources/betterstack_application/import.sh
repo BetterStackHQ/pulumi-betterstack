@@ -1,0 +1,1 @@
+terraform import betterstack_application.example 12345

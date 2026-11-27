@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_new_relic_integration.example 12345

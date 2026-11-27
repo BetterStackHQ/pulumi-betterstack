@@ -1,0 +1,171 @@
+# Diagnostics `pulumi preview` prints for each resource's replace fixture.
+# Regenerate: go test ./provider -run TestCLILifecycle -update-preview-messages
+
+alert
+  warning: [WARNING] Changing dashboardId replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+application
+  warning: [WARNING] Changing platform replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+application_group
+  (no replace fixture: no create-only input)
+
+aws_log_group_subscription
+  warning: [WARNING] Changing region replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+catalog_record
+  (no replace fixture: no create-only input)
+
+catalog_relation
+  warning: [WARNING] Changing organizationId replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+collector
+  warning: [WARNING] Changing platform replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+collector_target
+  warning: [WARNING] Changing kind replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+connection
+  warning: [WARNING] Changing clientType replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+dashboard
+  warning: [WARNING] Changing product replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+dashboard_chart
+  (no replace fixture: no create-only input)
+
+dashboard_group
+  (no replace fixture: no create-only input)
+
+dashboard_section
+  (no replace fixture: no create-only input)
+
+errors_jira_integration
+  (no replace fixture: no create-only input)
+
+errors_linear_integration
+  (no replace fixture: no create-only input)
+
+errors_microsoft_teams_integration
+  (no replace fixture: no create-only input)
+
+errors_slack_integration
+  (no replace fixture: no create-only input)
+
+escalation_policy
+  (no replace fixture: no create-only input)
+
+escalation_policy_group
+  (no replace fixture: no create-only input)
+
+exploration
+  warning: [WARNING] Changing sourceType replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+exploration_group
+  (no replace fixture: no create-only input)
+
+extracted_metric
+  (no replace fixture: no create-only input)
+
+heartbeat
+  (no replace fixture: no create-only input)
+
+heartbeat_group
+  (no replace fixture: no create-only input)
+
+incidents_amazon_sns_integration
+  (no replace fixture: no create-only input)
+
+incidents_aws_cloudwatch_integration
+  (no replace fixture: no create-only input)
+
+incidents_azure_integration
+  (no replace fixture: no create-only input)
+
+incidents_datadog_integration
+  (no replace fixture: no create-only input)
+
+incidents_elastic_integration
+  (no replace fixture: no create-only input)
+
+incidents_google_monitoring_integration
+  (no replace fixture: no create-only input)
+
+incidents_grafana_integration
+  (no replace fixture: no create-only input)
+
+incidents_incoming_email_integration
+  (no replace fixture: no create-only input)
+
+incidents_incoming_webhook_integration
+  (no replace fixture: no create-only input)
+
+incidents_jira_integration
+  (no replace fixture: no create-only input)
+
+incidents_new_relic_integration
+  (no replace fixture: no create-only input)
+
+incidents_outgoing_email_integration
+  (no replace fixture: no create-only input)
+
+incidents_outgoing_pagerduty_integration
+  (no replace fixture: no create-only input)
+
+incidents_outgoing_webhook_integration
+  warning: [WARNING] Changing triggerType replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+incidents_prometheus_integration
+  (no replace fixture: no create-only input)
+
+incidents_splunk_on_call_integration
+  (no replace fixture: no create-only input)
+
+metadata
+  warning: [WARNING] Changing mode replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+monitor
+  (no replace fixture: no create-only input)
+
+monitor_group
+  (no replace fixture: no create-only input)
+
+on_call_rotation
+  (no replace fixture: no create-only input)
+
+on_call_schedule
+  (no replace fixture: no create-only input)
+
+release
+  warning: [WARNING] Changing teamId replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+severity
+  (no replace fixture: no create-only input)
+
+severity_group
+  (no replace fixture: no create-only input)
+
+source
+  warning: [WARNING] Changing platform replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+source_aws_account
+  (no replace fixture: no create-only input)
+
+source_gcp_project
+  (no replace fixture: no create-only input)
+
+source_group
+  (no replace fixture: no create-only input)
+
+status_page
+  warning: [WARNING] Changing organizationId replaces this resource: Pulumi deletes this one first, then creates the new one.
+
+status_page_group
+  warning: [WARNING] Changing organizationId replaces this resource: Pulumi creates the new one first, then deletes this one.
+
+team
+  (no replace fixture: no create-only input)
+
+team_member
+  warning: [WARNING] Changing email replaces this resource: Pulumi creates the new one first, then deletes this one.
+  warning: [WARNING] Removing roleId keeps its current value in Better Stack: it has no default to reset to. Set it to the value you want instead.

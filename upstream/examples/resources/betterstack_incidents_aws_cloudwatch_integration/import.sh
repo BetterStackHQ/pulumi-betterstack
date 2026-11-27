@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_aws_cloudwatch_integration.example 12345

@@ -1,0 +1,1 @@
+terraform import betterstack_team_member.example 12345

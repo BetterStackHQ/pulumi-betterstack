@@ -1,0 +1,1 @@
+terraform import betterstack_status_page.example 12345

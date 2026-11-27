@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_elastic_integration.example 12345

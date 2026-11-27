@@ -1,0 +1,1 @@
+terraform import betterstack_dashboard_group.example 12345

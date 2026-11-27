@@ -1,0 +1,1 @@
+terraform import betterstack_incidents_incoming_email_integration.example 12345

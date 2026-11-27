@@ -1,0 +1,1 @@
+terraform import betterstack_heartbeat.example 12345
