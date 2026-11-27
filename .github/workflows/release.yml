@@ -145,6 +145,8 @@ jobs:
         with:
           dotnet-version: 8.x
       - name: Build and check the packages
+        env:
+          PackageId: BetterStack.Pulumi
         run: |
           python3 -m pip install build twine
           REQUIRE_ALL=1 release/package_sdks.sh dist
