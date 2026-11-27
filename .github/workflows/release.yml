@@ -7,15 +7,15 @@
 # pulumi_betterstack on PyPI and the better_stack account on NuGet.org trust this repository's
 # release.yml as their Trusted Publisher, and the job proves who it is with a GitHub OIDC token.
 # Maven Central has no trusted publishing, so the Java job runs in the "maven-central" environment
-# (v* tags only, with required reviewers: approving it is the Java release gate) and reads:
+# (v* tags, and main for a dispatch, with required reviewers: approving it is the Java release
+# gate) and reads:
 #   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD  a Central Portal user token
 #   GPG_PRIVATE_KEY, GPG_PASSPHRASE                  the ASCII-armored signing key and its passphrase
 #
 # A tag whose binaries are on its release but whose packages didn't all publish is finished by a
 # dispatch with that tag: it publishes npm, PyPI and NuGet from the tag's tree and skips what a
-# registry already has. Run the dispatch on main, so it uses this workflow file, and the package
-# contents still come from the tag. Maven Central only admits tag refs, so a failed Java job is
-# re-run in its tag's own run instead.
+# registry already has, and with java=true it also publishes the Java package. Run the dispatch on
+# main, so it uses this workflow file, and the package contents still come from the tag.
 name: release
 
 on:
@@ -28,6 +28,10 @@ on:
         description: "An existing vX.Y.Z tag whose release has its binaries: publish the packages that are missing"
         type: string
         required: true
+      java:
+        description: "Also publish the Java package to Maven Central (waits for the maven-central approval)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -176,7 +180,7 @@ jobs:
   publish_java:
     # After the binaries, like the other SDKs: the jar's plugin.json points at this release's plugin.
     needs: [check, provider]
-    if: github.event_name == 'push'
+    if: ${{ !cancelled() && needs.check.result == 'success' && contains(fromJSON('["success", "skipped"]'), needs.provider.result) && (github.event_name == 'push' || inputs.java) }}
     runs-on: ubuntu-latest
     environment: maven-central
     timeout-minutes: 60
@@ -185,7 +189,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ needs.check.outputs.ref }}
           persist-credentials: false
+      # pulumi-java leaves the POM's name and developer empty for a package not published by
+      # Pulumi, and Maven Central rejects a POM without them ("Project name is missing").
+      - name: Name the project and its developer in the POM
+        run: |
+          f=sdk/java/build.gradle
+          sed -i \
+            -e 's/^\(                inceptionYear = \)""$/\1"2026"/' \
+            -e 's/^\(                name = \)""$/\1"pulumi-betterstack"/' \
+            -e 's/^\(                        id = \)""$/\1"betterstack"/' \
+            -e 's/^\(                        name = \)""$/\1"Better Stack"/' \
+            -e 's/^\(                        email = \)""$/\1"hello@betterstack.com"/' "$f"
+          ! grep -nE '^ *(inceptionYear|name|id|email) = ""$' "$f" || { echo "::error::$f still has an empty POM field"; exit 1; }
       # The generated build compiles with a Java 11 toolchain; Gradle itself runs on 21.
       - uses: actions/setup-java@v4
         with:
