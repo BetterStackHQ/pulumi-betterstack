@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/BetterStackHQ/pulumi-betterstack</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BetterStackHQ/pulumi-betterstack</RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
 
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>

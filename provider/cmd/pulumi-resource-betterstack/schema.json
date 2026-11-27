@@ -1,5 +1,5 @@
 {
-    "version": "1.4.1",
+    "version": "1.4.2",
     "name": "betterstack",
     "displayName": "Better Stack",
     "description": "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.",

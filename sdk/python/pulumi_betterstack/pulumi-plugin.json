@@ -1,6 +1,6 @@
 {
   "resource": true,
   "name": "betterstack",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "server": "github://api.github.com/BetterStackHQ/pulumi-betterstack"
 }
