@@ -7,15 +7,16 @@
 # pulumi_betterstack on PyPI and the better_stack account on NuGet.org trust this repository's
 # release.yml as their Trusted Publisher, and the job proves who it is with a GitHub OIDC token.
 # Maven Central has no trusted publishing, so the Java job runs in the "maven-central" environment
-# (v* tags, and main for a dispatch, with required reviewers: approving it is the Java release
-# gate) and reads:
+# (v* tags only, with required reviewers: approving it is the Java release gate) and reads:
 #   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD  a Central Portal user token
 #   GPG_PRIVATE_KEY, GPG_PASSPHRASE                  the ASCII-armored signing key and its passphrase
 #
 # A tag whose binaries are on its release but whose packages didn't all publish is finished by a
 # dispatch with that tag: it publishes npm, PyPI and NuGet from the tag's tree and skips what a
 # registry already has, and with java=true it also publishes the Java package. Run the dispatch on
-# main, so it uses this workflow file, and the package contents still come from the tag.
+# main, so it uses this workflow file, and the package contents still come from the tag. Since
+# maven-central admits only v* tags, a java=true dispatch needs main added to its deployment refs
+# for that run, and taken out again after.
 name: release
 
 on:
