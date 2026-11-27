@@ -150,14 +150,6 @@ jobs:
           REQUIRE_ALL=1 release/package_sdks.sh dist
           python3 -m twine check dist/*.whl dist/*.tar.gz
       # The ./ matters: npm reads a bare dist/name.tgz as the GitHub repository dist/name.tgz.
-      # One-off for v1.4.0, whose tree predates the BetterStack.Pulumi package ID (nuget.org reserves Pulumi.*).
-      - name: Pack the .NET package as BetterStack.Pulumi
-        run: |
-          rm dist/*.nupkg
-          cp -R sdk/dotnet "$RUNNER_TEMP/dotnet"
-          dotnet build "$RUNNER_TEMP/dotnet" -c Release -p:Version="$VERSION" -p:PackageId=BetterStack.Pulumi >/dev/null
-          cp "$RUNNER_TEMP"/dotnet/bin/Release/BetterStack.Pulumi.*.nupkg dist/
-          ls dist/*.nupkg
       - name: Publish the npm package
         run: |
           if npm view "@better_stack/pulumi@$VERSION" version >/dev/null 2>&1; then
