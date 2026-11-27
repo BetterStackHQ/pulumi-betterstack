@@ -174,7 +174,14 @@ jobs:
         with:
           user: better_stack
       - name: Publish the .NET package
-        run: dotnet nuget push "dist/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+        # Not --skip-duplicate: it reads every 409 as "already exists", a reserved package ID too.
+        run: |
+          id="$(basename dist/*.nupkg ".$VERSION.nupkg")"
+          if curl -fsS "https://api.nuget.org/v3-flatcontainer/${id,,}/index.json" | jq -e --arg v "$VERSION" '.versions | index($v)' >/dev/null; then
+            echo "$id $VERSION is already on NuGet"
+          else
+            dotnet nuget push dist/*.nupkg --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY"
+          fi
         env:
           NUGET_API_KEY: ${{ steps.nuget.outputs.NUGET_API_KEY }}
 
