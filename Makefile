@@ -74,6 +74,21 @@ build_sdks: schema
 	TMPDIR=$(GEN_TMP) go run -ldflags "$(LDFLAGS)" ./provider/cmd/$(TFGEN) python --out sdk/python
 	TMPDIR=$(GEN_TMP) go run -ldflags "$(LDFLAGS)" ./provider/cmd/$(TFGEN) nodejs --out sdk/nodejs
 	TMPDIR=$(GEN_TMP) go run -ldflags "$(LDFLAGS)" ./provider/cmd/$(TFGEN) dotnet --out sdk/dotnet
+	# The generator downloads logoUrl into the NuGet icon, which must be PNG or JPEG, and logoUrl is the
+	# SVG the Pulumi Registry shows: the icon is the committed PNG instead.
+	cp assets/logo.png sdk/dotnet/logo.png
+	# The NuGet package ID would be the project name, Pulumi.BetterStack, but nuget.org reserves the Pulumi.
+	# prefix for Pulumi. The namespace stays Pulumi.BetterStack. Fails if the generated line ever changes.
+	grep -qx '    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>' sdk/dotnet/Pulumi.BetterStack.csproj
+	sed -i.bak 's#^    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>$$#&\n    <PackageId>BetterStack.Pulumi</PackageId>#' sdk/dotnet/Pulumi.BetterStack.csproj && rm sdk/dotnet/Pulumi.BetterStack.csproj.bak
+	# The generated project packs no README, so nuget.org shows "Your package is missing a README".
+	grep -qx '</Project>' sdk/dotnet/Pulumi.BetterStack.csproj
+	sed -i.bak -e 's#^    <PackageId>BetterStack.Pulumi</PackageId>$$#&\n    <PackageReadmeFile>README.md</PackageReadmeFile>#' \
+	  -e 's#^</Project>$$#  <ItemGroup>\n    <None Include="README.md" Pack="True" PackagePath="" />\n  </ItemGroup>\n\n&#' sdk/dotnet/Pulumi.BetterStack.csproj && rm sdk/dotnet/Pulumi.BetterStack.csproj.bak
+	# NuGet's search tags are the schema's keywords, as npm and PyPI get them (less the Registry's category tag).
+	ruby -rjson -e 'f = ARGV[1]; tags = JSON.parse(File.read(ARGV[0]))["keywords"].reject { |k| k.start_with?("category/") }.join(";"); \
+	  s = File.read(f).sub(%r{^    <PackageReadmeFile>README.md</PackageReadmeFile>\n}) { |m| "#{m}    <PackageTags>#{tags}</PackageTags>\n" }; \
+	  abort("no PackageReadmeFile line in #{f}") unless s.include?("<PackageTags>"); File.write(f, s)' $(SCHEMA_DIR)/schema.json sdk/dotnet/Pulumi.BetterStack.csproj
 	TMPDIR=$(GEN_TMP) go run -ldflags "$(LDFLAGS)" ./provider/cmd/$(TFGEN) java   --out sdk/java
 	# pulumi-java names the Maven artifact after the Pulumi package (betterstack) and has no setting for it;
 	# the published coordinates are com.betterstack:pulumi. Fails if the generated line ever changes.

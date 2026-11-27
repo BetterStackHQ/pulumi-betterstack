@@ -44,6 +44,8 @@ if command -v dotnet >/dev/null 2>&1; then
   cp "$work/dotnet"/bin/Release/*.nupkg "$dist/"
   # SDK generation downloads logoUrl into the icon; a failed download leaves the error page there.
   python3 -c 'import sys,zipfile; z=zipfile.ZipFile(sys.argv[1]); sys.exit(0 if z.read("logo.png")[:8]==b"\x89PNG\r\n\x1a\n" else "NuGet package icon logo.png is not a PNG")' "$dist"/*.nupkg
+  # nuget.org shows this README on the package page; without it the page says the README is missing.
+  python3 -c 'import sys,zipfile; sys.exit(0 if "README.md" in zipfile.ZipFile(sys.argv[1]).namelist() else "NuGet package lacks README.md")' "$dist"/*.nupkg
 elif [ "${REQUIRE_ALL:-}" = 1 ]; then
   echo "dotnet is missing and REQUIRE_ALL=1" >&2; exit 1
 else
@@ -93,7 +95,7 @@ found["wheel version"] = re.search(r"pulumi_betterstack-([^-]+)-", whl.filename)
 found["wheel pulumi-plugin.json"] = json.loads(whl.read("pulumi_betterstack/pulumi-plugin.json"))["version"]
 for nupkg in glob.glob(f"{dist}/*.nupkg"):
     z = zipfile.ZipFile(nupkg)
-    found["nupkg version"] = re.search(r"Pulumi\.BetterStack\.(.+)\.nupkg$", nupkg).group(1)
+    found["nupkg version"] = re.search(r"BetterStack\.Pulumi\.(.+)\.nupkg$", nupkg).group(1)
     for n in z.namelist():
         if n.endswith("pulumi-plugin.json"): found[f"nupkg {n}"] = json.loads(z.read(n))["version"]
         if n.endswith("version.txt"): found[f"nupkg {n}"] = z.read(n).decode().strip()

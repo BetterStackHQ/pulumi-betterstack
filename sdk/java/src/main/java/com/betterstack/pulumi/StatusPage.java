@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### Create a status page
+ * ### Serve a status page from your own domain
  * 
  * <pre>
  * {@code
@@ -50,11 +50,16 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new StatusPage("example", StatusPageArgs.builder()
- *             .companyUrl("https://best-company.com")
- *             .companyName("Best company")
- *             .subdomain("best-company-tokyo")
- *             .timezone("Tokyo")
+ *         var public_ = new StatusPage("public", StatusPageArgs.builder()
+ *             .companyName("Example, Inc.")
+ *             .companyUrl("https://example.org")
+ *             .subdomain("example-inc-status")
+ *             .customDomain("status.example.org")
+ *             .timezone("UTC")
+ *             .design("v2")
+ *             .theme("system")
+ *             .subscribable(true)
+ *             .automaticReports(true)
  *             .build());
  * 
  *     }
@@ -62,7 +67,7 @@ import javax.annotation.Nullable;
  * }
  * </pre>
  * 
- * ### In a status page group
+ * ### Show monitors in sections
  * 
  * <pre>
  * {@code
@@ -71,10 +76,12 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.StatusPageGroup;
- * import com.betterstack.pulumi.StatusPageGroupArgs;
+ * import com.betterstack.pulumi.Monitor;
+ * import com.betterstack.pulumi.MonitorArgs;
  * import com.betterstack.pulumi.StatusPage;
  * import com.betterstack.pulumi.StatusPageArgs;
+ * import com.betterstack.pulumi.inputs.StatusPageSectionArgs;
+ * import com.betterstack.pulumi.inputs.StatusPageSectionResourceArgs;
  * import java.util.ArrayList;
  * import java.util.Arrays;
  * import java.util.Map;
@@ -88,17 +95,41 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new StatusPageGroup("example", StatusPageGroupArgs.builder()
- *             .name("Production Status Pages")
- *             .sortIndex(1)
+ *         var website = new Monitor("website", MonitorArgs.builder()
+ *             .url("https://uptime.betterstack.com")
+ *             .pronounceableName("Website")
  *             .build());
  * 
- *         var inStatusPageGroup = new StatusPage("inStatusPageGroup", StatusPageArgs.builder()
- *             .companyUrl("https://best-company.com")
- *             .companyName("Best company")
- *             .subdomain("best-company-tokyo")
- *             .timezone("Tokyo")
- *             .statusPageGroupId(example.id())
+ *         var api = new Monitor("api", MonitorArgs.builder()
+ *             .url("https://uptime.betterstack.com/api/v2/monitors")
+ *             .monitorType("expected_status_code")
+ *             .expectedStatusCodes(401)
+ *             .pronounceableName("API")
+ *             .build());
+ * 
+ *         var services = new StatusPage("services", StatusPageArgs.builder()
+ *             .companyName("Example, Inc.")
+ *             .subdomain("example-inc-services")
+ *             .timezone("UTC")
+ *             .sections(            
+ *                 StatusPageSectionArgs.builder()
+ *                     .name("Website")
+ *                     .resources(StatusPageSectionResourceArgs.builder()
+ *                         .resourceType("Monitor")
+ *                         .resourceId(website.id())
+ *                         .publicName("Website")
+ *                         .widgetType("history")
+ *                         .build())
+ *                     .build(),
+ *                 StatusPageSectionArgs.builder()
+ *                     .name("API")
+ *                     .resources(StatusPageSectionResourceArgs.builder()
+ *                         .resourceType("Monitor")
+ *                         .resourceId(api.id())
+ *                         .publicName("Public API")
+ *                         .widgetType("response_times")
+ *                         .build())
+ *                     .build())
  *             .build());
  * 
  *     }

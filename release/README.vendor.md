@@ -7,7 +7,7 @@ of the Better Stack API.
 - Docs: [Pulumi Registry](https://www.pulumi.com/registry/packages/betterstack/) and
   [`docs/_index.md`](docs/_index.md)
 <!-- generated:packages -->
-- Packages: npm [`@better_stack/pulumi`](https://www.npmjs.com/package/@better_stack/pulumi), PyPI [`pulumi_betterstack`](https://pypi.org/project/pulumi-betterstack/), NuGet [`Pulumi.BetterStack`](https://www.nuget.org/packages/Pulumi.BetterStack), Maven Central [`com.betterstack:pulumi`](https://central.sonatype.com/artifact/com.betterstack/pulumi) (package `com.betterstack.pulumi`), Go `github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack`
+- Packages: npm [`@better_stack/pulumi`](https://www.npmjs.com/package/@better_stack/pulumi), PyPI [`pulumi_betterstack`](https://pypi.org/project/pulumi-betterstack/), NuGet [`BetterStack.Pulumi`](https://www.nuget.org/packages/BetterStack.Pulumi), Maven Central [`com.betterstack:pulumi`](https://central.sonatype.com/artifact/com.betterstack/pulumi) (package `com.betterstack.pulumi`), Go `github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack`
 <!-- /generated:packages -->
 
 This repository is published from Better Stack's API description, where the provider is built and

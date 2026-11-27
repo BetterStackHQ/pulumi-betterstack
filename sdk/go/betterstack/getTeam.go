@@ -28,7 +28,7 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := betterstack.GetTeam(ctx, &betterstack.LookupTeamArgs{
-//				Id: "12345",
+//				Id: "t123",
 //			}, nil)
 //			if err != nil {
 //				return err

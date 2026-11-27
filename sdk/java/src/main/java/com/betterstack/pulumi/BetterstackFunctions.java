@@ -13983,7 +13983,7 @@ public final class BetterstackFunctions {
      * 
      *     public static void stack(Context ctx) {
      *         final var example = BetterstackFunctions.getTeam(GetTeamArgs.builder()
-     *             .id("12345")
+     *             .id("t123")
      *             .build());
      * 
      *     }
@@ -14023,7 +14023,7 @@ public final class BetterstackFunctions {
      * 
      *     public static void stack(Context ctx) {
      *         final var example = BetterstackFunctions.getTeam(GetTeamArgs.builder()
-     *             .id("12345")
+     *             .id("t123")
      *             .build());
      * 
      *     }
@@ -14063,7 +14063,7 @@ public final class BetterstackFunctions {
      * 
      *     public static void stack(Context ctx) {
      *         final var example = BetterstackFunctions.getTeam(GetTeamArgs.builder()
-     *             .id("12345")
+     *             .id("t123")
      *             .build());
      * 
      *     }
@@ -14103,7 +14103,7 @@ public final class BetterstackFunctions {
      * 
      *     public static void stack(Context ctx) {
      *         final var example = BetterstackFunctions.getTeam(GetTeamArgs.builder()
-     *             .id("12345")
+     *             .id("t123")
      *             .build());
      * 
      *     }
@@ -14143,7 +14143,7 @@ public final class BetterstackFunctions {
      * 
      *     public static void stack(Context ctx) {
      *         final var example = BetterstackFunctions.getTeam(GetTeamArgs.builder()
-     *             .id("12345")
+     *             .id("t123")
      *             .build());
      * 
      *     }
@@ -14176,18 +14176,98 @@ public final class BetterstackFunctions {
      * import java.nio.file.Files;
      * import java.nio.file.Paths;
      * 
-     * public class App {
-     *     public static void main(String[] args) {
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
      *         Pulumi.run(App::stack);
-     *     }
+     *     }}{@code
      * 
-     *     public static void stack(Context ctx) {
+     *     public static void stack(Context ctx) }{{@code
      *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
-     *             .id("12345")
+     *             .email("alice}{@literal @}{@code example.com")
      *             .build());
      * 
-     *     }
+     *     }}{@code
+     * }}{@code
      * }
+     * </pre>
+     * 
+     */
+    public static Output<GetTeamMemberResult> getTeamMember() {
+        return getTeamMember(GetTeamMemberArgs.Empty, InvokeOptions.Empty);
+    }
+    /**
+     * A member of a team, or a pending invitation to join it, with the role they hold or would land on.
+     * 
+     * ## Example Usage
+     * 
+     * <pre>
+     * {@code
+     * package generated_program;
+     * 
+     * import com.pulumi.Context;
+     * import com.pulumi.Pulumi;
+     * import com.pulumi.core.Output;
+     * import com.betterstack.pulumi.BetterstackFunctions;
+     * import com.betterstack.pulumi.inputs.GetTeamMemberArgs;
+     * import java.util.ArrayList;
+     * import java.util.Arrays;
+     * import java.util.Map;
+     * import java.io.File;
+     * import java.nio.file.Files;
+     * import java.nio.file.Paths;
+     * 
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
+     *         Pulumi.run(App::stack);
+     *     }}{@code
+     * 
+     *     public static void stack(Context ctx) }{{@code
+     *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
+     *             .email("alice}{@literal @}{@code example.com")
+     *             .build());
+     * 
+     *     }}{@code
+     * }}{@code
+     * }
+     * </pre>
+     * 
+     */
+    public static CompletableFuture<GetTeamMemberResult> getTeamMemberPlain() {
+        return getTeamMemberPlain(GetTeamMemberPlainArgs.Empty, InvokeOptions.Empty);
+    }
+    /**
+     * A member of a team, or a pending invitation to join it, with the role they hold or would land on.
+     * 
+     * ## Example Usage
+     * 
+     * <pre>
+     * {@code
+     * package generated_program;
+     * 
+     * import com.pulumi.Context;
+     * import com.pulumi.Pulumi;
+     * import com.pulumi.core.Output;
+     * import com.betterstack.pulumi.BetterstackFunctions;
+     * import com.betterstack.pulumi.inputs.GetTeamMemberArgs;
+     * import java.util.ArrayList;
+     * import java.util.Arrays;
+     * import java.util.Map;
+     * import java.io.File;
+     * import java.nio.file.Files;
+     * import java.nio.file.Paths;
+     * 
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
+     *         Pulumi.run(App::stack);
+     *     }}{@code
+     * 
+     *     public static void stack(Context ctx) }{{@code
+     *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
+     *             .email("alice}{@literal @}{@code example.com")
+     *             .build());
+     * 
+     *     }}{@code
+     * }}{@code
      * }
      * </pre>
      * 
@@ -14216,18 +14296,18 @@ public final class BetterstackFunctions {
      * import java.nio.file.Files;
      * import java.nio.file.Paths;
      * 
-     * public class App {
-     *     public static void main(String[] args) {
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
      *         Pulumi.run(App::stack);
-     *     }
+     *     }}{@code
      * 
-     *     public static void stack(Context ctx) {
+     *     public static void stack(Context ctx) }{{@code
      *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
-     *             .id("12345")
+     *             .email("alice}{@literal @}{@code example.com")
      *             .build());
      * 
-     *     }
-     * }
+     *     }}{@code
+     * }}{@code
      * }
      * </pre>
      * 
@@ -14256,18 +14336,18 @@ public final class BetterstackFunctions {
      * import java.nio.file.Files;
      * import java.nio.file.Paths;
      * 
-     * public class App {
-     *     public static void main(String[] args) {
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
      *         Pulumi.run(App::stack);
-     *     }
+     *     }}{@code
      * 
-     *     public static void stack(Context ctx) {
+     *     public static void stack(Context ctx) }{{@code
      *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
-     *             .id("12345")
+     *             .email("alice}{@literal @}{@code example.com")
      *             .build());
      * 
-     *     }
-     * }
+     *     }}{@code
+     * }}{@code
      * }
      * </pre>
      * 
@@ -14296,18 +14376,18 @@ public final class BetterstackFunctions {
      * import java.nio.file.Files;
      * import java.nio.file.Paths;
      * 
-     * public class App {
-     *     public static void main(String[] args) {
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
      *         Pulumi.run(App::stack);
-     *     }
+     *     }}{@code
      * 
-     *     public static void stack(Context ctx) {
+     *     public static void stack(Context ctx) }{{@code
      *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
-     *             .id("12345")
+     *             .email("alice}{@literal @}{@code example.com")
      *             .build());
      * 
-     *     }
-     * }
+     *     }}{@code
+     * }}{@code
      * }
      * </pre>
      * 
@@ -14336,18 +14416,18 @@ public final class BetterstackFunctions {
      * import java.nio.file.Files;
      * import java.nio.file.Paths;
      * 
-     * public class App {
-     *     public static void main(String[] args) {
+     * public class App }{{@code
+     *     public static void main(String[] args) }{{@code
      *         Pulumi.run(App::stack);
-     *     }
+     *     }}{@code
      * 
-     *     public static void stack(Context ctx) {
+     *     public static void stack(Context ctx) }{{@code
      *         final var example = BetterstackFunctions.getTeamMember(GetTeamMemberArgs.builder()
-     *             .id("12345")
+     *             .email("alice}{@literal @}{@code example.com")
      *             .build());
      * 
-     *     }
-     * }
+     *     }}{@code
+     * }}{@code
      * }
      * </pre>
      * 

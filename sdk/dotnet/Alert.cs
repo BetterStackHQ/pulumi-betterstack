@@ -14,8 +14,6 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### On a dashboard chart
-    /// 
     /// ```csharp
     /// using System.Collections.Generic;
     /// using System.Linq;
@@ -24,142 +22,47 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var onADashboardChart = new BetterStack.Alert("on_a_dashboard_chart", new()
+    ///     var app = new BetterStack.Source("app", new()
     ///     {
-    ///         DashboardId = "123",
-    ///         ChartId = "456",
-    ///         Name = "High Error Rate",
-    ///         AlertType = BetterStack.AlertType.Threshold,
-    ///         Operator = BetterStack.AlertOperator.HigherThan,
-    ///         Value = 100.0,
-    ///         CheckPeriod = 300,
-    ///         ConfirmationPeriod = 0,
-    ///         EscalationTarget = new BetterStack.Inputs.AlertEscalationTargetArgs
-    ///         {
-    ///             PolicyName = "Critical Policy",
-    ///         },
-    ///         Metadata = 
-    ///         {
-    ///             { "runbook", new[]
-    ///             {
-    ///                 "http://runbook/high-errors",
-    ///             } },
-    ///         },
+    ///         Name = "Production app",
+    ///         Platform = BetterStack.SourcePlatform.Ubuntu,
     ///     });
     /// 
-    /// });
-    /// ```
-    /// 
-    /// ### On an exploration
-    /// 
-    /// ```csharp
-    /// using System.Collections.Generic;
-    /// using System.Linq;
-    /// using Pulumi;
-    /// using BetterStack = Pulumi.BetterStack;
-    /// 
-    /// return await Deployment.RunAsync(() =&gt; 
-    /// {
-    ///     var onAnExploration = new BetterStack.Alert("on_an_exploration", new()
+    ///     var appDashboard = new BetterStack.Dashboard("app", new()
     ///     {
-    ///         ExplorationId = "789",
-    ///         Name = "Status is Error",
-    ///         AlertType = BetterStack.AlertType.Threshold,
-    ///         Operator = BetterStack.AlertOperator.Equal,
-    ///         StringValue = "error",
-    ///         CheckPeriod = 300,
-    ///         ConfirmationPeriod = 0,
+    ///         Name = "Production app",
     ///     });
     /// 
-    /// });
-    /// ```
-    /// 
-    /// ### In an exploration
-    /// 
-    /// ```csharp
-    /// using System.Collections.Generic;
-    /// using System.Linq;
-    /// using Pulumi;
-    /// using BetterStack = Pulumi.BetterStack;
-    /// 
-    /// return await Deployment.RunAsync(() =&gt; 
-    /// {
-    ///     var example = new BetterStack.Exploration("example", new()
+    ///     var errors = new BetterStack.DashboardChart("errors", new()
     ///     {
-    ///         Name = "Error Rate Analysis",
-    ///         DateRangeFrom = "now-3h",
-    ///         DateRangeTo = "now",
-    ///         Chart = new BetterStack.Inputs.ExplorationChartArgs
-    ///         {
-    ///             ChartType = "line_chart",
-    ///             Description = "Shows error rates across all services",
-    ///             Settings = new BetterStack.Inputs.ExplorationChartSettingsArgs
-    ///             {
-    ///                 Unit = "auto",
-    ///                 DecimalPlaces = 0,
-    ///                 Legend = "shown_below",
-    ///                 Stacking = "dont_stack",
-    ///             },
-    ///         },
+    ///         DashboardId = appDashboard.Id,
+    ///         ChartType = BetterStack.DashboardChartChartType.LineChart,
+    ///         Name = "Errors",
     ///         Queries = new[]
     ///         {
-    ///             new BetterStack.Inputs.ExplorationQueryArgs
+    ///             new BetterStack.Inputs.DashboardChartQueryArgs
     ///             {
-    ///                 Name = "Main Query",
     ///                 QueryType = "sql_expression",
-    ///                 SqlQuery = @"SELECT {{time}} AS time, count(*) AS value
-    /// FROM {{source}}
-    /// WHERE dt BETWEEN {{start_time}} AND {{end_time}}
-    ///   [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]
-    /// GROUP BY time",
-    ///                 SourceVariable = "source",
-    ///             },
-    ///         },
-    ///         Variables = new[]
-    ///         {
-    ///             new BetterStack.Inputs.ExplorationVariableArgs
-    ///             {
-    ///                 Name = "source",
-    ///                 VariableType = "source",
-    ///                 Values = new[]
-    ///                 {
-    ///                     "123",
-    ///                 },
-    ///             },
-    ///             new BetterStack.Inputs.ExplorationVariableArgs
-    ///             {
-    ///                 Name = "level",
-    ///                 VariableType = "select_with_sql",
-    ///                 Values = new() { },
-    ///                 DefaultValues = new() { },
-    ///                 SqlDefinition = "JSONExtractString(raw, 'level')",
-    ///                 AllowMultipleValues = true,
+    ///                 SqlQuery = "SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time",
     ///             },
     ///         },
     ///     });
     /// 
-    ///     var inExploration = new BetterStack.Alert("in_exploration", new()
+    ///     var errorSpike = new BetterStack.Alert("error_spike", new()
     ///     {
-    ///         DashboardId = "123",
-    ///         ChartId = "456",
-    ///         Name = "High Error Rate",
+    ///         DashboardId = appDashboard.Id,
+    ///         ChartId = errors.Id,
+    ///         Name = "Error spike",
     ///         AlertType = BetterStack.AlertType.Threshold,
     ///         Operator = BetterStack.AlertOperator.HigherThan,
     ///         Value = 100.0,
-    ///         CheckPeriod = 300,
-    ///         ConfirmationPeriod = 0,
-    ///         EscalationTarget = new BetterStack.Inputs.AlertEscalationTargetArgs
-    ///         {
-    ///             PolicyName = "Critical Policy",
-    ///         },
-    ///         Metadata = 
-    ///         {
-    ///             { "runbook", new[]
-    ///             {
-    ///                 "http://runbook/high-errors",
-    ///             } },
-    ///         },
-    ///         ExplorationId = example.Id,
+    ///         SourceVariable = app.TableName.Apply(tableName =&gt; $"source:{tableName}"),
+    ///         AggregationInterval = 300,
+    ///         CheckPeriod = 60,
+    ///         ConfirmationPeriod = 300,
+    ///         RecoveryPeriod = 300,
+    ///         Email = true,
+    ///         Push = true,
     ///     });
     /// 
     /// });

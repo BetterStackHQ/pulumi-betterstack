@@ -70,7 +70,7 @@ namespace Pulumi.BetterStack
     /// Import an existing extracted metric by its ID as `source_id/id`. Get the ID from the matching get function, which finds it by `Name`.
     /// 
     /// ```sh
-    /// $ pulumi import betterstack:index/extractedMetric:ExtractedMetric example &lt;source_id&gt;/12345
+    /// $ pulumi import betterstack:index/extractedMetric:ExtractedMetric example &lt;source_id&gt;/m-123
     /// ```
     /// </summary>
     [BetterStackResourceType("betterstack:index/extractedMetric:ExtractedMetric")]

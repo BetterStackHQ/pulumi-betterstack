@@ -14,7 +14,7 @@ import * as utilities from "./utilities";
  * import * as betterstack from "@better_stack/pulumi";
  *
  * const example = betterstack.getTeam({
- *     id: "12345",
+ *     id: "t123",
  * });
  * ```
  */
@@ -114,7 +114,7 @@ export interface GetTeamResult {
  * import * as betterstack from "@better_stack/pulumi";
  *
  * const example = betterstack.getTeam({
- *     id: "12345",
+ *     id: "t123",
  * });
  * ```
  */

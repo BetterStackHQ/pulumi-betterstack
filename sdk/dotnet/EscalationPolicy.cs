@@ -14,7 +14,7 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### Escalation policy
+    /// ### Page the on-call person, then the whole team after 10 minutes
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -24,18 +24,21 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var escalationPolicy = new BetterStack.EscalationPolicy("escalation_policy", new()
+    ///     var high = BetterStack.GetSeverity.Invoke(new()
     ///     {
-    ///         Name = "Standard Escalation Policy",
-    ///         RepeatCount = 3,
-    ///         RepeatDelay = 1800,
+    ///         Name = "High severity",
+    ///     });
+    /// 
+    ///     var onCall = new BetterStack.EscalationPolicy("on_call", new()
+    ///     {
+    ///         Name = "On-call, then the whole team",
     ///         Steps = new[]
     ///         {
     ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
     ///                 Type = "escalation",
     ///                 WaitBefore = 0,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
@@ -48,7 +51,7 @@ namespace Pulumi.BetterStack
     ///             {
     ///                 Type = "escalation",
     ///                 WaitBefore = 600,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
@@ -63,7 +66,7 @@ namespace Pulumi.BetterStack
     /// });
     /// ```
     /// 
-    /// ### Branching
+    /// ### Post to Slack right away, page the on-call person after 3 minutes and repeat
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -73,103 +76,25 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var branching = new BetterStack.EscalationPolicy("branching", new()
+    ///     var high = BetterStack.GetSeverity.Invoke(new()
     ///     {
-    ///         Name = "Business Hours Branching",
-    ///         Steps = new[]
-    ///         {
-    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
-    ///             {
-    ///                 Type = "time_branching",
-    ///                 WaitBefore = 0,
-    ///                 Timezone = "America/New_York",
-    ///                 Days = new[]
-    ///                 {
-    ///                     "mon",
-    ///                     "tue",
-    ///                     "wed",
-    ///                     "thu",
-    ///                     "fri",
-    ///                 },
-    ///                 TimeFrom = "09:00",
-    ///                 TimeTo = "17:00",
-    ///                 PolicyMetadataKey = "business_hours_policy",
-    ///             },
-    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
-    ///             {
-    ///                 Type = "metadata_branching",
-    ///                 WaitBefore = 0,
-    ///                 MetadataKey = "urgency",
-    ///                 MetadataValues = new[]
-    ///                 {
-    ///                     new BetterStack.Inputs.EscalationPolicyStepMetadataValueArgs
-    ///                     {
-    ///                         Type = "String",
-    ///                         Value = "low",
-    ///                     },
-    ///                 },
-    ///                 ActionType = "do_not_escalate",
-    ///             },
-    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
-    ///             {
-    ///                 Type = "escalation",
-    ///                 WaitBefore = 300,
-    ///                 SeverityId = "$SEVERITY_ID",
-    ///                 StepMembers = new[]
-    ///                 {
-    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
-    ///                     {
-    ///                         Type = "current_on_call",
-    ///                     },
-    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
-    ///                     {
-    ///                         Type = "all_slack_integrations",
-    ///                     },
-    ///                 },
-    ///             },
-    ///         },
+    ///         Name = "High severity",
     ///     });
     /// 
-    /// });
-    /// ```
-    /// 
-    /// ### Instructions
-    /// 
-    /// ```csharp
-    /// using System.Collections.Generic;
-    /// using System.Linq;
-    /// using Pulumi;
-    /// using BetterStack = Pulumi.BetterStack;
-    /// 
-    /// return await Deployment.RunAsync(() =&gt; 
-    /// {
-    ///     var instructions = new BetterStack.EscalationPolicy("instructions", new()
+    ///     var slackFirst = new BetterStack.EscalationPolicy("slack_first", new()
     ///     {
-    ///         Name = "Policy with Instructions and Todo list",
+    ///         Name = "Slack, then on-call",
+    ///         RepeatCount = 3,
+    ///         RepeatDelay = 300,
     ///         Steps = new[]
     ///         {
     ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Type = "instructions",
-    ///                 WaitBefore = 0,
-    ///                 InstructionsComment = @"IMMEDIATE ACTIONS:
-    /// 1. Check system status at status.example.com
-    /// 2. Verify in monitoring dashboard
-    /// 3. Check #incidents Slack channel
-    /// 4. If database-related, run: kubectl get pods -n production",
-    ///                 InstructionsReminderEnabled = false,
-    ///             },
-    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
-    ///             {
     ///                 Type = "escalation",
     ///                 WaitBefore = 0,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
-    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
-    ///                     {
-    ///                         Type = "current_on_call",
-    ///                     },
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
     ///                         Type = "all_slack_integrations",
@@ -178,31 +103,14 @@ namespace Pulumi.BetterStack
     ///             },
     ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Type = "instructions",
-    ///                 WaitBefore = 900,
-    ///                 InstructionsComment = @"ESCALATION REQUIRED:
-    /// - [ ] Page backup on-call
-    /// - [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#
-    /// - [ ] Update status page
-    /// - [ ] Notify stakeholders via #incident-comms",
-    ///                 InstructionsReminderEnabled = true,
-    ///                 InstructionsReminderIntervalHours = 2,
-    ///             },
-    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
-    ///             {
     ///                 Type = "escalation",
-    ///                 WaitBefore = 300,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 WaitBefore = 180,
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
-    ///                         Type = "entire_team",
-    ///                     },
-    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
-    ///                     {
-    ///                         Type = "user",
-    ///                         Email = "manager@example.com",
+    ///                         Type = "current_on_call",
     ///                     },
     ///                 },
     ///             },

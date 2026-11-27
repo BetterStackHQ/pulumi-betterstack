@@ -14,13 +14,15 @@ import * as utilities from "./utilities";
  * import * as betterstack from "@better_stack/pulumi";
  *
  * const example = betterstack.getTeamMember({
- *     id: "12345",
+ *     email: "alice@example.com",
  * });
  * ```
  */
-export function getTeamMember(args: GetTeamMemberArgs, opts?: pulumi.InvokeOptions): Promise<GetTeamMemberResult> {
+export function getTeamMember(args?: GetTeamMemberArgs, opts?: pulumi.InvokeOptions): Promise<GetTeamMemberResult> {
+    args = args || {};
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts || {});
     return pulumi.runtime.invoke("betterstack:index/getTeamMember:getTeamMember", {
+        "email": args.email,
         "id": args.id,
         "teamId": args.teamId,
     }, opts);
@@ -31,9 +33,13 @@ export function getTeamMember(args: GetTeamMemberArgs, opts?: pulumi.InvokeOptio
  */
 export interface GetTeamMemberArgs {
     /**
-     * The ID of the team member to look up.
+     * The e-mail address of the team member to look up. Set it, or `id` to the same value.
      */
-    id: string;
+    email?: string;
+    /**
+     * The same value as `email`.
+     */
+    id?: string;
     /**
      * Team the membership is in, such as 't123'. Defaults to the provider's `teamId`. Set it to look the object up in another team.
      */
@@ -53,7 +59,7 @@ export interface GetTeamMemberResult {
      */
     readonly deletionProtection: boolean;
     /**
-     * E-mail address.
+     * The e-mail address of the team member to look up. Set it, or `id` to the same value.
      */
     readonly email: string;
     /**
@@ -61,7 +67,7 @@ export interface GetTeamMemberResult {
      */
     readonly firstName: string;
     /**
-     * The ID of the team member to look up.
+     * The same value as `email`.
      */
     readonly id: string;
     /**
@@ -99,13 +105,15 @@ export interface GetTeamMemberResult {
  * import * as betterstack from "@better_stack/pulumi";
  *
  * const example = betterstack.getTeamMember({
- *     id: "12345",
+ *     email: "alice@example.com",
  * });
  * ```
  */
-export function getTeamMemberOutput(args: GetTeamMemberOutputArgs, opts?: pulumi.InvokeOutputOptions): pulumi.Output<GetTeamMemberResult> {
+export function getTeamMemberOutput(args?: GetTeamMemberOutputArgs, opts?: pulumi.InvokeOutputOptions): pulumi.Output<GetTeamMemberResult> {
+    args = args || {};
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts || {});
     return pulumi.runtime.invokeOutput("betterstack:index/getTeamMember:getTeamMember", {
+        "email": args.email,
         "id": args.id,
         "teamId": args.teamId,
     }, opts);
@@ -116,9 +124,13 @@ export function getTeamMemberOutput(args: GetTeamMemberOutputArgs, opts?: pulumi
  */
 export interface GetTeamMemberOutputArgs {
     /**
-     * The ID of the team member to look up.
+     * The e-mail address of the team member to look up. Set it, or `id` to the same value.
      */
-    id: pulumi.Input<string>;
+    email?: pulumi.Input<string | undefined>;
+    /**
+     * The same value as `email`.
+     */
+    id?: pulumi.Input<string | undefined>;
     /**
      * Team the membership is in, such as 't123'. Defaults to the provider's `teamId`. Set it to look the object up in another team.
      */

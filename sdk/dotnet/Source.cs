@@ -16,7 +16,7 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### Create a source
+    /// ### Collect logs from Ubuntu servers and keep them for 30 days
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -26,17 +26,18 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.Source("example", new()
+    ///     var servers = new BetterStack.Source("servers", new()
     ///     {
-    ///         Name = "My new HTTP source",
-    ///         Platform = BetterStack.SourcePlatform.Http,
-    ///         DataRegion = "us",
+    ///         Name = "Production servers",
+    ///         Platform = BetterStack.SourcePlatform.Ubuntu,
+    ///         LogsRetention = 30,
+    ///         MetricsRetention = 90,
     ///     });
     /// 
     /// });
     /// ```
     /// 
-    /// ### In a source group
+    /// ### Receive OpenTelemetry data in a source group
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -46,17 +47,16 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.SourceGroup("example", new()
+    ///     var backend = new BetterStack.SourceGroup("backend", new()
     ///     {
-    ///         Name = "Backend sources",
+    ///         Name = "Backend",
     ///     });
     /// 
-    ///     var inSourceGroup = new BetterStack.Source("in_source_group", new()
+    ///     var otel = new BetterStack.Source("otel", new()
     ///     {
-    ///         Name = "My new HTTP source",
-    ///         Platform = BetterStack.SourcePlatform.Http,
-    ///         DataRegion = "us",
-    ///         SourceGroupId = example.Id,
+    ///         Name = "Checkout service",
+    ///         Platform = BetterStack.SourcePlatform.OpenTelemetry,
+    ///         SourceGroupId = backend.Id,
     ///     });
     /// 
     /// });

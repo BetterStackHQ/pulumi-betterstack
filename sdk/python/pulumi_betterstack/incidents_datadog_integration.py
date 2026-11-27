@@ -454,21 +454,20 @@ class IncidentsDatadogIntegration(pulumi.CustomResource):
             team_wait=180)
         ```
 
-        ### In an escalation policy
+        ### Alert through an escalation policy
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -476,17 +475,17 @@ class IncidentsDatadogIntegration(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
                 },
             ])
-        in_escalation_policy = betterstack.IncidentsDatadogIntegration("in_escalation_policy",
+        alert_through_an_escalation_policy = betterstack.IncidentsDatadogIntegration("alert_through_an_escalation_policy",
             name="Datadog alerts",
             sms=True,
             team_wait=180,
-            escalation_policy_id=escalation_policy.id)
+            escalation_policy_id=on_call.id)
         ```
 
         ## Import
@@ -535,21 +534,20 @@ class IncidentsDatadogIntegration(pulumi.CustomResource):
             team_wait=180)
         ```
 
-        ### In an escalation policy
+        ### Alert through an escalation policy
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -557,17 +555,17 @@ class IncidentsDatadogIntegration(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
                 },
             ])
-        in_escalation_policy = betterstack.IncidentsDatadogIntegration("in_escalation_policy",
+        alert_through_an_escalation_policy = betterstack.IncidentsDatadogIntegration("alert_through_an_escalation_policy",
             name="Datadog alerts",
             sms=True,
             team_wait=180,
-            escalation_policy_id=escalation_policy.id)
+            escalation_policy_id=on_call.id)
         ```
 
         ## Import

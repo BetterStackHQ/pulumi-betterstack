@@ -18,7 +18,7 @@ import (
 //
 // ## Example Usage
 //
-// ### Create a source
+// ### Collect logs from Ubuntu servers and keep them for 30 days
 //
 // ```go
 // package main
@@ -32,10 +32,11 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewSource(ctx, "example", &betterstack.SourceArgs{
-//				Name:       pulumi.String("My new HTTP source"),
-//				Platform:   pulumi.String(betterstack.SourcePlatformHttp),
-//				DataRegion: pulumi.String("us"),
+//			_, err := betterstack.NewSource(ctx, "servers", &betterstack.SourceArgs{
+//				Name:             pulumi.String("Production servers"),
+//				Platform:         pulumi.String(betterstack.SourcePlatformUbuntu),
+//				LogsRetention:    pulumi.Int(30),
+//				MetricsRetention: pulumi.Int(90),
 //			})
 //			if err != nil {
 //				return err
@@ -46,7 +47,7 @@ import (
 //
 // ```
 //
-// ### In a source group
+// ### Receive OpenTelemetry data in a source group
 //
 // ```go
 // package main
@@ -60,17 +61,16 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			example, err := betterstack.NewSourceGroup(ctx, "example", &betterstack.SourceGroupArgs{
-//				Name: pulumi.String("Backend sources"),
+//			backend, err := betterstack.NewSourceGroup(ctx, "backend", &betterstack.SourceGroupArgs{
+//				Name: pulumi.String("Backend"),
 //			})
 //			if err != nil {
 //				return err
 //			}
-//			_, err = betterstack.NewSource(ctx, "in_source_group", &betterstack.SourceArgs{
-//				Name:          pulumi.String("My new HTTP source"),
-//				Platform:      pulumi.String(betterstack.SourcePlatformHttp),
-//				DataRegion:    pulumi.String("us"),
-//				SourceGroupId: example.ID(),
+//			_, err = betterstack.NewSource(ctx, "otel", &betterstack.SourceArgs{
+//				Name:          pulumi.String("Checkout service"),
+//				Platform:      pulumi.String(betterstack.SourcePlatformOpenTelemetry),
+//				SourceGroupId: backend.ID(),
 //			})
 //			if err != nil {
 //				return err

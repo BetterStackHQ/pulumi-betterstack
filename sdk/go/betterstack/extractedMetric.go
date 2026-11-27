@@ -87,7 +87,7 @@ import (
 // Import an existing extracted metric by its ID as `source_id/id`. Get the ID from the matching get function, which finds it by `name`.
 //
 // ```sh
-// $ pulumi import betterstack:index/extractedMetric:ExtractedMetric example <source_id>/12345
+// $ pulumi import betterstack:index/extractedMetric:ExtractedMetric example <source_id>/m-123
 // ```
 type ExtractedMetric struct {
 	pulumi.CustomResourceState

@@ -16,7 +16,7 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### Create a heartbeat
+    /// ### Expect a nightly job once a day
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -26,17 +26,19 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.Heartbeat("example", new()
+    ///     var nightlyBackup = new BetterStack.Heartbeat("nightly_backup", new()
     ///     {
-    ///         Name = "Testing heartbeat",
-    ///         Period = 10800,
-    ///         Grace = 300,
+    ///         Name = "Nightly database backup",
+    ///         Period = 86400,
+    ///         Grace = 7200,
+    ///         Email = true,
+    ///         Push = true,
     ///     });
     /// 
     /// });
     /// ```
     /// 
-    /// ### With metadata
+    /// ### Alert through an escalation policy, except during weekend maintenance
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -46,61 +48,59 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var withMetadata = new BetterStack.Heartbeat("with_metadata", new()
+    ///     var high = BetterStack.GetSeverity.Invoke(new()
     ///     {
-    ///         Name = "Testing heartbeat",
-    ///         Period = 10800,
-    ///         Grace = 300,
-    ///         Metadata = 
+    ///         Name = "High severity",
+    ///     });
+    /// 
+    ///     var onCall = new BetterStack.EscalationPolicy("on_call", new()
+    ///     {
+    ///         Name = "On-call, then the whole team",
+    ///         Steps = new[]
     ///         {
-    ///             { "Environment", new BetterStack.Inputs.HeartbeatMetadataArgs
+    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Values = new[]
+    ///                 Type = "escalation",
+    ///                 WaitBefore = 0,
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
+    ///                 StepMembers = new[]
     ///                 {
-    ///                     new BetterStack.Inputs.HeartbeatMetadataValueArgs
+    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
-    ///                         Value = "production",
+    ///                         Type = "current_on_call",
     ///                     },
     ///                 },
-    ///             } },
-    ///             { "Owner", new BetterStack.Inputs.HeartbeatMetadataArgs
+    ///             },
+    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Values = new[]
+    ///                 Type = "escalation",
+    ///                 WaitBefore = 600,
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
+    ///                 StepMembers = new[]
     ///                 {
-    ///                     new BetterStack.Inputs.HeartbeatMetadataValueArgs
+    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
-    ///                         Type = "Team",
-    ///                         Name = "Platform",
+    ///                         Type = "entire_team",
     ///                     },
     ///                 },
-    ///             } },
+    ///             },
     ///         },
     ///     });
     /// 
-    /// });
-    /// ```
-    /// 
-    /// ### In a heartbeat group
-    /// 
-    /// ```csharp
-    /// using System.Collections.Generic;
-    /// using System.Linq;
-    /// using Pulumi;
-    /// using BetterStack = Pulumi.BetterStack;
-    /// 
-    /// return await Deployment.RunAsync(() =&gt; 
-    /// {
-    ///     var example = new BetterStack.HeartbeatGroup("example", new()
+    ///     var queueWorker = new BetterStack.Heartbeat("queue_worker", new()
     ///     {
-    ///         Name = "Backend services",
-    ///     });
-    /// 
-    ///     var inHeartbeatGroup = new BetterStack.Heartbeat("in_heartbeat_group", new()
-    ///     {
-    ///         Name = "Testing heartbeat",
-    ///         Period = 10800,
+    ///         Name = "Queue worker",
+    ///         Period = 300,
     ///         Grace = 300,
-    ///         HeartbeatGroupId = example.Id,
+    ///         EscalationPolicyId = onCall.Id,
+    ///         MaintenanceDays = new[]
+    ///         {
+    ///             "sat",
+    ///             "sun",
+    ///         },
+    ///         MaintenanceFrom = "00:00:00",
+    ///         MaintenanceTo = "06:00:00",
+    ///         MaintenanceTimezone = "London",
     ///     });
     /// 
     /// });

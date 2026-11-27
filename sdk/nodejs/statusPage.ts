@@ -14,36 +14,65 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### Create a status page
+ * ### Serve a status page from your own domain
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.StatusPage("example", {
- *     companyUrl: "https://best-company.com",
- *     companyName: "Best company",
- *     subdomain: "best-company-tokyo",
- *     timezone: "Tokyo",
+ * const _public = new betterstack.StatusPage("public", {
+ *     companyName: "Example, Inc.",
+ *     companyUrl: "https://example.org",
+ *     subdomain: "example-inc-status",
+ *     customDomain: "status.example.org",
+ *     timezone: "UTC",
+ *     design: betterstack.StatusPageDesign.V2,
+ *     theme: betterstack.StatusPageTheme.System,
+ *     subscribable: true,
+ *     automaticReports: true,
  * });
  * ```
  *
- * ### In a status page group
+ * ### Show monitors in sections
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.StatusPageGroup("example", {
- *     name: "Production Status Pages",
- *     sortIndex: 1,
+ * const website = new betterstack.Monitor("website", {
+ *     url: "https://uptime.betterstack.com",
+ *     pronounceableName: "Website",
  * });
- * const inStatusPageGroup = new betterstack.StatusPage("in_status_page_group", {
- *     companyUrl: "https://best-company.com",
- *     companyName: "Best company",
- *     subdomain: "best-company-tokyo",
- *     timezone: "Tokyo",
- *     statusPageGroupId: example.id,
+ * const api = new betterstack.Monitor("api", {
+ *     url: "https://uptime.betterstack.com/api/v2/monitors",
+ *     monitorType: betterstack.MonitorType.ExpectedStatusCode,
+ *     expectedStatusCodes: [401],
+ *     pronounceableName: "API",
+ * });
+ * const services = new betterstack.StatusPage("services", {
+ *     companyName: "Example, Inc.",
+ *     subdomain: "example-inc-services",
+ *     timezone: "UTC",
+ *     sections: [
+ *         {
+ *             name: "Website",
+ *             resources: [{
+ *                 resourceType: "Monitor",
+ *                 resourceId: website.id,
+ *                 publicName: "Website",
+ *                 widgetType: "history",
+ *             }],
+ *         },
+ *         {
+ *             name: "API",
+ *             resources: [{
+ *                 resourceType: "Monitor",
+ *                 resourceId: api.id,
+ *                 publicName: "Public API",
+ *                 widgetType: "response_times",
+ *             }],
+ *         },
+ *     ],
  * });
  * ```
  *

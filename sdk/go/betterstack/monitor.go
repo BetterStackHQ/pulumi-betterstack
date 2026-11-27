@@ -17,7 +17,7 @@ import (
 //
 // ## Example Usage
 //
-// ### Create a monitor
+// ### Check a website every 30 seconds
 //
 // ```go
 // package main
@@ -31,20 +31,21 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewMonitor(ctx, "example", &betterstack.MonitorArgs{
-//				MonitorType:       pulumi.String(betterstack.MonitorTypeStatus),
-//				Url:               pulumi.String("https://facebook.com"),
-//				PronounceableName: pulumi.String("Facebook homepage"),
-//				Email:             pulumi.Bool(true),
-//				Sms:               pulumi.Bool(true),
-//				Call:              pulumi.Bool(true),
-//				CheckFrequency:    pulumi.Int(30),
-//				RequestHeaders: betterstack.MonitorRequestHeaderArray{
-//					&betterstack.MonitorRequestHeaderArgs{
-//						Name:  pulumi.String("X-Custom-Header"),
-//						Value: pulumi.String("custom header value"),
-//					},
+//			_, err := betterstack.NewMonitor(ctx, "website", &betterstack.MonitorArgs{
+//				Url:                pulumi.String("https://uptime.betterstack.com"),
+//				MonitorType:        pulumi.String(betterstack.MonitorTypeStatus),
+//				PronounceableName:  pulumi.String("Uptime homepage"),
+//				CheckFrequency:     pulumi.Int(30),
+//				ConfirmationPeriod: pulumi.Int(60),
+//				Regions: pulumi.StringArray{
+//					pulumi.String("us"),
+//					pulumi.String("eu"),
 //				},
+//				SslExpiration:    pulumi.Int(14),
+//				DomainExpiration: pulumi.Int(14),
+//				Email:            pulumi.Bool(true),
+//				Push:             pulumi.Bool(true),
+//				TeamWait:         pulumi.Int(180),
 //			})
 //			if err != nil {
 //				return err
@@ -55,7 +56,7 @@ import (
 //
 // ```
 //
-// ### With metadata
+// ### Look for a keyword, alert through an escalation policy and pause at night
 //
 // ```go
 // package main
@@ -69,23 +70,32 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewMonitor(ctx, "with_metadata", &betterstack.MonitorArgs{
-//				MonitorType:       pulumi.String(betterstack.MonitorTypeStatus),
-//				Url:               pulumi.String("https://facebook.com"),
-//				PronounceableName: pulumi.String("Facebook homepage"),
-//				Metadata: betterstack.MonitorMetadataMap{
-//					"Environment": &betterstack.MonitorMetadataArgs{
-//						Values: betterstack.MonitorMetadataValueArray{
-//							&betterstack.MonitorMetadataValueArgs{
-//								Value: pulumi.String("production"),
+//			high, err := betterstack.GetSeverity(ctx, &betterstack.LookupSeverityArgs{
+//				Name: pulumi.StringRef("High severity"),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			onCall, err := betterstack.NewEscalationPolicy(ctx, "on_call", &betterstack.EscalationPolicyArgs{
+//				Name: pulumi.String("On-call, then the whole team"),
+//				Steps: betterstack.EscalationPolicyStepArray{
+//					&betterstack.EscalationPolicyStepArgs{
+//						Type:       pulumi.String("escalation"),
+//						WaitBefore: pulumi.Int(0),
+//						SeverityId: pulumi.String(high.Id),
+//						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
+//							&betterstack.EscalationPolicyStepStepMemberArgs{
+//								Type: pulumi.String("current_on_call"),
 //							},
 //						},
 //					},
-//					"Owner": &betterstack.MonitorMetadataArgs{
-//						Values: betterstack.MonitorMetadataValueArray{
-//							&betterstack.MonitorMetadataValueArgs{
-//								Type: pulumi.String("Team"),
-//								Name: pulumi.String("Platform"),
+//					&betterstack.EscalationPolicyStepArgs{
+//						Type:       pulumi.String("escalation"),
+//						WaitBefore: pulumi.Int(600),
+//						SeverityId: pulumi.String(high.Id),
+//						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
+//							&betterstack.EscalationPolicyStepStepMemberArgs{
+//								Type: pulumi.String("entire_team"),
 //							},
 //						},
 //					},
@@ -94,44 +104,23 @@ import (
 //			if err != nil {
 //				return err
 //			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ### Two custom headers
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewMonitor(ctx, "two_custom_headers", &betterstack.MonitorArgs{
-//				MonitorType:       pulumi.String(betterstack.MonitorTypeStatus),
-//				Url:               pulumi.String("https://facebook.com"),
-//				PronounceableName: pulumi.String("Facebook homepage"),
-//				Email:             pulumi.Bool(true),
-//				Sms:               pulumi.Bool(true),
-//				Call:              pulumi.Bool(true),
-//				CheckFrequency:    pulumi.Int(30),
+//			_, err = betterstack.NewMonitor(ctx, "pricing", &betterstack.MonitorArgs{
+//				Url:               pulumi.String("https://betterstack.com/pricing"),
+//				MonitorType:       pulumi.String(betterstack.MonitorTypeKeyword),
+//				RequiredKeyword:   pulumi.String("Pricing"),
+//				PronounceableName: pulumi.String("Pricing page"),
+//				CheckFrequency:    pulumi.Int(60),
+//				RecoveryPeriod:    pulumi.Int(300),
 //				RequestHeaders: betterstack.MonitorRequestHeaderArray{
 //					&betterstack.MonitorRequestHeaderArgs{
-//						Name:  pulumi.String("Content-Type"),
-//						Value: pulumi.String("application/json"),
-//					},
-//					&betterstack.MonitorRequestHeaderArgs{
-//						Name:  pulumi.String("X-Api-Key"),
-//						Value: pulumi.String("secret"),
+//						Name:  pulumi.String("Accept-Language"),
+//						Value: pulumi.String("en"),
 //					},
 //				},
+//				EscalationPolicyId:  onCall.ID(),
+//				MaintenanceFrom:     pulumi.String("02:00:00"),
+//				MaintenanceTo:       pulumi.String("05:00:00"),
+//				MaintenanceTimezone: pulumi.String("UTC"),
 //			})
 //			if err != nil {
 //				return err

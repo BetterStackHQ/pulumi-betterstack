@@ -34,7 +34,7 @@ namespace Pulumi.BetterStack
     /// });
     /// ```
     /// 
-    /// ### In an escalation policy
+    /// ### Alert through an escalation policy
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -44,18 +44,21 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var escalationPolicy = new BetterStack.EscalationPolicy("escalation_policy", new()
+    ///     var high = BetterStack.GetSeverity.Invoke(new()
     ///     {
-    ///         Name = "Standard Escalation Policy",
-    ///         RepeatCount = 3,
-    ///         RepeatDelay = 1800,
+    ///         Name = "High severity",
+    ///     });
+    /// 
+    ///     var onCall = new BetterStack.EscalationPolicy("on_call", new()
+    ///     {
+    ///         Name = "On-call, then the whole team",
     ///         Steps = new[]
     ///         {
     ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
     ///                 Type = "escalation",
     ///                 WaitBefore = 0,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
@@ -68,7 +71,7 @@ namespace Pulumi.BetterStack
     ///             {
     ///                 Type = "escalation",
     ///                 WaitBefore = 600,
-    ///                 SeverityId = "$SEVERITY_ID",
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
     ///                 StepMembers = new[]
     ///                 {
     ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
@@ -80,12 +83,12 @@ namespace Pulumi.BetterStack
     ///         },
     ///     });
     /// 
-    ///     var inEscalationPolicy = new BetterStack.IncidentsDatadogIntegration("in_escalation_policy", new()
+    ///     var alertThroughAnEscalationPolicy = new BetterStack.IncidentsDatadogIntegration("alert_through_an_escalation_policy", new()
     ///     {
     ///         Name = "Datadog alerts",
     ///         Sms = true,
     ///         TeamWait = 180,
-    ///         EscalationPolicyId = escalationPolicy.Id,
+    ///         EscalationPolicyId = onCall.Id,
     ///     });
     /// 
     /// });

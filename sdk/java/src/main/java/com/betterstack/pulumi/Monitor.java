@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### Create a monitor
+ * ### Check a website every 30 seconds
  * 
  * <pre>
  * {@code
@@ -36,6 +36,57 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.Monitor;
+ * import com.betterstack.pulumi.MonitorArgs;
+ * import java.util.ArrayList;
+ * import java.util.Arrays;
+ * import java.util.Map;
+ * import java.io.File;
+ * import java.nio.file.Files;
+ * import java.nio.file.Paths;
+ * 
+ * public class App {
+ *     public static void main(String[] args) {
+ *         Pulumi.run(App::stack);
+ *     }
+ * 
+ *     public static void stack(Context ctx) {
+ *         var website = new Monitor("website", MonitorArgs.builder()
+ *             .url("https://uptime.betterstack.com")
+ *             .monitorType("status")
+ *             .pronounceableName("Uptime homepage")
+ *             .checkFrequency(30)
+ *             .confirmationPeriod(60)
+ *             .regions(            
+ *                 "us",
+ *                 "eu")
+ *             .sslExpiration(14)
+ *             .domainExpiration(14)
+ *             .email(true)
+ *             .push(true)
+ *             .teamWait(180)
+ *             .build());
+ * 
+ *     }
+ * }
+ * }
+ * </pre>
+ * 
+ * ### Look for a keyword, alert through an escalation policy and pause at night
+ * 
+ * <pre>
+ * {@code
+ * package generated_program;
+ * 
+ * import com.pulumi.Context;
+ * import com.pulumi.Pulumi;
+ * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.BetterstackFunctions;
+ * import com.betterstack.pulumi.inputs.GetSeverityArgs;
+ * import com.betterstack.pulumi.EscalationPolicy;
+ * import com.betterstack.pulumi.EscalationPolicyArgs;
+ * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
+ * import com.betterstack.pulumi.inputs.EscalationPolicyStepStepMemberArgs;
  * import com.betterstack.pulumi.Monitor;
  * import com.betterstack.pulumi.MonitorArgs;
  * import com.betterstack.pulumi.inputs.MonitorRequestHeaderArgs;
@@ -52,117 +103,46 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new Monitor("example", MonitorArgs.builder()
- *             .monitorType("status")
- *             .url("https://facebook.com")
- *             .pronounceableName("Facebook homepage")
- *             .email(true)
- *             .sms(true)
- *             .call(true)
- *             .checkFrequency(30)
- *             .requestHeaders(MonitorRequestHeaderArgs.builder()
- *                 .name("X-Custom-Header")
- *                 .value("custom header value")
- *                 .build())
+ *         final var high = BetterstackFunctions.getSeverity(GetSeverityArgs.builder()
+ *             .name("High severity")
  *             .build());
  * 
- *     }
- * }
- * }
- * </pre>
- * 
- * ### With metadata
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.Monitor;
- * import com.betterstack.pulumi.MonitorArgs;
- * import com.betterstack.pulumi.inputs.MonitorMetadataArgs;
- * import com.betterstack.pulumi.inputs.MonitorMetadataValueArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App {
- *     public static void main(String[] args) {
- *         Pulumi.run(App::stack);
- *     }
- * 
- *     public static void stack(Context ctx) {
- *         var withMetadata = new Monitor("withMetadata", MonitorArgs.builder()
- *             .monitorType("status")
- *             .url("https://facebook.com")
- *             .pronounceableName("Facebook homepage")
- *             .metadata(Map.ofEntries(
- *                 Map.entry("Environment", MonitorMetadataArgs.builder()
- *                     .values(MonitorMetadataValueArgs.builder()
- *                         .value("production")
+ *         var onCall = new EscalationPolicy("onCall", EscalationPolicyArgs.builder()
+ *             .name("On-call, then the whole team")
+ *             .steps(            
+ *                 EscalationPolicyStepArgs.builder()
+ *                     .type("escalation")
+ *                     .waitBefore(0)
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("current_on_call")
  *                         .build())
- *                     .build()),
- *                 Map.entry("Owner", MonitorMetadataArgs.builder()
- *                     .values(MonitorMetadataValueArgs.builder()
- *                         .type("Team")
- *                         .name("Platform")
- *                         .build())
- *                     .build())
- *             ))
- *             .build());
- * 
- *     }
- * }
- * }
- * </pre>
- * 
- * ### Two custom headers
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.Monitor;
- * import com.betterstack.pulumi.MonitorArgs;
- * import com.betterstack.pulumi.inputs.MonitorRequestHeaderArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App {
- *     public static void main(String[] args) {
- *         Pulumi.run(App::stack);
- *     }
- * 
- *     public static void stack(Context ctx) {
- *         var twoCustomHeaders = new Monitor("twoCustomHeaders", MonitorArgs.builder()
- *             .monitorType("status")
- *             .url("https://facebook.com")
- *             .pronounceableName("Facebook homepage")
- *             .email(true)
- *             .sms(true)
- *             .call(true)
- *             .checkFrequency(30)
- *             .requestHeaders(            
- *                 MonitorRequestHeaderArgs.builder()
- *                     .name("Content-Type")
- *                     .value("application/json")
  *                     .build(),
- *                 MonitorRequestHeaderArgs.builder()
- *                     .name("X-Api-Key")
- *                     .value("secret")
+ *                 EscalationPolicyStepArgs.builder()
+ *                     .type("escalation")
+ *                     .waitBefore(600)
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("entire_team")
+ *                         .build())
  *                     .build())
+ *             .build());
+ * 
+ *         var pricing = new Monitor("pricing", MonitorArgs.builder()
+ *             .url("https://betterstack.com/pricing")
+ *             .monitorType("keyword")
+ *             .requiredKeyword("Pricing")
+ *             .pronounceableName("Pricing page")
+ *             .checkFrequency(60)
+ *             .recoveryPeriod(300)
+ *             .requestHeaders(MonitorRequestHeaderArgs.builder()
+ *                 .name("Accept-Language")
+ *                 .value("en")
+ *                 .build())
+ *             .escalationPolicyId(onCall.id())
+ *             .maintenanceFrom("02:00:00")
+ *             .maintenanceTo("05:00:00")
+ *             .maintenanceTimezone("UTC")
  *             .build());
  * 
  *     }

@@ -81,7 +81,7 @@ class GetTeamMemberResult:
     @pulumi.getter
     def email(self) -> _builtins.str:
         """
-        E-mail address.
+        The e-mail address of the team member to look up. Set it, or `id` to the same value.
         """
         return pulumi.get(self, "email")
 
@@ -97,7 +97,7 @@ class GetTeamMemberResult:
     @pulumi.getter
     def id(self) -> _builtins.str:
         """
-        The ID of the team member to look up.
+        The same value as `email`.
         """
         return pulumi.get(self, "id")
 
@@ -169,7 +169,8 @@ class AwaitableGetTeamMemberResult(GetTeamMemberResult):
             team_id=self.team_id)
 
 
-def get_team_member(id: Optional[_builtins.str] = None,
+def get_team_member(email: Optional[_builtins.str] = None,
+                    id: Optional[_builtins.str] = None,
                     team_id: Optional[_builtins.str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetTeamMemberResult:
     """
@@ -181,14 +182,16 @@ def get_team_member(id: Optional[_builtins.str] = None,
     import pulumi
     import pulumi_betterstack as betterstack
 
-    example = betterstack.get_team_member(id="12345")
+    example = betterstack.get_team_member(email="alice@example.com")
     ```
 
 
-    :param _builtins.str id: The ID of the team member to look up.
+    :param _builtins.str email: The e-mail address of the team member to look up. Set it, or `id` to the same value.
+    :param _builtins.str id: The same value as `email`.
     :param _builtins.str team_id: Team the membership is in, such as 't123'. Defaults to the provider's `team_id`. Set it to look the object up in another team.
     """
     __args__ = dict()
+    __args__['email'] = email
     __args__['id'] = id
     __args__['teamId'] = team_id
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
@@ -206,7 +209,8 @@ def get_team_member(id: Optional[_builtins.str] = None,
         role=pulumi.get(__ret__, 'role'),
         role_id=pulumi.get(__ret__, 'role_id'),
         team_id=pulumi.get(__ret__, 'team_id'))
-def get_team_member_output(id: pulumi.Input[Optional[_builtins.str]] = None,
+def get_team_member_output(email: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
+                           id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                            team_id: pulumi.Input[Optional[Optional[_builtins.str]]] = None,
                            opts: Optional[Union[pulumi.InvokeOptions, pulumi.InvokeOutputOptions]] = None) -> pulumi.Output[GetTeamMemberResult]:
     """
@@ -218,14 +222,16 @@ def get_team_member_output(id: pulumi.Input[Optional[_builtins.str]] = None,
     import pulumi
     import pulumi_betterstack as betterstack
 
-    example = betterstack.get_team_member(id="12345")
+    example = betterstack.get_team_member(email="alice@example.com")
     ```
 
 
-    :param _builtins.str id: The ID of the team member to look up.
+    :param _builtins.str email: The e-mail address of the team member to look up. Set it, or `id` to the same value.
+    :param _builtins.str id: The same value as `email`.
     :param _builtins.str team_id: Team the membership is in, such as 't123'. Defaults to the provider's `team_id`. Set it to look the object up in another team.
     """
     __args__ = dict()
+    __args__['email'] = email
     __args__['id'] = id
     __args__['teamId'] = team_id
     opts = pulumi.InvokeOutputOptions.merge(_utilities.get_invoke_opts_defaults(), opts)

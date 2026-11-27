@@ -18,7 +18,7 @@ import (
 //
 // ## Example Usage
 //
-// ### Create a heartbeat
+// ### Expect a nightly job once a day
 //
 // ```go
 // package main
@@ -32,10 +32,12 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewHeartbeat(ctx, "example", &betterstack.HeartbeatArgs{
-//				Name:   pulumi.String("Testing heartbeat"),
-//				Period: pulumi.Int(10800),
-//				Grace:  pulumi.Int(300),
+//			_, err := betterstack.NewHeartbeat(ctx, "nightly_backup", &betterstack.HeartbeatArgs{
+//				Name:   pulumi.String("Nightly database backup"),
+//				Period: pulumi.Int(86400),
+//				Grace:  pulumi.Int(7200),
+//				Email:  pulumi.Bool(true),
+//				Push:   pulumi.Bool(true),
 //			})
 //			if err != nil {
 //				return err
@@ -46,7 +48,7 @@ import (
 //
 // ```
 //
-// ### With metadata
+// ### Alert through an escalation policy, except during weekend maintenance
 //
 // ```go
 // package main
@@ -60,23 +62,32 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewHeartbeat(ctx, "with_metadata", &betterstack.HeartbeatArgs{
-//				Name:   pulumi.String("Testing heartbeat"),
-//				Period: pulumi.Int(10800),
-//				Grace:  pulumi.Int(300),
-//				Metadata: betterstack.HeartbeatMetadataMap{
-//					"Environment": &betterstack.HeartbeatMetadataArgs{
-//						Values: betterstack.HeartbeatMetadataValueArray{
-//							&betterstack.HeartbeatMetadataValueArgs{
-//								Value: pulumi.String("production"),
+//			high, err := betterstack.GetSeverity(ctx, &betterstack.LookupSeverityArgs{
+//				Name: pulumi.StringRef("High severity"),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			onCall, err := betterstack.NewEscalationPolicy(ctx, "on_call", &betterstack.EscalationPolicyArgs{
+//				Name: pulumi.String("On-call, then the whole team"),
+//				Steps: betterstack.EscalationPolicyStepArray{
+//					&betterstack.EscalationPolicyStepArgs{
+//						Type:       pulumi.String("escalation"),
+//						WaitBefore: pulumi.Int(0),
+//						SeverityId: pulumi.String(high.Id),
+//						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
+//							&betterstack.EscalationPolicyStepStepMemberArgs{
+//								Type: pulumi.String("current_on_call"),
 //							},
 //						},
 //					},
-//					"Owner": &betterstack.HeartbeatMetadataArgs{
-//						Values: betterstack.HeartbeatMetadataValueArray{
-//							&betterstack.HeartbeatMetadataValueArgs{
-//								Type: pulumi.String("Team"),
-//								Name: pulumi.String("Platform"),
+//					&betterstack.EscalationPolicyStepArgs{
+//						Type:       pulumi.String("escalation"),
+//						WaitBefore: pulumi.Int(600),
+//						SeverityId: pulumi.String(high.Id),
+//						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
+//							&betterstack.EscalationPolicyStepStepMemberArgs{
+//								Type: pulumi.String("entire_team"),
 //							},
 //						},
 //					},
@@ -85,37 +96,18 @@ import (
 //			if err != nil {
 //				return err
 //			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ### In a heartbeat group
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			example, err := betterstack.NewHeartbeatGroup(ctx, "example", &betterstack.HeartbeatGroupArgs{
-//				Name: pulumi.String("Backend services"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = betterstack.NewHeartbeat(ctx, "in_heartbeat_group", &betterstack.HeartbeatArgs{
-//				Name:             pulumi.String("Testing heartbeat"),
-//				Period:           pulumi.Int(10800),
-//				Grace:            pulumi.Int(300),
-//				HeartbeatGroupId: example.ID(),
+//			_, err = betterstack.NewHeartbeat(ctx, "queue_worker", &betterstack.HeartbeatArgs{
+//				Name:               pulumi.String("Queue worker"),
+//				Period:             pulumi.Int(300),
+//				Grace:              pulumi.Int(300),
+//				EscalationPolicyId: onCall.ID(),
+//				MaintenanceDays: pulumi.StringArray{
+//					pulumi.String("sat"),
+//					pulumi.String("sun"),
+//				},
+//				MaintenanceFrom:     pulumi.String("00:00:00"),
+//				MaintenanceTo:       pulumi.String("06:00:00"),
+//				MaintenanceTimezone: pulumi.String("London"),
 //			})
 //			if err != nil {
 //				return err

@@ -1,17 +1,21 @@
 {
     "name": "@better_stack/pulumi",
-    "version": "1.4.0",
-    "description": "A Pulumi package for managing Better Stack Account, Errors, Incidents and Telemetry resources.",
+    "version": "1.4.1",
+    "description": "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.",
     "keywords": [
         "betterstack",
         "observability",
         "monitoring",
-        "account",
-        "errors",
+        "uptime",
         "incidents",
-        "telemetry",
+        "on-call",
+        "status-page",
+        "logs",
+        "metrics",
+        "errors",
         "category/monitoring"
     ],
+    "homepage": "https://github.com/BetterStackHQ/pulumi-betterstack",
     "repository": "https://github.com/BetterStackHQ/pulumi-betterstack",
     "license": "Apache-2.0",
     "scripts": {
@@ -27,7 +31,7 @@
     "pulumi": {
         "resource": true,
         "name": "betterstack",
-        "version": "1.4.0",
+        "version": "1.4.1",
         "server": "github://api.github.com/BetterStackHQ/pulumi-betterstack"
     }
 }

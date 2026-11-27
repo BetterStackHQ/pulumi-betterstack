@@ -18,7 +18,7 @@ import (
 //
 // ## Example Usage
 //
-// ### Create a status page
+// ### Serve a status page from your own domain
 //
 // ```go
 // package main
@@ -32,11 +32,16 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewStatusPage(ctx, "example", &betterstack.StatusPageArgs{
-//				CompanyUrl:  pulumi.String("https://best-company.com"),
-//				CompanyName: pulumi.String("Best company"),
-//				Subdomain:   pulumi.String("best-company-tokyo"),
-//				Timezone:    pulumi.String("Tokyo"),
+//			_, err := betterstack.NewStatusPage(ctx, "public", &betterstack.StatusPageArgs{
+//				CompanyName:      pulumi.String("Example, Inc."),
+//				CompanyUrl:       pulumi.String("https://example.org"),
+//				Subdomain:        pulumi.String("example-inc-status"),
+//				CustomDomain:     pulumi.String("status.example.org"),
+//				Timezone:         pulumi.String("UTC"),
+//				Design:           pulumi.String(betterstack.StatusPageDesignV2),
+//				Theme:            pulumi.String(betterstack.StatusPageThemeSystem),
+//				Subscribable:     pulumi.Bool(true),
+//				AutomaticReports: pulumi.Bool(true),
 //			})
 //			if err != nil {
 //				return err
@@ -47,7 +52,7 @@ import (
 //
 // ```
 //
-// ### In a status page group
+// ### Show monitors in sections
 //
 // ```go
 // package main
@@ -61,19 +66,52 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			example, err := betterstack.NewStatusPageGroup(ctx, "example", &betterstack.StatusPageGroupArgs{
-//				Name:      pulumi.String("Production Status Pages"),
-//				SortIndex: pulumi.Int(1),
+//			website, err := betterstack.NewMonitor(ctx, "website", &betterstack.MonitorArgs{
+//				Url:               pulumi.String("https://uptime.betterstack.com"),
+//				PronounceableName: pulumi.String("Website"),
 //			})
 //			if err != nil {
 //				return err
 //			}
-//			_, err = betterstack.NewStatusPage(ctx, "in_status_page_group", &betterstack.StatusPageArgs{
-//				CompanyUrl:        pulumi.String("https://best-company.com"),
-//				CompanyName:       pulumi.String("Best company"),
-//				Subdomain:         pulumi.String("best-company-tokyo"),
-//				Timezone:          pulumi.String("Tokyo"),
-//				StatusPageGroupId: example.ID(),
+//			api, err := betterstack.NewMonitor(ctx, "api", &betterstack.MonitorArgs{
+//				Url:         pulumi.String("https://uptime.betterstack.com/api/v2/monitors"),
+//				MonitorType: pulumi.String(betterstack.MonitorTypeExpectedStatusCode),
+//				ExpectedStatusCodes: pulumi.IntArray{
+//					pulumi.Int(401),
+//				},
+//				PronounceableName: pulumi.String("API"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = betterstack.NewStatusPage(ctx, "services", &betterstack.StatusPageArgs{
+//				CompanyName: pulumi.String("Example, Inc."),
+//				Subdomain:   pulumi.String("example-inc-services"),
+//				Timezone:    pulumi.String("UTC"),
+//				Sections: betterstack.StatusPageSectionArray{
+//					&betterstack.StatusPageSectionArgs{
+//						Name: pulumi.String("Website"),
+//						Resources: betterstack.StatusPageSectionResourceArray{
+//							&betterstack.StatusPageSectionResourceArgs{
+//								ResourceType: pulumi.String("Monitor"),
+//								ResourceId:   website.ID(),
+//								PublicName:   pulumi.String("Website"),
+//								WidgetType:   pulumi.String("history"),
+//							},
+//						},
+//					},
+//					&betterstack.StatusPageSectionArgs{
+//						Name: pulumi.String("API"),
+//						Resources: betterstack.StatusPageSectionResourceArray{
+//							&betterstack.StatusPageSectionResourceArgs{
+//								ResourceType: pulumi.String("Monitor"),
+//								ResourceId:   api.ID(),
+//								PublicName:   pulumi.String("Public API"),
+//								WidgetType:   pulumi.String("response_times"),
+//							},
+//						},
+//					},
+//				},
 //			})
 //			if err != nil {
 //				return err

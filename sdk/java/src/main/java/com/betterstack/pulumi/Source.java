@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### Create a source
+ * ### Collect logs from Ubuntu servers and keep them for 30 days
  * 
  * <pre>
  * {@code
@@ -53,10 +53,11 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new Source("example", SourceArgs.builder()
- *             .name("My new HTTP source")
- *             .platform("http")
- *             .dataRegion("us")
+ *         var servers = new Source("servers", SourceArgs.builder()
+ *             .name("Production servers")
+ *             .platform("ubuntu")
+ *             .logsRetention(30)
+ *             .metricsRetention(90)
  *             .build());
  * 
  *     }
@@ -64,7 +65,7 @@ import javax.annotation.Nullable;
  * }
  * </pre>
  * 
- * ### In a source group
+ * ### Receive OpenTelemetry data in a source group
  * 
  * <pre>
  * {@code
@@ -90,15 +91,14 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new SourceGroup("example", SourceGroupArgs.builder()
- *             .name("Backend sources")
+ *         var backend = new SourceGroup("backend", SourceGroupArgs.builder()
+ *             .name("Backend")
  *             .build());
  * 
- *         var inSourceGroup = new Source("inSourceGroup", SourceArgs.builder()
- *             .name("My new HTTP source")
- *             .platform("http")
- *             .dataRegion("us")
- *             .sourceGroupId(example.id())
+ *         var otel = new Source("otel", SourceArgs.builder()
+ *             .name("Checkout service")
+ *             .platform("open_telemetry")
+ *             .sourceGroupId(backend.id())
  *             .build());
  * 
  *     }

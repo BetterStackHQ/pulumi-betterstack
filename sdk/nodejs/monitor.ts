@@ -14,77 +14,75 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### Create a monitor
+ * ### Check a website every 30 seconds
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.Monitor("example", {
+ * const website = new betterstack.Monitor("website", {
+ *     url: "https://uptime.betterstack.com",
  *     monitorType: betterstack.MonitorType.Status,
- *     url: "https://facebook.com",
- *     pronounceableName: "Facebook homepage",
- *     email: true,
- *     sms: true,
- *     call: true,
+ *     pronounceableName: "Uptime homepage",
  *     checkFrequency: 30,
- *     requestHeaders: [{
- *         name: "X-Custom-Header",
- *         value: "custom header value",
- *     }],
+ *     confirmationPeriod: 60,
+ *     regions: [
+ *         "us",
+ *         "eu",
+ *     ],
+ *     sslExpiration: 14,
+ *     domainExpiration: 14,
+ *     email: true,
+ *     push: true,
+ *     teamWait: 180,
  * });
  * ```
  *
- * ### With metadata
+ * ### Look for a keyword, alert through an escalation policy and pause at night
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const withMetadata = new betterstack.Monitor("with_metadata", {
- *     monitorType: betterstack.MonitorType.Status,
- *     url: "https://facebook.com",
- *     pronounceableName: "Facebook homepage",
- *     metadata: {
- *         Environment: {
- *             values: [{
- *                 value: "production",
- *             }],
- *         },
- *         Owner: {
- *             values: [{
- *                 type: "Team",
- *                 name: "Platform",
- *             }],
- *         },
- *     },
+ * const high = betterstack.getSeverity({
+ *     name: "High severity",
  * });
- * ```
- *
- * ### Two custom headers
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as betterstack from "@better_stack/pulumi";
- *
- * const twoCustomHeaders = new betterstack.Monitor("two_custom_headers", {
- *     monitorType: betterstack.MonitorType.Status,
- *     url: "https://facebook.com",
- *     pronounceableName: "Facebook homepage",
- *     email: true,
- *     sms: true,
- *     call: true,
- *     checkFrequency: 30,
- *     requestHeaders: [
+ * const onCall = new betterstack.EscalationPolicy("on_call", {
+ *     name: "On-call, then the whole team",
+ *     steps: [
  *         {
- *             name: "Content-Type",
- *             value: "application/json",
+ *             type: "escalation",
+ *             waitBefore: 0,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "current_on_call",
+ *             }],
  *         },
  *         {
- *             name: "X-Api-Key",
- *             value: "secret",
+ *             type: "escalation",
+ *             waitBefore: 600,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "entire_team",
+ *             }],
  *         },
  *     ],
+ * });
+ * const pricing = new betterstack.Monitor("pricing", {
+ *     url: "https://betterstack.com/pricing",
+ *     monitorType: betterstack.MonitorType.Keyword,
+ *     requiredKeyword: "Pricing",
+ *     pronounceableName: "Pricing page",
+ *     checkFrequency: 60,
+ *     recoveryPeriod: 300,
+ *     requestHeaders: [{
+ *         name: "Accept-Language",
+ *         value: "en",
+ *     }],
+ *     escalationPolicyId: onCall.id,
+ *     maintenanceFrom: "02:00:00",
+ *     maintenanceTo: "05:00:00",
+ *     maintenanceTimezone: "UTC",
  * });
  * ```
  *

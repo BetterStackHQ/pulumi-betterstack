@@ -836,55 +836,59 @@ class Heartbeat(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a heartbeat
+        ### Expect a nightly job once a day
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Heartbeat("example",
-            name="Testing heartbeat",
-            period=10800,
-            grace=300)
+        nightly_backup = betterstack.Heartbeat("nightly_backup",
+            name="Nightly database backup",
+            period=86400,
+            grace=7200,
+            email=True,
+            push=True)
         ```
 
-        ### With metadata
+        ### Alert through an escalation policy, except during weekend maintenance
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        with_metadata = betterstack.Heartbeat("with_metadata",
-            name="Testing heartbeat",
-            period=10800,
-            grace=300,
-            metadata={
-                "Environment": {
-                    "values": [{
-                        "value": "production",
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
+            steps=[
+                {
+                    "type": "escalation",
+                    "wait_before": 0,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
                     }],
                 },
-                "Owner": {
-                    "values": [{
-                        "type": "Team",
-                        "name": "Platform",
+                {
+                    "type": "escalation",
+                    "wait_before": 600,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "entire_team",
                     }],
                 },
-            })
-        ```
-
-        ### In a heartbeat group
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        example = betterstack.HeartbeatGroup("example", name="Backend services")
-        in_heartbeat_group = betterstack.Heartbeat("in_heartbeat_group",
-            name="Testing heartbeat",
-            period=10800,
+            ])
+        queue_worker = betterstack.Heartbeat("queue_worker",
+            name="Queue worker",
+            period=300,
             grace=300,
-            heartbeat_group_id=example.id)
+            escalation_policy_id=on_call.id,
+            maintenance_days=[
+                "sat",
+                "sun",
+            ],
+            maintenance_from="00:00:00",
+            maintenance_to="06:00:00",
+            maintenance_timezone="London")
         ```
 
         > A metadata object replaces all keys, including keys written through the metadata endpoints at `/api/v4/metadata`. Leaving metadata out keeps it unchanged, and an empty object, `{}`, clears it. Write an object's metadata either here or through those endpoints, not both.
@@ -935,55 +939,59 @@ class Heartbeat(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a heartbeat
+        ### Expect a nightly job once a day
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Heartbeat("example",
-            name="Testing heartbeat",
-            period=10800,
-            grace=300)
+        nightly_backup = betterstack.Heartbeat("nightly_backup",
+            name="Nightly database backup",
+            period=86400,
+            grace=7200,
+            email=True,
+            push=True)
         ```
 
-        ### With metadata
+        ### Alert through an escalation policy, except during weekend maintenance
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        with_metadata = betterstack.Heartbeat("with_metadata",
-            name="Testing heartbeat",
-            period=10800,
-            grace=300,
-            metadata={
-                "Environment": {
-                    "values": [{
-                        "value": "production",
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
+            steps=[
+                {
+                    "type": "escalation",
+                    "wait_before": 0,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
                     }],
                 },
-                "Owner": {
-                    "values": [{
-                        "type": "Team",
-                        "name": "Platform",
+                {
+                    "type": "escalation",
+                    "wait_before": 600,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "entire_team",
                     }],
                 },
-            })
-        ```
-
-        ### In a heartbeat group
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        example = betterstack.HeartbeatGroup("example", name="Backend services")
-        in_heartbeat_group = betterstack.Heartbeat("in_heartbeat_group",
-            name="Testing heartbeat",
-            period=10800,
+            ])
+        queue_worker = betterstack.Heartbeat("queue_worker",
+            name="Queue worker",
+            period=300,
             grace=300,
-            heartbeat_group_id=example.id)
+            escalation_policy_id=on_call.id,
+            maintenance_days=[
+                "sat",
+                "sun",
+            ],
+            maintenance_from="00:00:00",
+            maintenance_to="06:00:00",
+            maintenance_timezone="London")
         ```
 
         > A metadata object replaces all keys, including keys written through the metadata endpoints at `/api/v4/metadata`. Leaving metadata out keeps it unchanged, and an empty object, `{}`, clears it. Write an object's metadata either here or through those endpoints, not both.

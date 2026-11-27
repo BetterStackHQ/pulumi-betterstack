@@ -23,7 +23,7 @@ public final class GetTeamMemberResult {
      */
     private Boolean deletionProtection;
     /**
-     * @return E-mail address.
+     * @return The e-mail address of the team member to look up. Set it, or `id` to the same value.
      * 
      */
     private String email;
@@ -33,7 +33,7 @@ public final class GetTeamMemberResult {
      */
     private String firstName;
     /**
-     * @return The ID of the team member to look up.
+     * @return The same value as `email`.
      * 
      */
     private String id;
@@ -84,7 +84,7 @@ public final class GetTeamMemberResult {
         return this.deletionProtection;
     }
     /**
-     * @return E-mail address.
+     * @return The e-mail address of the team member to look up. Set it, or `id` to the same value.
      * 
      */
     public String email() {
@@ -98,7 +98,7 @@ public final class GetTeamMemberResult {
         return this.firstName;
     }
     /**
-     * @return The ID of the team member to look up.
+     * @return The same value as `email`.
      * 
      */
     public String id() {

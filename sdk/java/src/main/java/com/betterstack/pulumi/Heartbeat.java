@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### Create a heartbeat
+ * ### Expect a nightly job once a day
  * 
  * <pre>
  * {@code
@@ -50,10 +50,12 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var example = new Heartbeat("example", HeartbeatArgs.builder()
- *             .name("Testing heartbeat")
- *             .period(10800)
- *             .grace(300)
+ *         var nightlyBackup = new Heartbeat("nightlyBackup", HeartbeatArgs.builder()
+ *             .name("Nightly database backup")
+ *             .period(86400)
+ *             .grace(7200)
+ *             .email(true)
+ *             .push(true)
  *             .build());
  * 
  *     }
@@ -61,7 +63,7 @@ import javax.annotation.Nullable;
  * }
  * </pre>
  * 
- * ### With metadata
+ * ### Alert through an escalation policy, except during weekend maintenance
  * 
  * <pre>
  * {@code
@@ -70,10 +72,14 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.BetterstackFunctions;
+ * import com.betterstack.pulumi.inputs.GetSeverityArgs;
+ * import com.betterstack.pulumi.EscalationPolicy;
+ * import com.betterstack.pulumi.EscalationPolicyArgs;
+ * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
+ * import com.betterstack.pulumi.inputs.EscalationPolicyStepStepMemberArgs;
  * import com.betterstack.pulumi.Heartbeat;
  * import com.betterstack.pulumi.HeartbeatArgs;
- * import com.betterstack.pulumi.inputs.HeartbeatMetadataArgs;
- * import com.betterstack.pulumi.inputs.HeartbeatMetadataValueArgs;
  * import java.util.ArrayList;
  * import java.util.Arrays;
  * import java.util.Map;
@@ -87,65 +93,42 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var withMetadata = new Heartbeat("withMetadata", HeartbeatArgs.builder()
- *             .name("Testing heartbeat")
- *             .period(10800)
- *             .grace(300)
- *             .metadata(Map.ofEntries(
- *                 Map.entry("Environment", HeartbeatMetadataArgs.builder()
- *                     .values(HeartbeatMetadataValueArgs.builder()
- *                         .value("production")
+ *         final var high = BetterstackFunctions.getSeverity(GetSeverityArgs.builder()
+ *             .name("High severity")
+ *             .build());
+ * 
+ *         var onCall = new EscalationPolicy("onCall", EscalationPolicyArgs.builder()
+ *             .name("On-call, then the whole team")
+ *             .steps(            
+ *                 EscalationPolicyStepArgs.builder()
+ *                     .type("escalation")
+ *                     .waitBefore(0)
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("current_on_call")
  *                         .build())
- *                     .build()),
- *                 Map.entry("Owner", HeartbeatMetadataArgs.builder()
- *                     .values(HeartbeatMetadataValueArgs.builder()
- *                         .type("Team")
- *                         .name("Platform")
+ *                     .build(),
+ *                 EscalationPolicyStepArgs.builder()
+ *                     .type("escalation")
+ *                     .waitBefore(600)
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("entire_team")
  *                         .build())
  *                     .build())
- *             ))
  *             .build());
  * 
- *     }
- * }
- * }
- * </pre>
- * 
- * ### In a heartbeat group
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.HeartbeatGroup;
- * import com.betterstack.pulumi.HeartbeatGroupArgs;
- * import com.betterstack.pulumi.Heartbeat;
- * import com.betterstack.pulumi.HeartbeatArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App {
- *     public static void main(String[] args) {
- *         Pulumi.run(App::stack);
- *     }
- * 
- *     public static void stack(Context ctx) {
- *         var example = new HeartbeatGroup("example", HeartbeatGroupArgs.builder()
- *             .name("Backend services")
- *             .build());
- * 
- *         var inHeartbeatGroup = new Heartbeat("inHeartbeatGroup", HeartbeatArgs.builder()
- *             .name("Testing heartbeat")
- *             .period(10800)
+ *         var queueWorker = new Heartbeat("queueWorker", HeartbeatArgs.builder()
+ *             .name("Queue worker")
+ *             .period(300)
  *             .grace(300)
- *             .heartbeatGroupId(example.id())
+ *             .escalationPolicyId(onCall.id())
+ *             .maintenanceDays(            
+ *                 "sat",
+ *                 "sun")
+ *             .maintenanceFrom("00:00:00")
+ *             .maintenanceTo("06:00:00")
+ *             .maintenanceTimezone("London")
  *             .build());
  * 
  *     }

@@ -56,7 +56,8 @@ def packages
   {
     npm: lang.fetch("nodejs").fetch("packageName"),
     pypi: lang.fetch("python").fetch("packageName"),
-    nuget: "#{lang.fetch('csharp').fetch('rootNamespace')}.#{lang.fetch('csharp').fetch('namespaces').fetch(schema.fetch('name'))}",
+    # The Makefile sets the NuGet ID in the generated project: nuget.org reserves the namespace's Pulumi. prefix.
+    nuget: File.read(File.join(HERE, "sdk/dotnet/Pulumi.BetterStack.csproj"))[%r{<PackageId>([^<]+)</PackageId>}, 1] || abort("sdk/dotnet/Pulumi.BetterStack.csproj names no PackageId"),
     # pulumi-java names the artifact after the package; the Makefile renames it to the Java package's last part.
     maven: "#{java.fetch('basePackage')}:#{java.fetch('packages').fetch(schema.fetch('name'))}",
     java_package: java_package,
@@ -135,6 +136,8 @@ SDK_INSTALL = {
   "sdk/nodejs/README.md" => -> { "```bash\nnpm install #{packages[:npm]}\n```" },
   "sdk/python/pulumi_betterstack/README.md" => -> { "```bash\npip install #{pypi_project}\n```" },
   "sdk/dotnet/README.md" => -> { "```bash\ndotnet add package #{packages[:nuget]}\n```" },
+  # The Go module's README, which pkg.go.dev shows on the module page.
+  "sdk/go/README.md" => -> { "```bash\ngo get #{packages[:go]}\n```" },
   "sdk/java/README.md" => lambda {
     group, artifact = packages[:maven].split(":")
     "Maven Central `#{packages[:maven]}`, package `#{packages[:java_package]}`:\n\n" \
@@ -176,13 +179,11 @@ def render(path, text, generated)
   end
 end
 
-# provider/provider.go feeds the package description and keywords; they name the APIs themselves.
+# provider/provider.go feeds the package description. The keywords are search terms, not API names.
 def provider_errors
   errors = []
-  want = "A Pulumi package for managing Better Stack #{sentence_list(apis)} resources."
+  want = "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack."
   errors << "the package description is #{schema['description'].inspect}, want #{want.inspect} (provider/provider.go)" if schema["description"] != want
-  missing = apis.map(&:downcase) - schema.fetch("keywords")
-  errors << "the keywords lack #{missing.join(', ')} (provider/provider.go)" unless missing.empty?
   errors
 end
 

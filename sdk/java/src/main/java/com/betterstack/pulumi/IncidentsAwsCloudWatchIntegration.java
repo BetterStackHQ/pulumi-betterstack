@@ -57,7 +57,7 @@ import javax.annotation.Nullable;
  * }
  * </pre>
  * 
- * ### In an escalation policy
+ * ### Alert through an escalation policy
  * 
  * <pre>
  * {@code
@@ -66,6 +66,8 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.BetterstackFunctions;
+ * import com.betterstack.pulumi.inputs.GetSeverityArgs;
  * import com.betterstack.pulumi.EscalationPolicy;
  * import com.betterstack.pulumi.EscalationPolicyArgs;
  * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
@@ -85,15 +87,17 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var escalationPolicy = new EscalationPolicy("escalationPolicy", EscalationPolicyArgs.builder()
- *             .name("Standard Escalation Policy")
- *             .repeatCount(3)
- *             .repeatDelay(1800)
+ *         final var high = BetterstackFunctions.getSeverity(GetSeverityArgs.builder()
+ *             .name("High severity")
+ *             .build());
+ * 
+ *         var onCall = new EscalationPolicy("onCall", EscalationPolicyArgs.builder()
+ *             .name("On-call, then the whole team")
  *             .steps(            
  *                 EscalationPolicyStepArgs.builder()
  *                     .type("escalation")
  *                     .waitBefore(0)
- *                     .severityId("$SEVERITY_ID")
+ *                     .severityId(high.id())
  *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
  *                         .type("current_on_call")
  *                         .build())
@@ -101,18 +105,18 @@ import javax.annotation.Nullable;
  *                 EscalationPolicyStepArgs.builder()
  *                     .type("escalation")
  *                     .waitBefore(600)
- *                     .severityId("$SEVERITY_ID")
+ *                     .severityId(high.id())
  *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
  *                         .type("entire_team")
  *                         .build())
  *                     .build())
  *             .build());
  * 
- *         var inEscalationPolicy = new IncidentsAwsCloudWatchIntegration("inEscalationPolicy", IncidentsAwsCloudWatchIntegrationArgs.builder()
+ *         var alertThroughAnEscalationPolicy = new IncidentsAwsCloudWatchIntegration("alertThroughAnEscalationPolicy", IncidentsAwsCloudWatchIntegrationArgs.builder()
  *             .name("AWS CloudWatch alerts")
  *             .sms(true)
  *             .teamWait(180)
- *             .escalationPolicyId(escalationPolicy.id())
+ *             .escalationPolicyId(onCall.id())
  *             .build());
  * 
  *     }

@@ -16,7 +16,7 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### Create a monitor
+    /// ### Check a website every 30 seconds
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -26,29 +26,29 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.Monitor("example", new()
+    ///     var website = new BetterStack.Monitor("website", new()
     ///     {
+    ///         Url = "https://uptime.betterstack.com",
     ///         MonitorType = BetterStack.MonitorType.Status,
-    ///         Url = "https://facebook.com",
-    ///         PronounceableName = "Facebook homepage",
-    ///         Email = true,
-    ///         Sms = true,
-    ///         Call = true,
+    ///         PronounceableName = "Uptime homepage",
     ///         CheckFrequency = 30,
-    ///         RequestHeaders = new[]
+    ///         ConfirmationPeriod = 60,
+    ///         Regions = new[]
     ///         {
-    ///             new BetterStack.Inputs.MonitorRequestHeaderArgs
-    ///             {
-    ///                 Name = "X-Custom-Header",
-    ///                 Value = "custom header value",
-    ///             },
+    ///             "us",
+    ///             "eu",
     ///         },
+    ///         SslExpiration = 14,
+    ///         DomainExpiration = 14,
+    ///         Email = true,
+    ///         Push = true,
+    ///         TeamWait = 180,
     ///     });
     /// 
     /// });
     /// ```
     /// 
-    /// ### With metadata
+    /// ### Look for a keyword, alert through an escalation policy and pause at night
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -58,72 +58,65 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var withMetadata = new BetterStack.Monitor("with_metadata", new()
+    ///     var high = BetterStack.GetSeverity.Invoke(new()
     ///     {
-    ///         MonitorType = BetterStack.MonitorType.Status,
-    ///         Url = "https://facebook.com",
-    ///         PronounceableName = "Facebook homepage",
-    ///         Metadata = 
+    ///         Name = "High severity",
+    ///     });
+    /// 
+    ///     var onCall = new BetterStack.EscalationPolicy("on_call", new()
+    ///     {
+    ///         Name = "On-call, then the whole team",
+    ///         Steps = new[]
     ///         {
-    ///             { "Environment", new BetterStack.Inputs.MonitorMetadataArgs
+    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Values = new[]
+    ///                 Type = "escalation",
+    ///                 WaitBefore = 0,
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
+    ///                 StepMembers = new[]
     ///                 {
-    ///                     new BetterStack.Inputs.MonitorMetadataValueArgs
+    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
-    ///                         Value = "production",
+    ///                         Type = "current_on_call",
     ///                     },
     ///                 },
-    ///             } },
-    ///             { "Owner", new BetterStack.Inputs.MonitorMetadataArgs
+    ///             },
+    ///             new BetterStack.Inputs.EscalationPolicyStepArgs
     ///             {
-    ///                 Values = new[]
+    ///                 Type = "escalation",
+    ///                 WaitBefore = 600,
+    ///                 SeverityId = high.Apply(getSeverityResult =&gt; getSeverityResult.Id),
+    ///                 StepMembers = new[]
     ///                 {
-    ///                     new BetterStack.Inputs.MonitorMetadataValueArgs
+    ///                     new BetterStack.Inputs.EscalationPolicyStepStepMemberArgs
     ///                     {
-    ///                         Type = "Team",
-    ///                         Name = "Platform",
+    ///                         Type = "entire_team",
     ///                     },
     ///                 },
-    ///             } },
+    ///             },
     ///         },
     ///     });
     /// 
-    /// });
-    /// ```
-    /// 
-    /// ### Two custom headers
-    /// 
-    /// ```csharp
-    /// using System.Collections.Generic;
-    /// using System.Linq;
-    /// using Pulumi;
-    /// using BetterStack = Pulumi.BetterStack;
-    /// 
-    /// return await Deployment.RunAsync(() =&gt; 
-    /// {
-    ///     var twoCustomHeaders = new BetterStack.Monitor("two_custom_headers", new()
+    ///     var pricing = new BetterStack.Monitor("pricing", new()
     ///     {
-    ///         MonitorType = BetterStack.MonitorType.Status,
-    ///         Url = "https://facebook.com",
-    ///         PronounceableName = "Facebook homepage",
-    ///         Email = true,
-    ///         Sms = true,
-    ///         Call = true,
-    ///         CheckFrequency = 30,
+    ///         Url = "https://betterstack.com/pricing",
+    ///         MonitorType = BetterStack.MonitorType.Keyword,
+    ///         RequiredKeyword = "Pricing",
+    ///         PronounceableName = "Pricing page",
+    ///         CheckFrequency = 60,
+    ///         RecoveryPeriod = 300,
     ///         RequestHeaders = new[]
     ///         {
     ///             new BetterStack.Inputs.MonitorRequestHeaderArgs
     ///             {
-    ///                 Name = "Content-Type",
-    ///                 Value = "application/json",
-    ///             },
-    ///             new BetterStack.Inputs.MonitorRequestHeaderArgs
-    ///             {
-    ///                 Name = "X-Api-Key",
-    ///                 Value = "secret",
+    ///                 Name = "Accept-Language",
+    ///                 Value = "en",
     ///             },
     ///         },
+    ///         EscalationPolicyId = onCall.Id,
+    ///         MaintenanceFrom = "02:00:00",
+    ///         MaintenanceTo = "05:00:00",
+    ///         MaintenanceTimezone = "UTC",
     ///     });
     /// 
     /// });

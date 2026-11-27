@@ -16,7 +16,7 @@ namespace Pulumi.BetterStack
     /// 
     /// ## Example Usage
     /// 
-    /// ### Create a status page
+    /// ### Serve a status page from your own domain
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -26,18 +26,23 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.StatusPage("example", new()
+    ///     var @public = new BetterStack.StatusPage("public", new()
     ///     {
-    ///         CompanyUrl = "https://best-company.com",
-    ///         CompanyName = "Best company",
-    ///         Subdomain = "best-company-tokyo",
-    ///         Timezone = "Tokyo",
+    ///         CompanyName = "Example, Inc.",
+    ///         CompanyUrl = "https://example.org",
+    ///         Subdomain = "example-inc-status",
+    ///         CustomDomain = "status.example.org",
+    ///         Timezone = "UTC",
+    ///         Design = BetterStack.StatusPageDesign.V2,
+    ///         Theme = BetterStack.StatusPageTheme.System,
+    ///         Subscribable = true,
+    ///         AutomaticReports = true,
     ///     });
     /// 
     /// });
     /// ```
     /// 
-    /// ### In a status page group
+    /// ### Show monitors in sections
     /// 
     /// ```csharp
     /// using System.Collections.Generic;
@@ -47,19 +52,59 @@ namespace Pulumi.BetterStack
     /// 
     /// return await Deployment.RunAsync(() =&gt; 
     /// {
-    ///     var example = new BetterStack.StatusPageGroup("example", new()
+    ///     var website = new BetterStack.Monitor("website", new()
     ///     {
-    ///         Name = "Production Status Pages",
-    ///         SortIndex = 1,
+    ///         Url = "https://uptime.betterstack.com",
+    ///         PronounceableName = "Website",
     ///     });
     /// 
-    ///     var inStatusPageGroup = new BetterStack.StatusPage("in_status_page_group", new()
+    ///     var api = new BetterStack.Monitor("api", new()
     ///     {
-    ///         CompanyUrl = "https://best-company.com",
-    ///         CompanyName = "Best company",
-    ///         Subdomain = "best-company-tokyo",
-    ///         Timezone = "Tokyo",
-    ///         StatusPageGroupId = example.Id,
+    ///         Url = "https://uptime.betterstack.com/api/v2/monitors",
+    ///         MonitorType = BetterStack.MonitorType.ExpectedStatusCode,
+    ///         ExpectedStatusCodes = new[]
+    ///         {
+    ///             401,
+    ///         },
+    ///         PronounceableName = "API",
+    ///     });
+    /// 
+    ///     var services = new BetterStack.StatusPage("services", new()
+    ///     {
+    ///         CompanyName = "Example, Inc.",
+    ///         Subdomain = "example-inc-services",
+    ///         Timezone = "UTC",
+    ///         Sections = new[]
+    ///         {
+    ///             new BetterStack.Inputs.StatusPageSectionArgs
+    ///             {
+    ///                 Name = "Website",
+    ///                 Resources = new[]
+    ///                 {
+    ///                     new BetterStack.Inputs.StatusPageSectionResourceArgs
+    ///                     {
+    ///                         ResourceType = "Monitor",
+    ///                         ResourceId = website.Id,
+    ///                         PublicName = "Website",
+    ///                         WidgetType = "history",
+    ///                     },
+    ///                 },
+    ///             },
+    ///             new BetterStack.Inputs.StatusPageSectionArgs
+    ///             {
+    ///                 Name = "API",
+    ///                 Resources = new[]
+    ///                 {
+    ///                     new BetterStack.Inputs.StatusPageSectionResourceArgs
+    ///                     {
+    ///                         ResourceType = "Monitor",
+    ///                         ResourceId = api.Id,
+    ///                         PublicName = "Public API",
+    ///                         WidgetType = "response_times",
+    ///                     },
+    ///                 },
+    ///             },
+    ///         },
     ///     });
     /// 
     /// });

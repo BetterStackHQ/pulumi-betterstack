@@ -14,31 +14,31 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### Create a source
+ * ### Collect logs from Ubuntu servers and keep them for 30 days
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.Source("example", {
- *     name: "My new HTTP source",
- *     platform: betterstack.SourcePlatform.Http,
- *     dataRegion: "us",
+ * const servers = new betterstack.Source("servers", {
+ *     name: "Production servers",
+ *     platform: betterstack.SourcePlatform.Ubuntu,
+ *     logsRetention: 30,
+ *     metricsRetention: 90,
  * });
  * ```
  *
- * ### In a source group
+ * ### Receive OpenTelemetry data in a source group
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.SourceGroup("example", {name: "Backend sources"});
- * const inSourceGroup = new betterstack.Source("in_source_group", {
- *     name: "My new HTTP source",
- *     platform: betterstack.SourcePlatform.Http,
- *     dataRegion: "us",
- *     sourceGroupId: example.id,
+ * const backend = new betterstack.SourceGroup("backend", {name: "Backend"});
+ * const otel = new betterstack.Source("otel", {
+ *     name: "Checkout service",
+ *     platform: betterstack.SourcePlatform.OpenTelemetry,
+ *     sourceGroupId: backend.id,
  * });
  * ```
  *

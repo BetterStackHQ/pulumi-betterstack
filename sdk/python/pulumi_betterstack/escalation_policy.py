@@ -310,21 +310,20 @@ class EscalationPolicy(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Escalation policy
+        ### Page the on-call person, then the whole team after 10 minutes
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -332,7 +331,7 @@ class EscalationPolicy(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
@@ -340,112 +339,33 @@ class EscalationPolicy(pulumi.CustomResource):
             ])
         ```
 
-        ### Branching
+        ### Post to Slack right away, page the on-call person after 3 minutes and repeat
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        branching = betterstack.EscalationPolicy("branching",
-            name="Business Hours Branching",
+        high = betterstack.get_severity(name="High severity")
+        slack_first = betterstack.EscalationPolicy("slack_first",
+            name="Slack, then on-call",
+            repeat_count=3,
+            repeat_delay=300,
             steps=[
                 {
-                    "type": "time_branching",
+                    "type": "escalation",
                     "wait_before": 0,
-                    "timezone": "America/New_York",
-                    "days": [
-                        "mon",
-                        "tue",
-                        "wed",
-                        "thu",
-                        "fri",
-                    ],
-                    "time_from": "09:00",
-                    "time_to": "17:00",
-                    "policy_metadata_key": "business_hours_policy",
-                },
-                {
-                    "type": "metadata_branching",
-                    "wait_before": 0,
-                    "metadata_key": "urgency",
-                    "metadata_values": [{
-                        "type": "String",
-                        "value": "low",
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "all_slack_integrations",
                     }],
-                    "action_type": "do_not_escalate",
                 },
                 {
                     "type": "escalation",
-                    "wait_before": 300,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "current_on_call",
-                        },
-                        {
-                            "type": "all_slack_integrations",
-                        },
-                    ],
-                },
-            ])
-        ```
-
-        ### Instructions
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        instructions = betterstack.EscalationPolicy("instructions",
-            name="Policy with Instructions and Todo list",
-            steps=[
-                {
-                    "type": "instructions",
-                    "wait_before": 0,
-                    "instructions_comment": \"\"\"IMMEDIATE ACTIONS:
-        1. Check system status at status.example.com
-        2. Verify in monitoring dashboard
-        3. Check #incidents Slack channel
-        4. If database-related, run: kubectl get pods -n production\"\"\",
-                    "instructions_reminder_enabled": False,
-                },
-                {
-                    "type": "escalation",
-                    "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "current_on_call",
-                        },
-                        {
-                            "type": "all_slack_integrations",
-                        },
-                    ],
-                },
-                {
-                    "type": "instructions",
-                    "wait_before": 900,
-                    "instructions_comment": \"\"\"ESCALATION REQUIRED:
-        - [ ] Page backup on-call
-        - [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#
-        - [ ] Update status page
-        - [ ] Notify stakeholders via #incident-comms\"\"\",
-                    "instructions_reminder_enabled": True,
-                    "instructions_reminder_interval_hours": 2,
-                },
-                {
-                    "type": "escalation",
-                    "wait_before": 300,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "entire_team",
-                        },
-                        {
-                            "type": "user",
-                            "email": "manager@example.com",
-                        },
-                    ],
+                    "wait_before": 180,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
+                    }],
                 },
             ])
         ```
@@ -486,21 +406,20 @@ class EscalationPolicy(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Escalation policy
+        ### Page the on-call person, then the whole team after 10 minutes
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -508,7 +427,7 @@ class EscalationPolicy(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
@@ -516,112 +435,33 @@ class EscalationPolicy(pulumi.CustomResource):
             ])
         ```
 
-        ### Branching
+        ### Post to Slack right away, page the on-call person after 3 minutes and repeat
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        branching = betterstack.EscalationPolicy("branching",
-            name="Business Hours Branching",
+        high = betterstack.get_severity(name="High severity")
+        slack_first = betterstack.EscalationPolicy("slack_first",
+            name="Slack, then on-call",
+            repeat_count=3,
+            repeat_delay=300,
             steps=[
                 {
-                    "type": "time_branching",
+                    "type": "escalation",
                     "wait_before": 0,
-                    "timezone": "America/New_York",
-                    "days": [
-                        "mon",
-                        "tue",
-                        "wed",
-                        "thu",
-                        "fri",
-                    ],
-                    "time_from": "09:00",
-                    "time_to": "17:00",
-                    "policy_metadata_key": "business_hours_policy",
-                },
-                {
-                    "type": "metadata_branching",
-                    "wait_before": 0,
-                    "metadata_key": "urgency",
-                    "metadata_values": [{
-                        "type": "String",
-                        "value": "low",
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "all_slack_integrations",
                     }],
-                    "action_type": "do_not_escalate",
                 },
                 {
                     "type": "escalation",
-                    "wait_before": 300,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "current_on_call",
-                        },
-                        {
-                            "type": "all_slack_integrations",
-                        },
-                    ],
-                },
-            ])
-        ```
-
-        ### Instructions
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        instructions = betterstack.EscalationPolicy("instructions",
-            name="Policy with Instructions and Todo list",
-            steps=[
-                {
-                    "type": "instructions",
-                    "wait_before": 0,
-                    "instructions_comment": \"\"\"IMMEDIATE ACTIONS:
-        1. Check system status at status.example.com
-        2. Verify in monitoring dashboard
-        3. Check #incidents Slack channel
-        4. If database-related, run: kubectl get pods -n production\"\"\",
-                    "instructions_reminder_enabled": False,
-                },
-                {
-                    "type": "escalation",
-                    "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "current_on_call",
-                        },
-                        {
-                            "type": "all_slack_integrations",
-                        },
-                    ],
-                },
-                {
-                    "type": "instructions",
-                    "wait_before": 900,
-                    "instructions_comment": \"\"\"ESCALATION REQUIRED:
-        - [ ] Page backup on-call
-        - [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#
-        - [ ] Update status page
-        - [ ] Notify stakeholders via #incident-comms\"\"\",
-                    "instructions_reminder_enabled": True,
-                    "instructions_reminder_interval_hours": 2,
-                },
-                {
-                    "type": "escalation",
-                    "wait_before": 300,
-                    "severity_id": "$SEVERITY_ID",
-                    "step_members": [
-                        {
-                            "type": "entire_team",
-                        },
-                        {
-                            "type": "user",
-                            "email": "manager@example.com",
-                        },
-                    ],
+                    "wait_before": 180,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
+                    }],
                 },
             ])
         ```

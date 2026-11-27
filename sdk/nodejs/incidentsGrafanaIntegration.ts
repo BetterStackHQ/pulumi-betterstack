@@ -22,21 +22,22 @@ import * as utilities from "./utilities";
  * });
  * ```
  *
- * ### In an escalation policy
+ * ### Alert through an escalation policy
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const escalationPolicy = new betterstack.EscalationPolicy("escalation_policy", {
- *     name: "Standard Escalation Policy",
- *     repeatCount: 3,
- *     repeatDelay: 1800,
+ * const high = betterstack.getSeverity({
+ *     name: "High severity",
+ * });
+ * const onCall = new betterstack.EscalationPolicy("on_call", {
+ *     name: "On-call, then the whole team",
  *     steps: [
  *         {
  *             type: "escalation",
  *             waitBefore: 0,
- *             severityId: "$SEVERITY_ID",
+ *             severityId: high.then(high => high.id),
  *             stepMembers: [{
  *                 type: "current_on_call",
  *             }],
@@ -44,18 +45,18 @@ import * as utilities from "./utilities";
  *         {
  *             type: "escalation",
  *             waitBefore: 600,
- *             severityId: "$SEVERITY_ID",
+ *             severityId: high.then(high => high.id),
  *             stepMembers: [{
  *                 type: "entire_team",
  *             }],
  *         },
  *     ],
  * });
- * const inEscalationPolicy = new betterstack.IncidentsGrafanaIntegration("in_escalation_policy", {
+ * const alertThroughAnEscalationPolicy = new betterstack.IncidentsGrafanaIntegration("alert_through_an_escalation_policy", {
  *     name: "Grafana alerts",
  *     sms: true,
  *     teamWait: 180,
- *     escalationPolicyId: escalationPolicy.id,
+ *     escalationPolicyId: onCall.id,
  * });
  * ```
  *

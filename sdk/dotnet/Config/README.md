@@ -1,1 +1,1 @@
-A Pulumi package for managing Better Stack Account, Errors, Incidents and Telemetry resources.
+A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.

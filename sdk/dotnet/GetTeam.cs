@@ -26,7 +26,7 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeam.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Id = "t123",
         ///     });
         /// 
         /// });
@@ -50,7 +50,7 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeam.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Id = "t123",
         ///     });
         /// 
         /// });
@@ -74,7 +74,7 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeam.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Id = "t123",
         ///     });
         /// 
         /// });

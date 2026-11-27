@@ -1647,75 +1647,71 @@ class Monitor(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a monitor
+        ### Check a website every 30 seconds
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Monitor("example",
+        website = betterstack.Monitor("website",
+            url="https://uptime.betterstack.com",
             monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            email=True,
-            sms=True,
-            call=True,
+            pronounceable_name="Uptime homepage",
             check_frequency=30,
-            request_headers=[{
-                "name": "X-Custom-Header",
-                "value": "custom header value",
-            }])
+            confirmation_period=60,
+            regions=[
+                "us",
+                "eu",
+            ],
+            ssl_expiration=14,
+            domain_expiration=14,
+            email=True,
+            push=True,
+            team_wait=180)
         ```
 
-        ### With metadata
+        ### Look for a keyword, alert through an escalation policy and pause at night
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        with_metadata = betterstack.Monitor("with_metadata",
-            monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            metadata={
-                "Environment": {
-                    "values": [{
-                        "value": "production",
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
+            steps=[
+                {
+                    "type": "escalation",
+                    "wait_before": 0,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
                     }],
                 },
-                "Owner": {
-                    "values": [{
-                        "type": "Team",
-                        "name": "Platform",
+                {
+                    "type": "escalation",
+                    "wait_before": 600,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "entire_team",
                     }],
-                },
-            })
-        ```
-
-        ### Two custom headers
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        two_custom_headers = betterstack.Monitor("two_custom_headers",
-            monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            email=True,
-            sms=True,
-            call=True,
-            check_frequency=30,
-            request_headers=[
-                {
-                    "name": "Content-Type",
-                    "value": "application/json",
-                },
-                {
-                    "name": "X-Api-Key",
-                    "value": "secret",
                 },
             ])
+        pricing = betterstack.Monitor("pricing",
+            url="https://betterstack.com/pricing",
+            monitor_type=betterstack.MonitorType.KEYWORD,
+            required_keyword="Pricing",
+            pronounceable_name="Pricing page",
+            check_frequency=60,
+            recovery_period=300,
+            request_headers=[{
+                "name": "Accept-Language",
+                "value": "en",
+            }],
+            escalation_policy_id=on_call.id,
+            maintenance_from="02:00:00",
+            maintenance_to="05:00:00",
+            maintenance_timezone="UTC")
         ```
 
         At least one of `url` or `scenario_name` must be configured. The provider validates this condition before creating or updating the resource.
@@ -1791,75 +1787,71 @@ class Monitor(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a monitor
+        ### Check a website every 30 seconds
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Monitor("example",
+        website = betterstack.Monitor("website",
+            url="https://uptime.betterstack.com",
             monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            email=True,
-            sms=True,
-            call=True,
+            pronounceable_name="Uptime homepage",
             check_frequency=30,
-            request_headers=[{
-                "name": "X-Custom-Header",
-                "value": "custom header value",
-            }])
+            confirmation_period=60,
+            regions=[
+                "us",
+                "eu",
+            ],
+            ssl_expiration=14,
+            domain_expiration=14,
+            email=True,
+            push=True,
+            team_wait=180)
         ```
 
-        ### With metadata
+        ### Look for a keyword, alert through an escalation policy and pause at night
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        with_metadata = betterstack.Monitor("with_metadata",
-            monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            metadata={
-                "Environment": {
-                    "values": [{
-                        "value": "production",
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
+            steps=[
+                {
+                    "type": "escalation",
+                    "wait_before": 0,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "current_on_call",
                     }],
                 },
-                "Owner": {
-                    "values": [{
-                        "type": "Team",
-                        "name": "Platform",
+                {
+                    "type": "escalation",
+                    "wait_before": 600,
+                    "severity_id": high.id,
+                    "step_members": [{
+                        "type": "entire_team",
                     }],
-                },
-            })
-        ```
-
-        ### Two custom headers
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        two_custom_headers = betterstack.Monitor("two_custom_headers",
-            monitor_type=betterstack.MonitorType.STATUS,
-            url="https://facebook.com",
-            pronounceable_name="Facebook homepage",
-            email=True,
-            sms=True,
-            call=True,
-            check_frequency=30,
-            request_headers=[
-                {
-                    "name": "Content-Type",
-                    "value": "application/json",
-                },
-                {
-                    "name": "X-Api-Key",
-                    "value": "secret",
                 },
             ])
+        pricing = betterstack.Monitor("pricing",
+            url="https://betterstack.com/pricing",
+            monitor_type=betterstack.MonitorType.KEYWORD,
+            required_keyword="Pricing",
+            pronounceable_name="Pricing page",
+            check_frequency=60,
+            recovery_period=300,
+            request_headers=[{
+                "name": "Accept-Language",
+                "value": "en",
+            }],
+            escalation_policy_id=on_call.id,
+            maintenance_from="02:00:00",
+            maintenance_to="05:00:00",
+            maintenance_timezone="UTC")
         ```
 
         At least one of `url` or `scenario_name` must be configured. The provider validates this condition before creating or updating the resource.

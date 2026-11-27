@@ -1001,30 +1001,30 @@ class Source(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a source
+        ### Collect logs from Ubuntu servers and keep them for 30 days
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Source("example",
-            name="My new HTTP source",
-            platform=betterstack.SourcePlatform.HTTP,
-            data_region="us")
+        servers = betterstack.Source("servers",
+            name="Production servers",
+            platform=betterstack.SourcePlatform.UBUNTU,
+            logs_retention=30,
+            metrics_retention=90)
         ```
 
-        ### In a source group
+        ### Receive OpenTelemetry data in a source group
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.SourceGroup("example", name="Backend sources")
-        in_source_group = betterstack.Source("in_source_group",
-            name="My new HTTP source",
-            platform=betterstack.SourcePlatform.HTTP,
-            data_region="us",
-            source_group_id=example.id)
+        backend = betterstack.SourceGroup("backend", name="Backend")
+        otel = betterstack.Source("otel",
+            name="Checkout service",
+            platform=betterstack.SourcePlatform.OPEN_TELEMETRY,
+            source_group_id=backend.id)
         ```
 
         'apache2', 'aws', 'aws_cloudwatch', 'aws_ecs', 'aws_elb', 'aws_fargate', 'azure', 'azure_logs', 'claude_platform', 'cloudflare_logpush', 'cloudflare_prometheus_exporter', 'cloudflare_worker', 'datadog_agent', 'digitalocean', 'docker', 'dokku', 'dotnet', 'elasticsearch', 'erlang', 'fastly', 'filebeat', 'flights', 'fluentbit', 'fluentd', 'fly_io', 'gcp', 'go', 'google_cloud_pubsub', 'haproxy', 'heroku', 'http', 'java', 'javascript', 'kubernetes', 'logstash', 'minio', 'mongodb', 'mysql', 'nginx', 'open_telemetry', 'oracle_cloud', 'php', 'postgresql', 'prometheus', 'prometheus_scrape', 'python', 'rabbitmq', 'redis', 'render', 'rsyslog', 'ruby', `syslog-ng`, 'traefik', 'ubuntu', 'vector', 'vercel_integration', 'winlogbeat'
@@ -1082,30 +1082,30 @@ class Source(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a source
+        ### Collect logs from Ubuntu servers and keep them for 30 days
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.Source("example",
-            name="My new HTTP source",
-            platform=betterstack.SourcePlatform.HTTP,
-            data_region="us")
+        servers = betterstack.Source("servers",
+            name="Production servers",
+            platform=betterstack.SourcePlatform.UBUNTU,
+            logs_retention=30,
+            metrics_retention=90)
         ```
 
-        ### In a source group
+        ### Receive OpenTelemetry data in a source group
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.SourceGroup("example", name="Backend sources")
-        in_source_group = betterstack.Source("in_source_group",
-            name="My new HTTP source",
-            platform=betterstack.SourcePlatform.HTTP,
-            data_region="us",
-            source_group_id=example.id)
+        backend = betterstack.SourceGroup("backend", name="Backend")
+        otel = betterstack.Source("otel",
+            name="Checkout service",
+            platform=betterstack.SourcePlatform.OPEN_TELEMETRY,
+            source_group_id=backend.id)
         ```
 
         'apache2', 'aws', 'aws_cloudwatch', 'aws_ecs', 'aws_elb', 'aws_fargate', 'azure', 'azure_logs', 'claude_platform', 'cloudflare_logpush', 'cloudflare_prometheus_exporter', 'cloudflare_worker', 'datadog_agent', 'digitalocean', 'docker', 'dokku', 'dotnet', 'elasticsearch', 'erlang', 'fastly', 'filebeat', 'flights', 'fluentbit', 'fluentd', 'fly_io', 'gcp', 'go', 'google_cloud_pubsub', 'haproxy', 'heroku', 'http', 'java', 'javascript', 'kubernetes', 'logstash', 'minio', 'mongodb', 'mysql', 'nginx', 'open_telemetry', 'oracle_cloud', 'php', 'postgresql', 'prometheus', 'prometheus_scrape', 'python', 'rabbitmq', 'redis', 'render', 'rsyslog', 'ruby', `syslog-ng`, 'traefik', 'ubuntu', 'vector', 'vercel_integration', 'winlogbeat'

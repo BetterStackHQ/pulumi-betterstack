@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### Escalation policy
+ * ### Page the on-call person, then the whole team after 10 minutes
  * 
  * <pre>
  * {@code
@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.BetterstackFunctions;
+ * import com.betterstack.pulumi.inputs.GetSeverityArgs;
  * import com.betterstack.pulumi.EscalationPolicy;
  * import com.betterstack.pulumi.EscalationPolicyArgs;
  * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
@@ -48,15 +50,17 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var escalationPolicy = new EscalationPolicy("escalationPolicy", EscalationPolicyArgs.builder()
- *             .name("Standard Escalation Policy")
- *             .repeatCount(3)
- *             .repeatDelay(1800)
+ *         final var high = BetterstackFunctions.getSeverity(GetSeverityArgs.builder()
+ *             .name("High severity")
+ *             .build());
+ * 
+ *         var onCall = new EscalationPolicy("onCall", EscalationPolicyArgs.builder()
+ *             .name("On-call, then the whole team")
  *             .steps(            
  *                 EscalationPolicyStepArgs.builder()
  *                     .type("escalation")
  *                     .waitBefore(0)
- *                     .severityId("$SEVERITY_ID")
+ *                     .severityId(high.id())
  *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
  *                         .type("current_on_call")
  *                         .build())
@@ -64,7 +68,7 @@ import javax.annotation.Nullable;
  *                 EscalationPolicyStepArgs.builder()
  *                     .type("escalation")
  *                     .waitBefore(600)
- *                     .severityId("$SEVERITY_ID")
+ *                     .severityId(high.id())
  *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
  *                         .type("entire_team")
  *                         .build())
@@ -76,7 +80,7 @@ import javax.annotation.Nullable;
  * }
  * </pre>
  * 
- * ### Branching
+ * ### Post to Slack right away, page the on-call person after 3 minutes and repeat
  * 
  * <pre>
  * {@code
@@ -85,10 +89,11 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.BetterstackFunctions;
+ * import com.betterstack.pulumi.inputs.GetSeverityArgs;
  * import com.betterstack.pulumi.EscalationPolicy;
  * import com.betterstack.pulumi.EscalationPolicyArgs;
  * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
- * import com.betterstack.pulumi.inputs.EscalationPolicyStepMetadataValueArgs;
  * import com.betterstack.pulumi.inputs.EscalationPolicyStepStepMemberArgs;
  * import java.util.ArrayList;
  * import java.util.Arrays;
@@ -103,133 +108,35 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var branching = new EscalationPolicy("branching", EscalationPolicyArgs.builder()
- *             .name("Business Hours Branching")
+ *         final var high = BetterstackFunctions.getSeverity(GetSeverityArgs.builder()
+ *             .name("High severity")
+ *             .build());
+ * 
+ *         var slackFirst = new EscalationPolicy("slackFirst", EscalationPolicyArgs.builder()
+ *             .name("Slack, then on-call")
+ *             .repeatCount(3)
+ *             .repeatDelay(300)
  *             .steps(            
  *                 EscalationPolicyStepArgs.builder()
- *                     .type("time_branching")
+ *                     .type("escalation")
  *                     .waitBefore(0)
- *                     .timezone("America/New_York")
- *                     .days(                    
- *                         "mon",
- *                         "tue",
- *                         "wed",
- *                         "thu",
- *                         "fri")
- *                     .timeFrom("09:00")
- *                     .timeTo("17:00")
- *                     .policyMetadataKey("business_hours_policy")
- *                     .build(),
- *                 EscalationPolicyStepArgs.builder()
- *                     .type("metadata_branching")
- *                     .waitBefore(0)
- *                     .metadataKey("urgency")
- *                     .metadataValues(EscalationPolicyStepMetadataValueArgs.builder()
- *                         .type("String")
- *                         .value("low")
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("all_slack_integrations")
  *                         .build())
- *                     .actionType("do_not_escalate")
  *                     .build(),
  *                 EscalationPolicyStepArgs.builder()
  *                     .type("escalation")
- *                     .waitBefore(300)
- *                     .severityId("$SEVERITY_ID")
- *                     .stepMembers(                    
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("current_on_call")
- *                             .build(),
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("all_slack_integrations")
- *                             .build())
+ *                     .waitBefore(180)
+ *                     .severityId(high.id())
+ *                     .stepMembers(EscalationPolicyStepStepMemberArgs.builder()
+ *                         .type("current_on_call")
+ *                         .build())
  *                     .build())
  *             .build());
  * 
  *     }
  * }
- * }
- * </pre>
- * 
- * ### Instructions
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.EscalationPolicy;
- * import com.betterstack.pulumi.EscalationPolicyArgs;
- * import com.betterstack.pulumi.inputs.EscalationPolicyStepArgs;
- * import com.betterstack.pulumi.inputs.EscalationPolicyStepStepMemberArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App }{{@code
- *     public static void main(String[] args) }{{@code
- *         Pulumi.run(App::stack);
- *     }}{@code
- * 
- *     public static void stack(Context ctx) }{{@code
- *         var instructions = new EscalationPolicy("instructions", EscalationPolicyArgs.builder()
- *             .name("Policy with Instructions and Todo list")
- *             .steps(            
- *                 EscalationPolicyStepArgs.builder()
- *                     .type("instructions")
- *                     .waitBefore(0)
- *                     .instructionsComment("""
- * IMMEDIATE ACTIONS:
- * 1. Check system status at status.example.com
- * 2. Verify in monitoring dashboard
- * 3. Check #incidents Slack channel
- * 4. If database-related, run: kubectl get pods -n production                    """)
- *                     .instructionsReminderEnabled(false)
- *                     .build(),
- *                 EscalationPolicyStepArgs.builder()
- *                     .type("escalation")
- *                     .waitBefore(0)
- *                     .severityId("$SEVERITY_ID")
- *                     .stepMembers(                    
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("current_on_call")
- *                             .build(),
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("all_slack_integrations")
- *                             .build())
- *                     .build(),
- *                 EscalationPolicyStepArgs.builder()
- *                     .type("instructions")
- *                     .waitBefore(900)
- *                     .instructionsComment("""
- * ESCALATION REQUIRED:
- * - [ ] Page backup on-call
- * - [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#
- * - [ ] Update status page
- * - [ ] Notify stakeholders via #incident-comms                    """)
- *                     .instructionsReminderEnabled(true)
- *                     .instructionsReminderIntervalHours(2)
- *                     .build(),
- *                 EscalationPolicyStepArgs.builder()
- *                     .type("escalation")
- *                     .waitBefore(300)
- *                     .severityId("$SEVERITY_ID")
- *                     .stepMembers(                    
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("entire_team")
- *                             .build(),
- *                         EscalationPolicyStepStepMemberArgs.builder()
- *                             .type("user")
- *                             .email("manager}{@literal @}{@code example.com")
- *                             .build())
- *                     .build())
- *             .build());
- * 
- *     }}{@code
- * }}{@code
  * }
  * </pre>
  * 

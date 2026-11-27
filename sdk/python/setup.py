@@ -9,7 +9,7 @@ from setuptools.command.install import install
 from subprocess import check_call
 
 
-VERSION = "1.4.0"
+VERSION = "1.4.1"
 def readme():
     try:
         with open('README.md', encoding='utf-8') as f:
@@ -21,10 +21,11 @@ def readme():
 setup(name='pulumi_betterstack',
       python_requires='>=3.9',
       version=VERSION,
-      description="A Pulumi package for managing Better Stack Account, Errors, Incidents and Telemetry resources.",
+      description="A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.",
       long_description=readme(),
       long_description_content_type='text/markdown',
-      keywords='betterstack observability monitoring account errors incidents telemetry category/monitoring',
+      keywords='betterstack observability monitoring uptime incidents on-call status-page logs metrics errors category/monitoring',
+      url='https://github.com/BetterStackHQ/pulumi-betterstack',
       project_urls={
           'Repository': 'https://github.com/BetterStackHQ/pulumi-betterstack'
       },

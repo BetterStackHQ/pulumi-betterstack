@@ -4,7 +4,6 @@
 package com.betterstack.pulumi.inputs;
 
 import com.pulumi.core.annotations.Import;
-import com.pulumi.exceptions.MissingRequiredPropertyException;
 import java.lang.String;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,18 +15,33 @@ public final class GetTeamMemberPlainArgs extends com.pulumi.resources.InvokeArg
     public static final GetTeamMemberPlainArgs Empty = new GetTeamMemberPlainArgs();
 
     /**
-     * The ID of the team member to look up.
+     * The e-mail address of the team member to look up. Set it, or `id` to the same value.
      * 
      */
-    @Import(name="id", required=true)
-    private String id;
+    @Import(name="email")
+    private @Nullable String email;
 
     /**
-     * @return The ID of the team member to look up.
+     * @return The e-mail address of the team member to look up. Set it, or `id` to the same value.
      * 
      */
-    public String id() {
-        return this.id;
+    public Optional<String> email() {
+        return Optional.ofNullable(this.email);
+    }
+
+    /**
+     * The same value as `email`.
+     * 
+     */
+    @Import(name="id")
+    private @Nullable String id;
+
+    /**
+     * @return The same value as `email`.
+     * 
+     */
+    public Optional<String> id() {
+        return Optional.ofNullable(this.id);
     }
 
     /**
@@ -48,6 +62,7 @@ public final class GetTeamMemberPlainArgs extends com.pulumi.resources.InvokeArg
     private GetTeamMemberPlainArgs() {}
 
     private GetTeamMemberPlainArgs(GetTeamMemberPlainArgs $) {
+        this.email = $.email;
         this.id = $.id;
         this.teamId = $.teamId;
     }
@@ -71,12 +86,23 @@ public final class GetTeamMemberPlainArgs extends com.pulumi.resources.InvokeArg
         }
 
         /**
-         * @param id The ID of the team member to look up.
+         * @param email The e-mail address of the team member to look up. Set it, or `id` to the same value.
          * 
          * @return builder
          * 
          */
-        public Builder id(String id) {
+        public Builder email(@Nullable String email) {
+            $.email = email;
+            return this;
+        }
+
+        /**
+         * @param id The same value as `email`.
+         * 
+         * @return builder
+         * 
+         */
+        public Builder id(@Nullable String id) {
             $.id = id;
             return this;
         }
@@ -93,9 +119,6 @@ public final class GetTeamMemberPlainArgs extends com.pulumi.resources.InvokeArg
         }
 
         public GetTeamMemberPlainArgs build() {
-            if ($.id == null) {
-                throw new MissingRequiredPropertyException("GetTeamMemberPlainArgs", "id");
-            }
             return $;
         }
     }

@@ -16,7 +16,7 @@ import (
 //
 // ## Example Usage
 //
-// ### Escalation policy
+// ### Page the on-call person, then the whole team after 10 minutes
 //
 // ```go
 // package main
@@ -30,15 +30,19 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewEscalationPolicy(ctx, "escalation_policy", &betterstack.EscalationPolicyArgs{
-//				Name:        pulumi.String("Standard Escalation Policy"),
-//				RepeatCount: pulumi.Int(3),
-//				RepeatDelay: pulumi.Int(1800),
+//			high, err := betterstack.GetSeverity(ctx, &betterstack.LookupSeverityArgs{
+//				Name: pulumi.StringRef("High severity"),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			_, err = betterstack.NewEscalationPolicy(ctx, "on_call", &betterstack.EscalationPolicyArgs{
+//				Name: pulumi.String("On-call, then the whole team"),
 //				Steps: betterstack.EscalationPolicyStepArray{
 //					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
 //						WaitBefore: pulumi.Int(0),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
 //								Type: pulumi.String("current_on_call"),
@@ -48,7 +52,7 @@ import (
 //					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
 //						WaitBefore: pulumi.Int(600),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
 //								Type: pulumi.String("entire_team"),
@@ -66,7 +70,7 @@ import (
 //
 // ```
 //
-// ### Branching
+// ### Post to Slack right away, page the on-call person after 3 minutes and repeat
 //
 // ```go
 // package main
@@ -80,114 +84,34 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewEscalationPolicy(ctx, "branching", &betterstack.EscalationPolicyArgs{
-//				Name: pulumi.String("Business Hours Branching"),
-//				Steps: betterstack.EscalationPolicyStepArray{
-//					&betterstack.EscalationPolicyStepArgs{
-//						Type:       pulumi.String("time_branching"),
-//						WaitBefore: pulumi.Int(0),
-//						Timezone:   pulumi.String("America/New_York"),
-//						Days: pulumi.StringArray{
-//							pulumi.String("mon"),
-//							pulumi.String("tue"),
-//							pulumi.String("wed"),
-//							pulumi.String("thu"),
-//							pulumi.String("fri"),
-//						},
-//						TimeFrom:          pulumi.String("09:00"),
-//						TimeTo:            pulumi.String("17:00"),
-//						PolicyMetadataKey: pulumi.String("business_hours_policy"),
-//					},
-//					&betterstack.EscalationPolicyStepArgs{
-//						Type:        pulumi.String("metadata_branching"),
-//						WaitBefore:  pulumi.Int(0),
-//						MetadataKey: pulumi.String("urgency"),
-//						MetadataValues: betterstack.EscalationPolicyStepMetadataValueArray{
-//							&betterstack.EscalationPolicyStepMetadataValueArgs{
-//								Type:  pulumi.String("String"),
-//								Value: pulumi.String("low"),
-//							},
-//						},
-//						ActionType: pulumi.String("do_not_escalate"),
-//					},
-//					&betterstack.EscalationPolicyStepArgs{
-//						Type:       pulumi.String("escalation"),
-//						WaitBefore: pulumi.Int(300),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
-//						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
-//							&betterstack.EscalationPolicyStepStepMemberArgs{
-//								Type: pulumi.String("current_on_call"),
-//							},
-//							&betterstack.EscalationPolicyStepStepMemberArgs{
-//								Type: pulumi.String("all_slack_integrations"),
-//							},
-//						},
-//					},
-//				},
-//			})
+//			high, err := betterstack.GetSeverity(ctx, &betterstack.LookupSeverityArgs{
+//				Name: pulumi.StringRef("High severity"),
+//			}, nil)
 //			if err != nil {
 //				return err
 //			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ### Instructions
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewEscalationPolicy(ctx, "instructions", &betterstack.EscalationPolicyArgs{
-//				Name: pulumi.String("Policy with Instructions and Todo list"),
+//			_, err = betterstack.NewEscalationPolicy(ctx, "slack_first", &betterstack.EscalationPolicyArgs{
+//				Name:        pulumi.String("Slack, then on-call"),
+//				RepeatCount: pulumi.Int(3),
+//				RepeatDelay: pulumi.Int(300),
 //				Steps: betterstack.EscalationPolicyStepArray{
-//					&betterstack.EscalationPolicyStepArgs{
-//						Type:                        pulumi.String("instructions"),
-//						WaitBefore:                  pulumi.Int(0),
-//						InstructionsComment:         pulumi.String("IMMEDIATE ACTIONS:\n1. Check system status at status.example.com\n2. Verify in monitoring dashboard\n3. Check #incidents Slack channel\n4. If database-related, run: kubectl get pods -n production"),
-//						InstructionsReminderEnabled: pulumi.Bool(false),
-//					},
 //					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
 //						WaitBefore: pulumi.Int(0),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
-//							&betterstack.EscalationPolicyStepStepMemberArgs{
-//								Type: pulumi.String("current_on_call"),
-//							},
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
 //								Type: pulumi.String("all_slack_integrations"),
 //							},
 //						},
 //					},
 //					&betterstack.EscalationPolicyStepArgs{
-//						Type:                              pulumi.String("instructions"),
-//						WaitBefore:                        pulumi.Int(900),
-//						InstructionsComment:               pulumi.String("ESCALATION REQUIRED:\n- [ ] Page backup on-call\n- [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#\n- [ ] Update status page\n- [ ] Notify stakeholders via #incident-comms"),
-//						InstructionsReminderEnabled:       pulumi.Bool(true),
-//						InstructionsReminderIntervalHours: pulumi.Int(2),
-//					},
-//					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
-//						WaitBefore: pulumi.Int(300),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						WaitBefore: pulumi.Int(180),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
-//								Type: pulumi.String("entire_team"),
-//							},
-//							&betterstack.EscalationPolicyStepStepMemberArgs{
-//								Type:  pulumi.String("user"),
-//								Email: pulumi.String("manager@example.com"),
+//								Type: pulumi.String("current_on_call"),
 //							},
 //						},
 //					},

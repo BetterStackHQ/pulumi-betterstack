@@ -28,7 +28,7 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := betterstack.GetTeamMember(ctx, &betterstack.LookupTeamMemberArgs{
-//				Id: "12345",
+//				Email: pulumi.StringRef("alice@example.com"),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -50,8 +50,10 @@ func LookupTeamMember(ctx *pulumi.Context, args *LookupTeamMemberArgs, opts ...p
 
 // A collection of arguments for invoking getTeamMember.
 type LookupTeamMemberArgs struct {
-	// The ID of the team member to look up.
-	Id string `pulumi:"id"`
+	// The e-mail address of the team member to look up. Set it, or `id` to the same value.
+	Email *string `pulumi:"email"`
+	// The same value as `email`.
+	Id *string `pulumi:"id"`
 	// Team the membership is in, such as 't123'. Defaults to the provider's `teamId`. Set it to look the object up in another team.
 	TeamId *string `pulumi:"teamId"`
 }
@@ -62,11 +64,11 @@ type LookupTeamMemberResult struct {
 	CreatedAt string `pulumi:"createdAt"`
 	// Whether destroying or replacing this team member is refused. Defaults to true. Set it to false and apply before you delete or replace it on purpose. It's kept in state and never sent to Better Stack.
 	DeletionProtection bool `pulumi:"deletionProtection"`
-	// E-mail address.
+	// The e-mail address of the team member to look up. Set it, or `id` to the same value.
 	Email string `pulumi:"email"`
 	// The member's first name, or null when they haven't set one. Absent on a pending invitation.
 	FirstName string `pulumi:"firstName"`
-	// The ID of the team member to look up.
+	// The same value as `email`.
 	Id string `pulumi:"id"`
 	// When the invitation was created. Present only on a pending invitation.
 	InvitedAt string `pulumi:"invitedAt"`
@@ -89,8 +91,10 @@ func LookupTeamMemberOutput(ctx *pulumi.Context, args LookupTeamMemberOutputArgs
 
 // A collection of arguments for invoking getTeamMember.
 type LookupTeamMemberOutputArgs struct {
-	// The ID of the team member to look up.
-	Id pulumi.StringInput `pulumi:"id"`
+	// The e-mail address of the team member to look up. Set it, or `id` to the same value.
+	Email pulumi.StringPtrInput `pulumi:"email"`
+	// The same value as `email`.
+	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Team the membership is in, such as 't123'. Defaults to the provider's `teamId`. Set it to look the object up in another team.
 	TeamId pulumi.StringPtrInput `pulumi:"teamId"`
 }
@@ -124,7 +128,7 @@ func (o LookupTeamMemberResultOutput) DeletionProtection() pulumi.BoolOutput {
 	return o.ApplyT(func(v LookupTeamMemberResult) bool { return v.DeletionProtection }).(pulumi.BoolOutput)
 }
 
-// E-mail address.
+// The e-mail address of the team member to look up. Set it, or `id` to the same value.
 func (o LookupTeamMemberResultOutput) Email() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupTeamMemberResult) string { return v.Email }).(pulumi.StringOutput)
 }
@@ -134,7 +138,7 @@ func (o LookupTeamMemberResultOutput) FirstName() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupTeamMemberResult) string { return v.FirstName }).(pulumi.StringOutput)
 }
 
-// The ID of the team member to look up.
+// The same value as `email`.
 func (o LookupTeamMemberResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupTeamMemberResult) string { return v.Id }).(pulumi.StringOutput)
 }

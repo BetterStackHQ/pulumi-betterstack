@@ -12,21 +12,22 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### Escalation policy
+ * ### Page the on-call person, then the whole team after 10 minutes
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const escalationPolicy = new betterstack.EscalationPolicy("escalation_policy", {
- *     name: "Standard Escalation Policy",
- *     repeatCount: 3,
- *     repeatDelay: 1800,
+ * const high = betterstack.getSeverity({
+ *     name: "High severity",
+ * });
+ * const onCall = new betterstack.EscalationPolicy("on_call", {
+ *     name: "On-call, then the whole team",
  *     steps: [
  *         {
  *             type: "escalation",
  *             waitBefore: 0,
- *             severityId: "$SEVERITY_ID",
+ *             severityId: high.then(high => high.id),
  *             stepMembers: [{
  *                 type: "current_on_call",
  *             }],
@@ -34,7 +35,7 @@ import * as utilities from "./utilities";
  *         {
  *             type: "escalation",
  *             waitBefore: 600,
- *             severityId: "$SEVERITY_ID",
+ *             severityId: high.then(high => high.id),
  *             stepMembers: [{
  *                 type: "entire_team",
  *             }],
@@ -43,113 +44,35 @@ import * as utilities from "./utilities";
  * });
  * ```
  *
- * ### Branching
+ * ### Post to Slack right away, page the on-call person after 3 minutes and repeat
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const branching = new betterstack.EscalationPolicy("branching", {
- *     name: "Business Hours Branching",
- *     steps: [
- *         {
- *             type: "time_branching",
- *             waitBefore: 0,
- *             timezone: "America/New_York",
- *             days: [
- *                 "mon",
- *                 "tue",
- *                 "wed",
- *                 "thu",
- *                 "fri",
- *             ],
- *             timeFrom: "09:00",
- *             timeTo: "17:00",
- *             policyMetadataKey: "business_hours_policy",
- *         },
- *         {
- *             type: "metadata_branching",
- *             waitBefore: 0,
- *             metadataKey: "urgency",
- *             metadataValues: [{
- *                 type: "String",
- *                 value: "low",
- *             }],
- *             actionType: "do_not_escalate",
- *         },
- *         {
- *             type: "escalation",
- *             waitBefore: 300,
- *             severityId: "$SEVERITY_ID",
- *             stepMembers: [
- *                 {
- *                     type: "current_on_call",
- *                 },
- *                 {
- *                     type: "all_slack_integrations",
- *                 },
- *             ],
- *         },
- *     ],
+ * const high = betterstack.getSeverity({
+ *     name: "High severity",
  * });
- * ```
- *
- * ### Instructions
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as betterstack from "@better_stack/pulumi";
- *
- * const instructions = new betterstack.EscalationPolicy("instructions", {
- *     name: "Policy with Instructions and Todo list",
+ * const slackFirst = new betterstack.EscalationPolicy("slack_first", {
+ *     name: "Slack, then on-call",
+ *     repeatCount: 3,
+ *     repeatDelay: 300,
  *     steps: [
  *         {
- *             type: "instructions",
+ *             type: "escalation",
  *             waitBefore: 0,
- *             instructionsComment: `IMMEDIATE ACTIONS:
- * 1. Check system status at status.example.com
- * 2. Verify in monitoring dashboard
- * 3. Check #incidents Slack channel
- * 4. If database-related, run: kubectl get pods -n production`,
- *             instructionsReminderEnabled: false,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "all_slack_integrations",
+ *             }],
  *         },
  *         {
  *             type: "escalation",
- *             waitBefore: 0,
- *             severityId: "$SEVERITY_ID",
- *             stepMembers: [
- *                 {
- *                     type: "current_on_call",
- *                 },
- *                 {
- *                     type: "all_slack_integrations",
- *                 },
- *             ],
- *         },
- *         {
- *             type: "instructions",
- *             waitBefore: 900,
- *             instructionsComment: `ESCALATION REQUIRED:
- * - [ ] Page backup on-call
- * - [ ] Start incident bridge: dial 1-800-XXX-XXXX, code: 12345#
- * - [ ] Update status page
- * - [ ] Notify stakeholders via #incident-comms`,
- *             instructionsReminderEnabled: true,
- *             instructionsReminderIntervalHours: 2,
- *         },
- *         {
- *             type: "escalation",
- *             waitBefore: 300,
- *             severityId: "$SEVERITY_ID",
- *             stepMembers: [
- *                 {
- *                     type: "entire_team",
- *                 },
- *                 {
- *                     type: "user",
- *                     email: "manager@example.com",
- *                 },
- *             ],
+ *             waitBefore: 180,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "current_on_call",
+ *             }],
  *         },
  *     ],
  * });

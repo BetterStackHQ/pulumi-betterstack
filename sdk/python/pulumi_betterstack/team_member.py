@@ -289,6 +289,8 @@ class TeamMember(pulumi.CustomResource):
         """
         A member of a team, or a pending invitation to join it, with the role they hold or would land on.
 
+        > Creating a team member e-mails them an invitation to join the team, and they join once they accept it. Someone already in another team of the organization joins at once, with no invitation.
+
         > Destroying a team member deletes its data for good, so `deletion_protection` is on by default: a preview, an update or a pulumi destroy that destroys or replaces it fails until you set `deletion_protection` to false and run pulumi up.
 
         ## Example Usage
@@ -326,10 +328,10 @@ class TeamMember(pulumi.CustomResource):
 
         ## Import
 
-        Import an existing team member by its ID. Get the user ID via [List team members](https://betterstack.com/docs/uptime/api/team-members/list/).
+        Import an existing team member by its ID. Its ID is its e-mail address, such as `alice@example.com`.
 
         ```sh
-        $ pulumi import betterstack:index/teamMember:TeamMember example 12345
+        $ pulumi import betterstack:index/teamMember:TeamMember example alice@example.com
         ```
 
 
@@ -350,6 +352,8 @@ class TeamMember(pulumi.CustomResource):
         """
         A member of a team, or a pending invitation to join it, with the role they hold or would land on.
 
+        > Creating a team member e-mails them an invitation to join the team, and they join once they accept it. Someone already in another team of the organization joins at once, with no invitation.
+
         > Destroying a team member deletes its data for good, so `deletion_protection` is on by default: a preview, an update or a pulumi destroy that destroys or replaces it fails until you set `deletion_protection` to false and run pulumi up.
 
         ## Example Usage
@@ -387,10 +391,10 @@ class TeamMember(pulumi.CustomResource):
 
         ## Import
 
-        Import an existing team member by its ID. Get the user ID via [List team members](https://betterstack.com/docs/uptime/api/team-members/list/).
+        Import an existing team member by its ID. Its ID is its e-mail address, such as `alice@example.com`.
 
         ```sh
-        $ pulumi import betterstack:index/teamMember:TeamMember example 12345
+        $ pulumi import betterstack:index/teamMember:TeamMember example alice@example.com
         ```
 
 

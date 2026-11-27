@@ -1028,21 +1028,20 @@ class IncidentsIncomingWebhookIntegration(pulumi.CustomResource):
         example = betterstack.IncidentsIncomingWebhookIntegration("example", name="Backend service")
         ```
 
-        ### In an escalation policy
+        ### Alert through an escalation policy
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -1050,15 +1049,15 @@ class IncidentsIncomingWebhookIntegration(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
                 },
             ])
-        in_escalation_policy = betterstack.IncidentsIncomingWebhookIntegration("in_escalation_policy",
+        alert_through_an_escalation_policy = betterstack.IncidentsIncomingWebhookIntegration("alert_through_an_escalation_policy",
             name="Backend service",
-            escalation_policy_id=escalation_policy.id)
+            escalation_policy_id=on_call.id)
         ```
 
         > The `cause_field`, `title_field`, `started_alert_id_field`, `acknowledged_alert_id_field` and `resolved_alert_id_field` attributes each hold one extraction field, as an object or null. `other_started_fields`, `other_acknowledged_fields`, `other_resolved_fields`, `started_rules`, `acknowledged_rules` and `resolved_rules` are lists. Each list is the complete set for its event and replaces the current one.
@@ -1123,21 +1122,20 @@ class IncidentsIncomingWebhookIntegration(pulumi.CustomResource):
         example = betterstack.IncidentsIncomingWebhookIntegration("example", name="Backend service")
         ```
 
-        ### In an escalation policy
+        ### Alert through an escalation policy
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        escalation_policy = betterstack.EscalationPolicy("escalation_policy",
-            name="Standard Escalation Policy",
-            repeat_count=3,
-            repeat_delay=1800,
+        high = betterstack.get_severity(name="High severity")
+        on_call = betterstack.EscalationPolicy("on_call",
+            name="On-call, then the whole team",
             steps=[
                 {
                     "type": "escalation",
                     "wait_before": 0,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "current_on_call",
                     }],
@@ -1145,15 +1143,15 @@ class IncidentsIncomingWebhookIntegration(pulumi.CustomResource):
                 {
                     "type": "escalation",
                     "wait_before": 600,
-                    "severity_id": "$SEVERITY_ID",
+                    "severity_id": high.id,
                     "step_members": [{
                         "type": "entire_team",
                     }],
                 },
             ])
-        in_escalation_policy = betterstack.IncidentsIncomingWebhookIntegration("in_escalation_policy",
+        alert_through_an_escalation_policy = betterstack.IncidentsIncomingWebhookIntegration("alert_through_an_escalation_policy",
             name="Backend service",
-            escalation_policy_id=escalation_policy.id)
+            escalation_policy_id=on_call.id)
         ```
 
         > The `cause_field`, `title_field`, `started_alert_id_field`, `acknowledged_alert_id_field` and `resolved_alert_id_field` attributes each hold one extraction field, as an object or null. `other_started_fields`, `other_acknowledged_fields`, `other_resolved_fields`, `started_rules`, `acknowledged_rules` and `resolved_rules` are lists. Each list is the complete set for its event and replaces the current one.

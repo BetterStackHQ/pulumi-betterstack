@@ -12,109 +12,38 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### On a dashboard chart
- *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const onADashboardChart = new betterstack.Alert("on_a_dashboard_chart", {
- *     dashboardId: "123",
- *     chartId: "456",
- *     name: "High Error Rate",
- *     alertType: betterstack.AlertType.Threshold,
- *     operator: betterstack.AlertOperator.HigherThan,
- *     value: 100,
- *     checkPeriod: 300,
- *     confirmationPeriod: 0,
- *     escalationTarget: {
- *         policyName: "Critical Policy",
- *     },
- *     metadata: {
- *         runbook: ["http://runbook/high-errors"],
- *     },
+ * const app = new betterstack.Source("app", {
+ *     name: "Production app",
+ *     platform: betterstack.SourcePlatform.Ubuntu,
  * });
- * ```
- *
- * ### On an exploration
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as betterstack from "@better_stack/pulumi";
- *
- * const onAnExploration = new betterstack.Alert("on_an_exploration", {
- *     explorationId: "789",
- *     name: "Status is Error",
- *     alertType: betterstack.AlertType.Threshold,
- *     operator: betterstack.AlertOperator.Equal,
- *     stringValue: "error",
- *     checkPeriod: 300,
- *     confirmationPeriod: 0,
- * });
- * ```
- *
- * ### In an exploration
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as betterstack from "@better_stack/pulumi";
- *
- * const example = new betterstack.Exploration("example", {
- *     name: "Error Rate Analysis",
- *     dateRangeFrom: "now-3h",
- *     dateRangeTo: "now",
- *     chart: {
- *         chartType: "line_chart",
- *         description: "Shows error rates across all services",
- *         settings: {
- *             unit: "auto",
- *             decimalPlaces: 0,
- *             legend: "shown_below",
- *             stacking: "dont_stack",
- *         },
- *     },
+ * const appDashboard = new betterstack.Dashboard("app", {name: "Production app"});
+ * const errors = new betterstack.DashboardChart("errors", {
+ *     dashboardId: appDashboard.id,
+ *     chartType: betterstack.DashboardChartChartType.LineChart,
+ *     name: "Errors",
  *     queries: [{
- *         name: "Main Query",
  *         queryType: "sql_expression",
- *         sqlQuery: `SELECT {{time}} AS time, count(*) AS value
- * FROM {{source}}
- * WHERE dt BETWEEN {{start_time}} AND {{end_time}}
- *   [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]
- * GROUP BY time`,
- *         sourceVariable: "source",
+ *         sqlQuery: "SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time",
  *     }],
- *     variables: [
- *         {
- *             name: "source",
- *             variableType: "source",
- *             values: ["123"],
- *         },
- *         {
- *             name: "level",
- *             variableType: "select_with_sql",
- *             values: [],
- *             defaultValues: [],
- *             sqlDefinition: "JSONExtractString(raw, 'level')",
- *             allowMultipleValues: true,
- *         },
- *     ],
  * });
- * const inExploration = new betterstack.Alert("in_exploration", {
- *     dashboardId: "123",
- *     chartId: "456",
- *     name: "High Error Rate",
+ * const errorSpike = new betterstack.Alert("error_spike", {
+ *     dashboardId: appDashboard.id,
+ *     chartId: errors.id,
+ *     name: "Error spike",
  *     alertType: betterstack.AlertType.Threshold,
  *     operator: betterstack.AlertOperator.HigherThan,
  *     value: 100,
- *     checkPeriod: 300,
- *     confirmationPeriod: 0,
- *     escalationTarget: {
- *         policyName: "Critical Policy",
- *     },
- *     metadata: {
- *         runbook: ["http://runbook/high-errors"],
- *     },
- *     explorationId: example.id,
+ *     sourceVariable: pulumi.interpolate`source:${app.tableName}`,
+ *     aggregationInterval: 300,
+ *     checkPeriod: 60,
+ *     confirmationPeriod: 300,
+ *     recoveryPeriod: 300,
+ *     email: true,
+ *     push: true,
  * });
  * ```
  *

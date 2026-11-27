@@ -1,9 +1,9 @@
 # Better Stack Pulumi provider
 
-A Pulumi package for managing Better Stack Account, Errors, Incidents and Telemetry resources.
+A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.
 
 ```bash
-dotnet add package Pulumi.BetterStack
+dotnet add package BetterStack.Pulumi
 ```
 
 Docs, with an example in every language: [Pulumi Registry](https://www.pulumi.com/registry/packages/betterstack/). Report bugs and

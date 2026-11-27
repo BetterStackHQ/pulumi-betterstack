@@ -26,13 +26,13 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeamMember.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Email = "alice@example.com",
         ///     });
         /// 
         /// });
         /// ```
         /// </summary>
-        public static Task<GetTeamMemberResult> InvokeAsync(GetTeamMemberArgs args, InvokeOptions? options = null)
+        public static Task<GetTeamMemberResult> InvokeAsync(GetTeamMemberArgs? args = null, InvokeOptions? options = null)
             => global::Pulumi.Deployment.Instance.InvokeAsync<GetTeamMemberResult>("betterstack:index/getTeamMember:getTeamMember", args ?? new GetTeamMemberArgs(), options.WithDefaults());
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeamMember.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Email = "alice@example.com",
         ///     });
         /// 
         /// });
         /// ```
         /// </summary>
-        public static Output<GetTeamMemberResult> Invoke(GetTeamMemberInvokeArgs args, InvokeOptions? options = null)
+        public static Output<GetTeamMemberResult> Invoke(GetTeamMemberInvokeArgs? args = null, InvokeOptions? options = null)
             => global::Pulumi.Deployment.Instance.Invoke<GetTeamMemberResult>("betterstack:index/getTeamMember:getTeamMember", args ?? new GetTeamMemberInvokeArgs(), options.WithDefaults());
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Pulumi.BetterStack
         /// {
         ///     var example = BetterStack.GetTeamMember.Invoke(new()
         ///     {
-        ///         Id = "12345",
+        ///         Email = "alice@example.com",
         ///     });
         /// 
         /// });
@@ -88,10 +88,16 @@ namespace Pulumi.BetterStack
     public sealed class GetTeamMemberArgs : global::Pulumi.InvokeArgs
     {
         /// <summary>
-        /// The ID of the team member to look up.
+        /// The e-mail address of the team member to look up. Set it, or `Id` to the same value.
         /// </summary>
-        [Input("id", required: true)]
-        public string Id { get; set; } = null!;
+        [Input("email")]
+        public string? Email { get; set; }
+
+        /// <summary>
+        /// The same value as `Email`.
+        /// </summary>
+        [Input("id")]
+        public string? Id { get; set; }
 
         /// <summary>
         /// Team the membership is in, such as 't123'. Defaults to the provider's `TeamId`. Set it to look the object up in another team.
@@ -108,10 +114,16 @@ namespace Pulumi.BetterStack
     public sealed class GetTeamMemberInvokeArgs : global::Pulumi.InvokeArgs
     {
         /// <summary>
-        /// The ID of the team member to look up.
+        /// The e-mail address of the team member to look up. Set it, or `Id` to the same value.
         /// </summary>
-        [Input("id", required: true)]
-        public Input<string> Id { get; set; } = null!;
+        [Input("email")]
+        public Input<string>? Email { get; set; }
+
+        /// <summary>
+        /// The same value as `Email`.
+        /// </summary>
+        [Input("id")]
+        public Input<string>? Id { get; set; }
 
         /// <summary>
         /// Team the membership is in, such as 't123'. Defaults to the provider's `TeamId`. Set it to look the object up in another team.
@@ -138,7 +150,7 @@ namespace Pulumi.BetterStack
         /// </summary>
         public readonly bool DeletionProtection;
         /// <summary>
-        /// E-mail address.
+        /// The e-mail address of the team member to look up. Set it, or `Id` to the same value.
         /// </summary>
         public readonly string Email;
         /// <summary>
@@ -146,7 +158,7 @@ namespace Pulumi.BetterStack
         /// </summary>
         public readonly string FirstName;
         /// <summary>
-        /// The ID of the team member to look up.
+        /// The same value as `Email`.
         /// </summary>
         public readonly string Id;
         /// <summary>

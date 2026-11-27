@@ -240,7 +240,7 @@ def get_team(id: Optional[_builtins.str] = None,
     import pulumi
     import pulumi_betterstack as betterstack
 
-    example = betterstack.get_team(id="12345")
+    example = betterstack.get_team(id="t123")
     ```
 
 
@@ -279,7 +279,7 @@ def get_team_output(id: pulumi.Input[Optional[_builtins.str]] = None,
     import pulumi
     import pulumi_betterstack as betterstack
 
-    example = betterstack.get_team(id="12345")
+    example = betterstack.get_team(id="t123")
     ```
 
 

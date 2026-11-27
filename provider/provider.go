@@ -6,7 +6,6 @@ package provider
 
 import (
 	_ "embed"
-	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -69,16 +68,17 @@ func Provider() tfbridge.ProviderInfo {
 		Publisher:         "Better Stack",
 		GitHubOrg:         "betterstackhq",
 		Repository:        "https://github.com/BetterStackHQ/pulumi-betterstack",
-		Description:       "A Pulumi package for managing Better Stack " + sentenceList(shim.APIs()) + " resources.",
+		Homepage:          "https://github.com/BetterStackHQ/pulumi-betterstack",                                      // npm, PyPI and NuGet's project URL
+		Description:       "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.", // one product, never a sub-product (DESCRIPTIONS.md)
 		License:           "Apache-2.0",
 		TFProviderLicense: &upstreamLicense,
 		Keywords:          keywords(),
 		// The plugin binaries are attached to the vendor repository's GitHub releases, so `pulumi up`
-		// installs the plugin by itself. The logo is a PNG because SDK generation downloads it into
-		// the NuGet package's icon, which must be PNG or JPEG; it must stay reachable, or the icon
-		// becomes the error page.
+		// installs the plugin by itself. The Pulumi Registry shows the logo and asks for an SVG
+		// wordmark: assets/logo.svg, served from the vendor repository. The NuGet icon must be PNG or
+		// JPEG, so the Makefile replaces what SDK generation downloads from here with assets/logo.png.
 		PluginDownloadURL: "github://api.github.com/BetterStackHQ/pulumi-betterstack",
-		LogoURL:           "https://github.com/BetterStackHQ.png?size=256",
+		LogoURL:           "https://raw.githubusercontent.com/BetterStackHQ/pulumi-betterstack/main/assets/logo.svg",
 		// The generated TF provider tree (relative to tfgen's cwd, provider/): its registry docs
 		// become the Pulumi resource/function descriptions and import sections.
 		UpstreamRepoPath: "../upstream",
@@ -98,7 +98,8 @@ func Provider() tfbridge.ProviderInfo {
 			Requires:             map[string]string{"pulumi": ">=3.0.0,<4.0.0"},
 			RespectSchemaVersion: true,
 		},
-		// The .NET package and namespace are Pulumi.BetterStack, as for Pulumi's own providers. A root
+		// The .NET namespace is Pulumi.BetterStack, as for Pulumi's own providers (the NuGet package ID is
+		// BetterStack.Pulumi, set by the Makefile, since nuget.org reserves Pulumi.* for Pulumi). A root
 		// namespace of BetterStack would make BetterStack.BetterStack, whose inner BetterStack hides the
 		// outer one, so the SDK's fully qualified enum types don't compile. Namespaces keeps the
 		// capital S; without it the generator title-cases the package name into Betterstack.
@@ -148,19 +149,9 @@ func Provider() tfbridge.ProviderInfo {
 	return info
 }
 
-// keywords are the package's search terms, the APIs it covers among them.
+// keywords are the package's search terms: what people look for, not the names of Better Stack's
+// APIs, since Better Stack is one product. category/monitoring is the Pulumi Registry's category.
 func keywords() []string {
-	words := []string{"betterstack", "observability", "monitoring"}
-	for _, api := range shim.APIs() {
-		words = append(words, strings.ToLower(api))
-	}
-	return append(words, "category/monitoring")
-}
-
-// sentenceList joins items as a sentence does: "A, B and C".
-func sentenceList(items []string) string {
-	if len(items) < 2 {
-		return strings.Join(items, "")
-	}
-	return strings.Join(items[:len(items)-1], ", ") + " and " + items[len(items)-1]
+	return []string{"betterstack", "observability", "monitoring", "uptime", "incidents", "on-call",
+		"status-page", "logs", "metrics", "errors", "category/monitoring"}
 }

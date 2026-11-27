@@ -14,57 +14,63 @@ import * as utilities from "./utilities";
  *
  * ## Example Usage
  *
- * ### Create a heartbeat
+ * ### Expect a nightly job once a day
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const example = new betterstack.Heartbeat("example", {
- *     name: "Testing heartbeat",
- *     period: 10800,
- *     grace: 300,
+ * const nightlyBackup = new betterstack.Heartbeat("nightly_backup", {
+ *     name: "Nightly database backup",
+ *     period: 86400,
+ *     grace: 7200,
+ *     email: true,
+ *     push: true,
  * });
  * ```
  *
- * ### With metadata
+ * ### Alert through an escalation policy, except during weekend maintenance
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as betterstack from "@better_stack/pulumi";
  *
- * const withMetadata = new betterstack.Heartbeat("with_metadata", {
- *     name: "Testing heartbeat",
- *     period: 10800,
- *     grace: 300,
- *     metadata: {
- *         Environment: {
- *             values: [{
- *                 value: "production",
- *             }],
- *         },
- *         Owner: {
- *             values: [{
- *                 type: "Team",
- *                 name: "Platform",
- *             }],
- *         },
- *     },
+ * const high = betterstack.getSeverity({
+ *     name: "High severity",
  * });
- * ```
- *
- * ### In a heartbeat group
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as betterstack from "@better_stack/pulumi";
- *
- * const example = new betterstack.HeartbeatGroup("example", {name: "Backend services"});
- * const inHeartbeatGroup = new betterstack.Heartbeat("in_heartbeat_group", {
- *     name: "Testing heartbeat",
- *     period: 10800,
+ * const onCall = new betterstack.EscalationPolicy("on_call", {
+ *     name: "On-call, then the whole team",
+ *     steps: [
+ *         {
+ *             type: "escalation",
+ *             waitBefore: 0,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "current_on_call",
+ *             }],
+ *         },
+ *         {
+ *             type: "escalation",
+ *             waitBefore: 600,
+ *             severityId: high.then(high => high.id),
+ *             stepMembers: [{
+ *                 type: "entire_team",
+ *             }],
+ *         },
+ *     ],
+ * });
+ * const queueWorker = new betterstack.Heartbeat("queue_worker", {
+ *     name: "Queue worker",
+ *     period: 300,
  *     grace: 300,
- *     heartbeatGroupId: example.id,
+ *     escalationPolicyId: onCall.id,
+ *     maintenanceDays: [
+ *         "sat",
+ *         "sun",
+ *     ],
+ *     maintenanceFrom: "00:00:00",
+ *     maintenanceTo: "06:00:00",
+ *     maintenanceTimezone: "London",
  * });
  * ```
  *

@@ -1382,34 +1382,62 @@ class StatusPage(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a status page
+        ### Serve a status page from your own domain
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.StatusPage("example",
-            company_url="https://best-company.com",
-            company_name="Best company",
-            subdomain="best-company-tokyo",
-            timezone="Tokyo")
+        public = betterstack.StatusPage("public",
+            company_name="Example, Inc.",
+            company_url="https://example.org",
+            subdomain="example-inc-status",
+            custom_domain="status.example.org",
+            timezone="UTC",
+            design=betterstack.StatusPageDesign.V2,
+            theme=betterstack.StatusPageTheme.SYSTEM,
+            subscribable=True,
+            automatic_reports=True)
         ```
 
-        ### In a status page group
+        ### Show monitors in sections
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.StatusPageGroup("example",
-            name="Production Status Pages",
-            sort_index=1)
-        in_status_page_group = betterstack.StatusPage("in_status_page_group",
-            company_url="https://best-company.com",
-            company_name="Best company",
-            subdomain="best-company-tokyo",
-            timezone="Tokyo",
-            status_page_group_id=example.id)
+        website = betterstack.Monitor("website",
+            url="https://uptime.betterstack.com",
+            pronounceable_name="Website")
+        api = betterstack.Monitor("api",
+            url="https://uptime.betterstack.com/api/v2/monitors",
+            monitor_type=betterstack.MonitorType.EXPECTED_STATUS_CODE,
+            expected_status_codes=[401],
+            pronounceable_name="API")
+        services = betterstack.StatusPage("services",
+            company_name="Example, Inc.",
+            subdomain="example-inc-services",
+            timezone="UTC",
+            sections=[
+                {
+                    "name": "Website",
+                    "resources": [{
+                        "resource_type": "Monitor",
+                        "resource_id": website.id,
+                        "public_name": "Website",
+                        "widget_type": "history",
+                    }],
+                },
+                {
+                    "name": "API",
+                    "resources": [{
+                        "resource_type": "Monitor",
+                        "resource_id": api.id,
+                        "public_name": "Public API",
+                        "widget_type": "response_times",
+                    }],
+                },
+            ])
         ```
 
         > The `logo_url`, `logo_remote_url`, `dark_logo_url`, `dark_logo_remote_url` and `favicon_remote_url` attributes must be absolute URLs, or the change is refused. Leaving out an image's fields keeps the image.
@@ -1477,34 +1505,62 @@ class StatusPage(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### Create a status page
+        ### Serve a status page from your own domain
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.StatusPage("example",
-            company_url="https://best-company.com",
-            company_name="Best company",
-            subdomain="best-company-tokyo",
-            timezone="Tokyo")
+        public = betterstack.StatusPage("public",
+            company_name="Example, Inc.",
+            company_url="https://example.org",
+            subdomain="example-inc-status",
+            custom_domain="status.example.org",
+            timezone="UTC",
+            design=betterstack.StatusPageDesign.V2,
+            theme=betterstack.StatusPageTheme.SYSTEM,
+            subscribable=True,
+            automatic_reports=True)
         ```
 
-        ### In a status page group
+        ### Show monitors in sections
 
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        example = betterstack.StatusPageGroup("example",
-            name="Production Status Pages",
-            sort_index=1)
-        in_status_page_group = betterstack.StatusPage("in_status_page_group",
-            company_url="https://best-company.com",
-            company_name="Best company",
-            subdomain="best-company-tokyo",
-            timezone="Tokyo",
-            status_page_group_id=example.id)
+        website = betterstack.Monitor("website",
+            url="https://uptime.betterstack.com",
+            pronounceable_name="Website")
+        api = betterstack.Monitor("api",
+            url="https://uptime.betterstack.com/api/v2/monitors",
+            monitor_type=betterstack.MonitorType.EXPECTED_STATUS_CODE,
+            expected_status_codes=[401],
+            pronounceable_name="API")
+        services = betterstack.StatusPage("services",
+            company_name="Example, Inc.",
+            subdomain="example-inc-services",
+            timezone="UTC",
+            sections=[
+                {
+                    "name": "Website",
+                    "resources": [{
+                        "resource_type": "Monitor",
+                        "resource_id": website.id,
+                        "public_name": "Website",
+                        "widget_type": "history",
+                    }],
+                },
+                {
+                    "name": "API",
+                    "resources": [{
+                        "resource_type": "Monitor",
+                        "resource_id": api.id,
+                        "public_name": "Public API",
+                        "widget_type": "response_times",
+                    }],
+                },
+            ])
         ```
 
         > The `logo_url`, `logo_remote_url`, `dark_logo_url`, `dark_logo_remote_url` and `favicon_remote_url` attributes must be absolute URLs, or the change is refused. Leaving out an image's fields keeps the image.

@@ -43,7 +43,7 @@ import (
 //
 // ```
 //
-// ### In an escalation policy
+// ### Alert through an escalation policy
 //
 // ```go
 // package main
@@ -57,15 +57,19 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			escalationPolicy, err := betterstack.NewEscalationPolicy(ctx, "escalation_policy", &betterstack.EscalationPolicyArgs{
-//				Name:        pulumi.String("Standard Escalation Policy"),
-//				RepeatCount: pulumi.Int(3),
-//				RepeatDelay: pulumi.Int(1800),
+//			high, err := betterstack.GetSeverity(ctx, &betterstack.LookupSeverityArgs{
+//				Name: pulumi.StringRef("High severity"),
+//			}, nil)
+//			if err != nil {
+//				return err
+//			}
+//			onCall, err := betterstack.NewEscalationPolicy(ctx, "on_call", &betterstack.EscalationPolicyArgs{
+//				Name: pulumi.String("On-call, then the whole team"),
 //				Steps: betterstack.EscalationPolicyStepArray{
 //					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
 //						WaitBefore: pulumi.Int(0),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
 //								Type: pulumi.String("current_on_call"),
@@ -75,7 +79,7 @@ import (
 //					&betterstack.EscalationPolicyStepArgs{
 //						Type:       pulumi.String("escalation"),
 //						WaitBefore: pulumi.Int(600),
-//						SeverityId: pulumi.String("$SEVERITY_ID"),
+//						SeverityId: pulumi.String(high.Id),
 //						StepMembers: betterstack.EscalationPolicyStepStepMemberArray{
 //							&betterstack.EscalationPolicyStepStepMemberArgs{
 //								Type: pulumi.String("entire_team"),
@@ -87,11 +91,11 @@ import (
 //			if err != nil {
 //				return err
 //			}
-//			_, err = betterstack.NewIncidentsPrometheusIntegration(ctx, "in_escalation_policy", &betterstack.IncidentsPrometheusIntegrationArgs{
+//			_, err = betterstack.NewIncidentsPrometheusIntegration(ctx, "alert_through_an_escalation_policy", &betterstack.IncidentsPrometheusIntegrationArgs{
 //				Name:               pulumi.String("Prometheus alerts"),
 //				Sms:                pulumi.Bool(true),
 //				TeamWait:           pulumi.Int(180),
-//				EscalationPolicyId: escalationPolicy.ID(),
+//				EscalationPolicyId: onCall.ID(),
 //			})
 //			if err != nil {
 //				return err

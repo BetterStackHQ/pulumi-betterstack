@@ -27,8 +27,6 @@ import javax.annotation.Nullable;
  * 
  * ## Example Usage
  * 
- * ### On a dashboard chart
- * 
  * <pre>
  * {@code
  * package generated_program;
@@ -36,9 +34,15 @@ import javax.annotation.Nullable;
  * import com.pulumi.Context;
  * import com.pulumi.Pulumi;
  * import com.pulumi.core.Output;
+ * import com.betterstack.pulumi.Source;
+ * import com.betterstack.pulumi.SourceArgs;
+ * import com.betterstack.pulumi.Dashboard;
+ * import com.betterstack.pulumi.DashboardArgs;
+ * import com.betterstack.pulumi.DashboardChart;
+ * import com.betterstack.pulumi.DashboardChartArgs;
+ * import com.betterstack.pulumi.inputs.DashboardChartQueryArgs;
  * import com.betterstack.pulumi.Alert;
  * import com.betterstack.pulumi.AlertArgs;
- * import com.betterstack.pulumi.inputs.AlertEscalationTargetArgs;
  * import java.util.ArrayList;
  * import java.util.Arrays;
  * import java.util.Map;
@@ -52,151 +56,39 @@ import javax.annotation.Nullable;
  *     }
  * 
  *     public static void stack(Context ctx) {
- *         var onADashboardChart = new Alert("onADashboardChart", AlertArgs.builder()
- *             .dashboardId("123")
- *             .chartId("456")
- *             .name("High Error Rate")
- *             .alertType("threshold")
- *             .operator("higher_than")
- *             .value(100.0)
- *             .checkPeriod(300)
- *             .confirmationPeriod(0)
- *             .escalationTarget(AlertEscalationTargetArgs.builder()
- *                 .policyName("Critical Policy")
- *                 .build())
- *             .metadata(Map.of("runbook", Arrays.asList("http://runbook/high-errors")))
+ *         var app = new Source("app", SourceArgs.builder()
+ *             .name("Production app")
+ *             .platform("ubuntu")
  *             .build());
  * 
- *     }
- * }
- * }
- * </pre>
- * 
- * ### On an exploration
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.Alert;
- * import com.betterstack.pulumi.AlertArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App {
- *     public static void main(String[] args) {
- *         Pulumi.run(App::stack);
- *     }
- * 
- *     public static void stack(Context ctx) {
- *         var onAnExploration = new Alert("onAnExploration", AlertArgs.builder()
- *             .explorationId("789")
- *             .name("Status is Error")
- *             .alertType("threshold")
- *             .operator("equal")
- *             .stringValue("error")
- *             .checkPeriod(300)
- *             .confirmationPeriod(0)
+ *         var appDashboard = new Dashboard("appDashboard", DashboardArgs.builder()
+ *             .name("Production app")
  *             .build());
  * 
- *     }
- * }
- * }
- * </pre>
- * 
- * ### In an exploration
- * 
- * <pre>
- * {@code
- * package generated_program;
- * 
- * import com.pulumi.Context;
- * import com.pulumi.Pulumi;
- * import com.pulumi.core.Output;
- * import com.betterstack.pulumi.Exploration;
- * import com.betterstack.pulumi.ExplorationArgs;
- * import com.betterstack.pulumi.inputs.ExplorationChartArgs;
- * import com.betterstack.pulumi.inputs.ExplorationChartSettingsArgs;
- * import com.betterstack.pulumi.inputs.ExplorationQueryArgs;
- * import com.betterstack.pulumi.inputs.ExplorationVariableArgs;
- * import com.betterstack.pulumi.Alert;
- * import com.betterstack.pulumi.AlertArgs;
- * import com.betterstack.pulumi.inputs.AlertEscalationTargetArgs;
- * import java.util.ArrayList;
- * import java.util.Arrays;
- * import java.util.Map;
- * import java.io.File;
- * import java.nio.file.Files;
- * import java.nio.file.Paths;
- * 
- * public class App {
- *     public static void main(String[] args) {
- *         Pulumi.run(App::stack);
- *     }
- * 
- *     public static void stack(Context ctx) {
- *         var example = new Exploration("example", ExplorationArgs.builder()
- *             .name("Error Rate Analysis")
- *             .dateRangeFrom("now-3h")
- *             .dateRangeTo("now")
- *             .chart(ExplorationChartArgs.builder()
- *                 .chartType("line_chart")
- *                 .description("Shows error rates across all services")
- *                 .settings(ExplorationChartSettingsArgs.builder()
- *                     .unit("auto")
- *                     .decimalPlaces(0)
- *                     .legend("shown_below")
- *                     .stacking("dont_stack")
- *                     .build())
- *                 .build())
- *             .queries(ExplorationQueryArgs.builder()
- *                 .name("Main Query")
+ *         var errors = new DashboardChart("errors", DashboardChartArgs.builder()
+ *             .dashboardId(appDashboard.id())
+ *             .chartType("line_chart")
+ *             .name("Errors")
+ *             .queries(DashboardChartQueryArgs.builder()
  *                 .queryType("sql_expression")
- *                 .sqlQuery("""
- * SELECT {{time}} AS time, count(*) AS value
- * FROM {{source}}
- * WHERE dt BETWEEN {{start_time}} AND {{end_time}}
- *   [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]
- * GROUP BY time                """)
- *                 .sourceVariable("source")
+ *                 .sqlQuery("SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time")
  *                 .build())
- *             .variables(            
- *                 ExplorationVariableArgs.builder()
- *                     .name("source")
- *                     .variableType("source")
- *                     .values("123")
- *                     .build(),
- *                 ExplorationVariableArgs.builder()
- *                     .name("level")
- *                     .variableType("select_with_sql")
- *                     .values()
- *                     .defaultValues()
- *                     .sqlDefinition("JSONExtractString(raw, 'level')")
- *                     .allowMultipleValues(true)
- *                     .build())
  *             .build());
  * 
- *         var inExploration = new Alert("inExploration", AlertArgs.builder()
- *             .dashboardId("123")
- *             .chartId("456")
- *             .name("High Error Rate")
+ *         var errorSpike = new Alert("errorSpike", AlertArgs.builder()
+ *             .dashboardId(appDashboard.id())
+ *             .chartId(errors.id())
+ *             .name("Error spike")
  *             .alertType("threshold")
  *             .operator("higher_than")
  *             .value(100.0)
- *             .checkPeriod(300)
- *             .confirmationPeriod(0)
- *             .escalationTarget(AlertEscalationTargetArgs.builder()
- *                 .policyName("Critical Policy")
- *                 .build())
- *             .metadata(Map.of("runbook", Arrays.asList("http://runbook/high-errors")))
- *             .explorationId(example.id())
+ *             .sourceVariable(app.tableName().applyValue(_tableName -> String.format("source:%s", _tableName)))
+ *             .aggregationInterval(300)
+ *             .checkPeriod(60)
+ *             .confirmationPeriod(300)
+ *             .recoveryPeriod(300)
+ *             .email(true)
+ *             .push(true)
  *             .build());
  * 
  *     }

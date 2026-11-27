@@ -2,14 +2,17 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>BetterStack.Pulumi</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>betterstack;observability;monitoring;uptime;incidents;on-call;status-page;logs;metrics;errors</PackageTags>
     <Authors>Better Stack</Authors>
     <Company>Better Stack</Company>
-    <Description>A Pulumi package for managing Better Stack Account, Errors, Incidents and Telemetry resources.</Description>
+    <Description>A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl></PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/BetterStackHQ/pulumi-betterstack</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BetterStackHQ/pulumi-betterstack</RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
 
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -56,6 +59,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="True" PackagePath="" />
   </ItemGroup>
 
 </Project>

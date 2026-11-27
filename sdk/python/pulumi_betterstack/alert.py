@@ -1316,106 +1316,36 @@ class Alert(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### On a dashboard chart
-
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        on_a_dashboard_chart = betterstack.Alert("on_a_dashboard_chart",
-            dashboard_id="123",
-            chart_id="456",
-            name="High Error Rate",
-            alert_type=betterstack.AlertType.THRESHOLD,
-            operator=betterstack.AlertOperator.HIGHER_THAN,
-            value=float(100),
-            check_period=300,
-            confirmation_period=0,
-            escalation_target={
-                "policy_name": "Critical Policy",
-            },
-            metadata={
-                "runbook": ["http://runbook/high-errors"],
-            })
-        ```
-
-        ### On an exploration
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        on_an_exploration = betterstack.Alert("on_an_exploration",
-            exploration_id="789",
-            name="Status is Error",
-            alert_type=betterstack.AlertType.THRESHOLD,
-            operator=betterstack.AlertOperator.EQUAL,
-            string_value="error",
-            check_period=300,
-            confirmation_period=0)
-        ```
-
-        ### In an exploration
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        example = betterstack.Exploration("example",
-            name="Error Rate Analysis",
-            date_range_from="now-3h",
-            date_range_to="now",
-            chart={
-                "chart_type": "line_chart",
-                "description": "Shows error rates across all services",
-                "settings": {
-                    "unit": "auto",
-                    "decimal_places": 0,
-                    "legend": "shown_below",
-                    "stacking": "dont_stack",
-                },
-            },
+        app = betterstack.Source("app",
+            name="Production app",
+            platform=betterstack.SourcePlatform.UBUNTU)
+        app_dashboard = betterstack.Dashboard("app", name="Production app")
+        errors = betterstack.DashboardChart("errors",
+            dashboard_id=app_dashboard.id,
+            chart_type=betterstack.DashboardChartChartType.LINE_CHART,
+            name="Errors",
             queries=[{
-                "name": "Main Query",
                 "query_type": "sql_expression",
-                "sql_query": \"\"\"SELECT {{time}} AS time, count(*) AS value
-        FROM {{source}}
-        WHERE dt BETWEEN {{start_time}} AND {{end_time}}
-          [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]
-        GROUP BY time\"\"\",
-                "source_variable": "source",
-            }],
-            variables=[
-                {
-                    "name": "source",
-                    "variable_type": "source",
-                    "values": ["123"],
-                },
-                {
-                    "name": "level",
-                    "variable_type": "select_with_sql",
-                    "values": [],
-                    "default_values": [],
-                    "sql_definition": "JSONExtractString(raw, 'level')",
-                    "allow_multiple_values": True,
-                },
-            ])
-        in_exploration = betterstack.Alert("in_exploration",
-            dashboard_id="123",
-            chart_id="456",
-            name="High Error Rate",
+                "sql_query": "SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time",
+            }])
+        error_spike = betterstack.Alert("error_spike",
+            dashboard_id=app_dashboard.id,
+            chart_id=errors.id,
+            name="Error spike",
             alert_type=betterstack.AlertType.THRESHOLD,
             operator=betterstack.AlertOperator.HIGHER_THAN,
             value=float(100),
-            check_period=300,
-            confirmation_period=0,
-            escalation_target={
-                "policy_name": "Critical Policy",
-            },
-            metadata={
-                "runbook": ["http://runbook/high-errors"],
-            },
-            exploration_id=example.id)
+            source_variable=app.table_name.apply(lambda table_name: f"source:{table_name}"),
+            aggregation_interval=300,
+            check_period=60,
+            confirmation_period=300,
+            recovery_period=300,
+            email=True,
+            push=True)
         ```
 
         Configure exactly one of these: `dashboard_id` with `chart_id`, or `exploration_id`. The provider checks this when it plans the resource, before it creates or replaces anything.
@@ -1486,106 +1416,36 @@ class Alert(pulumi.CustomResource):
 
         ## Example Usage
 
-        ### On a dashboard chart
-
         ```python
         import pulumi
         import pulumi_betterstack as betterstack
 
-        on_a_dashboard_chart = betterstack.Alert("on_a_dashboard_chart",
-            dashboard_id="123",
-            chart_id="456",
-            name="High Error Rate",
-            alert_type=betterstack.AlertType.THRESHOLD,
-            operator=betterstack.AlertOperator.HIGHER_THAN,
-            value=float(100),
-            check_period=300,
-            confirmation_period=0,
-            escalation_target={
-                "policy_name": "Critical Policy",
-            },
-            metadata={
-                "runbook": ["http://runbook/high-errors"],
-            })
-        ```
-
-        ### On an exploration
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        on_an_exploration = betterstack.Alert("on_an_exploration",
-            exploration_id="789",
-            name="Status is Error",
-            alert_type=betterstack.AlertType.THRESHOLD,
-            operator=betterstack.AlertOperator.EQUAL,
-            string_value="error",
-            check_period=300,
-            confirmation_period=0)
-        ```
-
-        ### In an exploration
-
-        ```python
-        import pulumi
-        import pulumi_betterstack as betterstack
-
-        example = betterstack.Exploration("example",
-            name="Error Rate Analysis",
-            date_range_from="now-3h",
-            date_range_to="now",
-            chart={
-                "chart_type": "line_chart",
-                "description": "Shows error rates across all services",
-                "settings": {
-                    "unit": "auto",
-                    "decimal_places": 0,
-                    "legend": "shown_below",
-                    "stacking": "dont_stack",
-                },
-            },
+        app = betterstack.Source("app",
+            name="Production app",
+            platform=betterstack.SourcePlatform.UBUNTU)
+        app_dashboard = betterstack.Dashboard("app", name="Production app")
+        errors = betterstack.DashboardChart("errors",
+            dashboard_id=app_dashboard.id,
+            chart_type=betterstack.DashboardChartChartType.LINE_CHART,
+            name="Errors",
             queries=[{
-                "name": "Main Query",
                 "query_type": "sql_expression",
-                "sql_query": \"\"\"SELECT {{time}} AS time, count(*) AS value
-        FROM {{source}}
-        WHERE dt BETWEEN {{start_time}} AND {{end_time}}
-          [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]
-        GROUP BY time\"\"\",
-                "source_variable": "source",
-            }],
-            variables=[
-                {
-                    "name": "source",
-                    "variable_type": "source",
-                    "values": ["123"],
-                },
-                {
-                    "name": "level",
-                    "variable_type": "select_with_sql",
-                    "values": [],
-                    "default_values": [],
-                    "sql_definition": "JSONExtractString(raw, 'level')",
-                    "allow_multiple_values": True,
-                },
-            ])
-        in_exploration = betterstack.Alert("in_exploration",
-            dashboard_id="123",
-            chart_id="456",
-            name="High Error Rate",
+                "sql_query": "SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time",
+            }])
+        error_spike = betterstack.Alert("error_spike",
+            dashboard_id=app_dashboard.id,
+            chart_id=errors.id,
+            name="Error spike",
             alert_type=betterstack.AlertType.THRESHOLD,
             operator=betterstack.AlertOperator.HIGHER_THAN,
             value=float(100),
-            check_period=300,
-            confirmation_period=0,
-            escalation_target={
-                "policy_name": "Critical Policy",
-            },
-            metadata={
-                "runbook": ["http://runbook/high-errors"],
-            },
-            exploration_id=example.id)
+            source_variable=app.table_name.apply(lambda table_name: f"source:{table_name}"),
+            aggregation_interval=300,
+            check_period=60,
+            confirmation_period=300,
+            recovery_period=300,
+            email=True,
+            push=True)
         ```
 
         Configure exactly one of these: `dashboard_id` with `chart_id`, or `exploration_id`. The provider checks this when it plans the resource, before it creates or replaces anything.

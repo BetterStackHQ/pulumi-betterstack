@@ -1,1 +1,1 @@
-terraform import betterstack_extracted_metric.example <source_id>/12345
+terraform import betterstack_extracted_metric.example <source_id>/m-123

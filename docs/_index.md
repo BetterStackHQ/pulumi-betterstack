@@ -6,7 +6,21 @@ layout: package
 
 The Better Stack provider manages [Better Stack](https://betterstack.com) resources with Pulumi. One provider and one API token cover uptime monitors, heartbeats, on-call calendars and escalation policies, status pages, log and metric sources, collectors, dashboards, error tracking and the rest of the Better Stack API.
 
-## Example
+## Installation
+
+The provider is available as a package in these languages:
+
+<!-- generated:install -->
+* JavaScript/TypeScript: [`@better_stack/pulumi`](https://www.npmjs.com/package/@better_stack/pulumi)
+* Python: [`pulumi_betterstack`](https://pypi.org/project/pulumi-betterstack/)
+* Go: [`github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack`](https://pkg.go.dev/github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack)
+* .NET: [`BetterStack.Pulumi`](https://www.nuget.org/packages/BetterStack.Pulumi)
+* Java: [`com.betterstack:pulumi`](https://central.sonatype.com/artifact/com.betterstack/pulumi) (package `com.betterstack.pulumi`)
+<!-- /generated:install -->
+
+Pulumi downloads the provider plugin from the [GitHub releases](https://github.com/BetterStackHQ/pulumi-betterstack/releases) on the first `pulumi up`.
+
+## Example Usage
 
 {{< chooser language "typescript,python,go,csharp,java,yaml" >}}
 
@@ -135,20 +149,6 @@ outputs:
 
 {{< /chooser >}}
 
-## Installation
-
-The provider is available as a package in these languages:
-
-<!-- generated:install -->
-* JavaScript/TypeScript: [`@better_stack/pulumi`](https://www.npmjs.com/package/@better_stack/pulumi)
-* Python: [`pulumi_betterstack`](https://pypi.org/project/pulumi-betterstack/)
-* Go: [`github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack`](https://pkg.go.dev/github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack)
-* .NET: [`Pulumi.BetterStack`](https://www.nuget.org/packages/Pulumi.BetterStack)
-* Java: [`com.betterstack:pulumi`](https://central.sonatype.com/artifact/com.betterstack/pulumi) (package `com.betterstack.pulumi`)
-<!-- /generated:install -->
-
-Pulumi downloads the provider plugin from the [GitHub releases](https://github.com/BetterStackHQ/pulumi-betterstack/releases) on the first `pulumi up`.
-
 ## Configuration
 
 The provider needs a Better Stack API token. Use a global API token from [Better Stack → API tokens → Global tokens](https://betterstack.com/settings/global-api-tokens), or a team API token from [Better Stack → API tokens → Team-based tokens](https://betterstack.com/settings/api-tokens/0). Store it as a secret.
@@ -174,9 +174,27 @@ Or set the `BETTERSTACK_API_TOKEN` environment variable, which the provider read
 
 ## Several teams
 
-The provider picks the team. Every resource it creates goes to the team `betterstack:teamId` selects, written as the team's ID from Better Stack URLs, such as `t123`. A resource's own `teamName` or `teamId` output is read-only and shows the team it belongs to. Set `betterstack:teamId` when the API token can reach several teams, as a global API token can.
+The provider's `betterstack:teamId` is the team a resource is created in when the resource doesn't name one, written as the team's ID from Better Stack URLs, such as `t123`. To manage resources in several teams with one API token, set `teamId` on the resources that belong to another team. Changing a resource's `teamId` replaces it, because an object can't move to another team. Set `betterstack:teamId` when the API token can reach several teams, as a global API token can, or set `teamId` on every resource that accepts one.
 
-To manage several teams in one program, create one explicit provider per team and pass it in each resource's options:
+```typescript
+import * as betterstack from "@better_stack/pulumi";
+
+// Created in the team betterstack:teamId selects.
+new betterstack.Heartbeat("nightly-backup", {
+    name: "Nightly backup",
+    period: 86400,
+    grace: 3600,
+});
+
+new betterstack.Heartbeat("settlement-job", {
+    teamId: "t456",
+    name: "Settlement job",
+    period: 3600,
+    grace: 600,
+});
+```
+
+To give each team its own token or settings, create one explicit provider per team and pass it in each resource's options:
 
 ```typescript
 import * as pulumi from "@pulumi/pulumi";

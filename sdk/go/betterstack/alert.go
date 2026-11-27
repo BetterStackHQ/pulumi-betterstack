@@ -16,12 +16,12 @@ import (
 //
 // ## Example Usage
 //
-// ### On a dashboard chart
-//
 // ```go
 // package main
 //
 // import (
+//
+//	"fmt"
 //
 //	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -30,140 +30,49 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewAlert(ctx, "on_a_dashboard_chart", &betterstack.AlertArgs{
-//				DashboardId:        pulumi.String("123"),
-//				ChartId:            pulumi.String("456"),
-//				Name:               pulumi.String("High Error Rate"),
-//				AlertType:          pulumi.String(betterstack.AlertTypeThreshold),
-//				Operator:           pulumi.String(betterstack.AlertOperatorHigherThan),
-//				Value:              pulumi.Float64(100),
-//				CheckPeriod:        pulumi.Int(300),
-//				ConfirmationPeriod: pulumi.Int(0),
-//				EscalationTarget: &betterstack.AlertEscalationTargetArgs{
-//					PolicyName: pulumi.String("Critical Policy"),
-//				},
-//				Metadata: pulumi.StringArrayMap{
-//					"runbook": pulumi.StringArray{
-//						pulumi.String("http://runbook/high-errors"),
+//			app, err := betterstack.NewSource(ctx, "app", &betterstack.SourceArgs{
+//				Name:     pulumi.String("Production app"),
+//				Platform: pulumi.String(betterstack.SourcePlatformUbuntu),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			appDashboard, err := betterstack.NewDashboard(ctx, "app", &betterstack.DashboardArgs{
+//				Name: pulumi.String("Production app"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			errors, err := betterstack.NewDashboardChart(ctx, "errors", &betterstack.DashboardChartArgs{
+//				DashboardId: appDashboard.ID(),
+//				ChartType:   pulumi.String(betterstack.DashboardChartChartTypeLineChart),
+//				Name:        pulumi.String("Errors"),
+//				Queries: betterstack.DashboardChartQueryArray{
+//					&betterstack.DashboardChartQueryArgs{
+//						QueryType: pulumi.String("sql_expression"),
+//						SqlQuery:  pulumi.String("SELECT {{time}} AS time, count(*) AS value FROM {{source}} WHERE dt BETWEEN {{start_time}} AND {{end_time}} AND JSONExtract(raw, 'level', 'Nullable(String)') = 'error' GROUP BY time"),
 //					},
 //				},
 //			})
 //			if err != nil {
 //				return err
 //			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ### On an exploration
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := betterstack.NewAlert(ctx, "on_an_exploration", &betterstack.AlertArgs{
-//				ExplorationId:      pulumi.String("789"),
-//				Name:               pulumi.String("Status is Error"),
-//				AlertType:          pulumi.String(betterstack.AlertTypeThreshold),
-//				Operator:           pulumi.String(betterstack.AlertOperatorEqual),
-//				StringValue:        pulumi.String("error"),
-//				CheckPeriod:        pulumi.Int(300),
-//				ConfirmationPeriod: pulumi.Int(0),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
-// ### In an exploration
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/betterstackhq/pulumi-betterstack/sdk/go/betterstack"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			example, err := betterstack.NewExploration(ctx, "example", &betterstack.ExplorationArgs{
-//				Name:          pulumi.String("Error Rate Analysis"),
-//				DateRangeFrom: pulumi.String("now-3h"),
-//				DateRangeTo:   pulumi.String("now"),
-//				Chart: &betterstack.ExplorationChartArgs{
-//					ChartType:   pulumi.String("line_chart"),
-//					Description: pulumi.String("Shows error rates across all services"),
-//					Settings: &betterstack.ExplorationChartSettingsArgs{
-//						Unit:          pulumi.String("auto"),
-//						DecimalPlaces: pulumi.Int(0),
-//						Legend:        pulumi.String("shown_below"),
-//						Stacking:      pulumi.String("dont_stack"),
-//					},
-//				},
-//				Queries: betterstack.ExplorationQueryArray{
-//					&betterstack.ExplorationQueryArgs{
-//						Name:           pulumi.String("Main Query"),
-//						QueryType:      pulumi.String("sql_expression"),
-//						SqlQuery:       pulumi.String("SELECT {{time}} AS time, count(*) AS value\nFROM {{source}}\nWHERE dt BETWEEN {{start_time}} AND {{end_time}}\n  [[ AND match(JSONExtractString(raw, 'level'), {{level}}) ]]\nGROUP BY time"),
-//						SourceVariable: pulumi.String("source"),
-//					},
-//				},
-//				Variables: betterstack.ExplorationVariableArray{
-//					&betterstack.ExplorationVariableArgs{
-//						Name:         pulumi.String("source"),
-//						VariableType: pulumi.String("source"),
-//						Values: pulumi.StringArray{
-//							pulumi.String("123"),
-//						},
-//					},
-//					&betterstack.ExplorationVariableArgs{
-//						Name:                pulumi.String("level"),
-//						VariableType:        pulumi.String("select_with_sql"),
-//						Values:              pulumi.StringArray{},
-//						DefaultValues:       pulumi.StringArray{},
-//						SqlDefinition:       pulumi.String("JSONExtractString(raw, 'level')"),
-//						AllowMultipleValues: pulumi.Bool(true),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = betterstack.NewAlert(ctx, "in_exploration", &betterstack.AlertArgs{
-//				DashboardId:        pulumi.String("123"),
-//				ChartId:            pulumi.String("456"),
-//				Name:               pulumi.String("High Error Rate"),
-//				AlertType:          pulumi.String(betterstack.AlertTypeThreshold),
-//				Operator:           pulumi.String(betterstack.AlertOperatorHigherThan),
-//				Value:              pulumi.Float64(100),
-//				CheckPeriod:        pulumi.Int(300),
-//				ConfirmationPeriod: pulumi.Int(0),
-//				EscalationTarget: &betterstack.AlertEscalationTargetArgs{
-//					PolicyName: pulumi.String("Critical Policy"),
-//				},
-//				Metadata: pulumi.StringArrayMap{
-//					"runbook": pulumi.StringArray{
-//						pulumi.String("http://runbook/high-errors"),
-//					},
-//				},
-//				ExplorationId: example.ID(),
+//			_, err = betterstack.NewAlert(ctx, "error_spike", &betterstack.AlertArgs{
+//				DashboardId: appDashboard.ID(),
+//				ChartId:     errors.ID(),
+//				Name:        pulumi.String("Error spike"),
+//				AlertType:   pulumi.String(betterstack.AlertTypeThreshold),
+//				Operator:    pulumi.String(betterstack.AlertOperatorHigherThan),
+//				Value:       pulumi.Float64(100),
+//				SourceVariable: app.TableName.ApplyT(func(tableName string) (string, error) {
+//					return fmt.Sprintf("source:%v", tableName), nil
+//				}).(pulumi.StringOutput),
+//				AggregationInterval: pulumi.Int(300),
+//				CheckPeriod:         pulumi.Int(60),
+//				ConfirmationPeriod:  pulumi.Int(300),
+//				RecoveryPeriod:      pulumi.Int(300),
+//				Email:               pulumi.Bool(true),
+//				Push:                pulumi.Bool(true),
 //			})
 //			if err != nil {
 //				return err

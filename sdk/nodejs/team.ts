@@ -62,7 +62,7 @@ import * as utilities from "./utilities";
  * Import an existing team by its ID. Get the ID via [List teams](https://betterstack.com/docs/uptime/api/teams/list/).
  *
  * ```sh
- * $ pulumi import betterstack:index/team:Team example 12345
+ * $ pulumi import betterstack:index/team:Team example t123
  * ```
  */
 export class Team extends pulumi.CustomResource {
