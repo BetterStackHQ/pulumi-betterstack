@@ -7,7 +7,7 @@
 # pulumi_betterstack on PyPI and the better_stack account on NuGet.org trust this repository's
 # release.yml as their Trusted Publisher, and the job proves who it is with a GitHub OIDC token.
 # Maven Central has no trusted publishing, so the Java job runs in the "maven-central" environment
-# (v* tags only, with required reviewers: approving it is the Java release gate) and reads:
+# (v* tags only) and reads:
 #   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD  a Central Portal user token
 #   GPG_PRIVATE_KEY, GPG_PASSPHRASE                  the ASCII-armored signing key and its passphrase
 #
@@ -222,8 +222,12 @@ jobs:
         with:
           gradle-version: "8.14.3"
           cache-disabled: true
-      # The generated build publishes through the Central Portal's OSSRH staging API with the Portal
-      # user token, signs with the in-memory key, then closes and releases the staging repository.
+      # The generated build uploads through the Central Portal's OSSRH staging API with the Portal
+      # user token and signs with the in-memory key. Closing the staging repository hands it to the
+      # Portal as a deployment, which validates it and publishes it to Central on its own or stops at
+      # VALIDATED for a publish call. The step makes that publish call itself and waits for the
+      # deployment to reach PUBLISHED, so no release waits on a person. It uploads only when Central
+      # and the Portal have no live deployment of this version, so a rerun picks up where one stopped.
       - name: Publish the Java package to Maven Central
         env:
           PUBLISH_REPO_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
@@ -232,5 +236,41 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           test -n "$PUBLISH_REPO_USERNAME" -a -n "$SIGNING_KEY" || { echo "::error::the maven-central environment lacks its secrets"; exit 1; }
-          gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
-            publishToSonatype closeAndReleaseSonatypeStagingRepository
+          pom="https://repo1.maven.org/maven2/com/betterstack/pulumi/$PACKAGE_VERSION/pulumi-$PACKAGE_VERSION.pom"
+          purl="pkg:maven/com.betterstack/pulumi@$PACKAGE_VERSION"
+          auth="Authorization: Bearer $(printf '%s:%s' "$PUBLISH_REPO_USERNAME" "$PUBLISH_REPO_PASSWORD" | base64 -w0)"
+          on_central() { curl -fsS -o /dev/null "$pom" 2>/dev/null; }
+          # Prints "<id> <state>" for each Portal deployment of this version, newest first.
+          deployments() {
+            curl -fsS -H "$auth" "https://ossrh-staging-api.central.sonatype.com/manual/search/repositories?ip=any&profile_id=com.betterstack" \
+              | jq -r '.repositories | reverse | .[].portal_deployment_id // empty' \
+              | while read -r id; do
+                  curl -fsS -X POST -H "$auth" "https://central.sonatype.com/api/v1/publisher/status?id=$id" \
+                    | jq -r --arg purl "$purl" 'select(.purls // [] | index($purl)) | "\(.deploymentId) \(.deploymentState)"'
+                done
+          }
+          live() { deployments | awk '$2 != "FAILED" && !f {print; f = 1}'; }
+          if on_central; then echo "com.betterstack:pulumi:$PACKAGE_VERSION is already on Maven Central"; exit 0; fi
+          deployments | sed 's/^/Portal deployment of this version: /'
+          if [ -z "$(live)" ]; then
+            gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
+              publishToSonatype closeAndReleaseSonatypeStagingRepository
+          fi
+          for _ in $(seq 100); do
+            read -r id state <<<"$(live)"
+            echo "Portal deployment ${id:-of this version}: ${state:-none yet}"
+            case "$state" in
+              PUBLISHED) on_central && exit 0 ;;
+              VALIDATED) curl -fsS -X POST -H "$auth" "https://central.sonatype.com/api/v1/publisher/deployment/$id" ;;
+              "")
+                failed="$(deployments | awk '$2 == "FAILED" && !f {print $1; f = 1}')"
+                if [ -n "$failed" ]; then
+                  echo "::error::the Central Portal failed deployment $failed of com.betterstack:pulumi:$PACKAGE_VERSION"
+                  curl -fsS -X POST -H "$auth" "https://central.sonatype.com/api/v1/publisher/status?id=$failed" | jq '.errors'
+                  exit 1
+                fi ;;
+            esac
+            sleep 30
+          done
+          echo "::error::com.betterstack:pulumi:$PACKAGE_VERSION is not on Maven Central 50 minutes after its upload (Portal state: ${state:-none})"
+          exit 1
