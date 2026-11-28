@@ -1240,7 +1240,7 @@ export interface DashboardChartSettings {
     /**
      * Whether `unit` is your own suffix, shown after the value as written and never scaled.
      */
-    customUnit?: boolean;
+    customUnit: boolean;
     /**
      * Number of decimal places shown.
      */
@@ -1268,7 +1268,7 @@ export interface DashboardChartSettings {
     /**
      * Up to two columns a hierarchy chart groups its hexagons by.
      */
-    groupByColumns?: string[];
+    groupByColumns: string[];
     /**
      * Colors the chart picked for its series, keyed by `seriesName`.
      */
@@ -1276,7 +1276,7 @@ export interface DashboardChartSettings {
     /**
      * How a heatmap colors its cells. Usually 'gradient' or 'categorized'.
      */
-    heatmapColorMode?: string;
+    heatmapColorMode: string;
     /**
      * A legend placement the chart editor saves next to `legend`, such as 'shown_below'. Charts ignore it and place the legend by `legend`.
      */
@@ -1284,7 +1284,7 @@ export interface DashboardChartSettings {
     /**
      * Column that names each hexagon on a hierarchy chart.
      */
-    labelColumn?: string;
+    labelColumn: string;
     /**
      * Where the legend is shown. Usually 'hidden', 'shown_below', 'shown_below_with_statistics' or 'shown_right'.
      */
@@ -1292,7 +1292,7 @@ export interface DashboardChartSettings {
     /**
      * Link a hierarchy chart opens when you click a hexagon, with `{{column}}` placeholders.
      */
-    linkTemplate?: string;
+    linkTemplate: string;
     /**
      * Column holding the location on a map chart.
      */
@@ -1300,7 +1300,7 @@ export interface DashboardChartSettings {
     /**
      * What a map chart's tooltip names, either the closest city or country or the value as sent. Usually 'automatic' or 'original_value'.
      */
-    locationLabel?: string;
+    locationLabel: string;
     /**
      * Upper bound of a gauge, the goal value.
      */
@@ -1336,15 +1336,15 @@ export interface DashboardChartSettings {
     /**
      * Map projection of a map chart, such as 'mercator'.
      */
-    projection?: string;
+    projection: string;
     /**
      * Seconds a published chart's results are cached, 3 by default.
      */
-    publishedCacheFor?: number;
+    publishedCacheFor: number;
     /**
      * Format a published chart is served in, 'json' by default.
      */
-    publishedFormat?: string;
+    publishedFormat: string;
     /**
      * Live tail row format of each source, by source ID.
      */
@@ -1352,11 +1352,11 @@ export interface DashboardChartSettings {
     /**
      * Percentage of data the chart samples.
      */
-    sampling?: number;
+    sampling: number;
     /**
      * Color of each series, keyed by its `seriesName`, as a hex color such as `#22c55e`.
      */
-    seriesColors?: {[key: string]: string};
+    seriesColors: {[key: string]: string};
     /**
      * Column that splits the data into series. On a heatmap it's the Y axis column.
      */
@@ -1364,19 +1364,19 @@ export interface DashboardChartSettings {
     /**
      * Whether `seriesUnit` is your own suffix.
      */
-    seriesCustomUnit?: boolean;
+    seriesCustomUnit: boolean;
     /**
      * Order the series are shown in, by name.
      */
-    seriesOrder?: string[];
+    seriesOrder: string[];
     /**
      * Unit of a heatmap's Y axis labels.
      */
-    seriesUnit?: string;
+    seriesUnit: string;
     /**
      * Whether a line chart also shows the previous period.
      */
-    showPreviousPeriod?: boolean;
+    showPreviousPeriod: boolean;
     /**
      * How series are stacked. Usually 'dont_stack', 'stack' or 'stack_to_100'.
      */
@@ -1400,7 +1400,7 @@ export interface DashboardChartSettings {
     /**
      * How zero values are drawn, 'keep' or 'drop_disconnected'. Defaults to 'keep'.
      */
-    treatZeroValues?: string;
+    treatZeroValues: string;
     /**
      * Unit the values are shown in, such as 'percent', 'bytes' or 'ms'. Table charts use `columnUnits` instead.
      */
@@ -1408,7 +1408,7 @@ export interface DashboardChartSettings {
     /**
      * Label and color of each cell value of a categorized heatmap.
      */
-    valueCategories?: {[key: string]: outputs.DashboardChartSettingsValueCategories};
+    valueCategories: {[key: string]: outputs.DashboardChartSettingsValueCategories};
     /**
      * Result columns that hold the values to chart.
      */
@@ -1416,7 +1416,7 @@ export interface DashboardChartSettings {
     /**
      * Vertical lines drawn at values on the X axis, each with a label and color. A value is a time or a number, as the X axis reads it.
      */
-    xAxisAnnotations?: outputs.DashboardChartSettingsXAxisAnnotation[];
+    xAxisAnnotations: outputs.DashboardChartSettingsXAxisAnnotation[];
     /**
      * How the X axis is read. Usually 'time', `value` or 'category'.
      */
@@ -1424,19 +1424,19 @@ export interface DashboardChartSettings {
     /**
      * Horizontal lines drawn at values on the Y axis, each with a label and color.
      */
-    yAxisAnnotations?: outputs.DashboardChartSettingsYAxisAnnotation[];
+    yAxisAnnotations: outputs.DashboardChartSettingsYAxisAnnotation[];
     /**
      * How a line chart fits its Y axis when no bounds are set. Usually 'include_zero' or 'fit_data'.
      */
-    yAxisAutoRange?: string;
+    yAxisAutoRange: string;
     /**
      * Highest value on the Y axis.
      */
-    yAxisMax?: number;
+    yAxisMax: number;
     /**
      * Lowest value on the Y axis.
      */
-    yAxisMin?: number;
+    yAxisMin: number;
     /**
      * Scale of the Y axis. Usually 'linear' or 'log'.
      */
@@ -2043,7 +2043,7 @@ export interface ExplorationChartSettings {
     /**
      * Whether `unit` is your own suffix, shown after the value as written and never scaled.
      */
-    customUnit?: boolean;
+    customUnit: boolean;
     /**
      * Number of decimal places shown.
      */
@@ -2071,7 +2071,7 @@ export interface ExplorationChartSettings {
     /**
      * Up to two columns a hierarchy chart groups its hexagons by.
      */
-    groupByColumns?: string[];
+    groupByColumns: string[];
     /**
      * Colors the chart picked for its series, keyed by `seriesName`.
      */
@@ -2079,7 +2079,7 @@ export interface ExplorationChartSettings {
     /**
      * How a heatmap colors its cells. Usually 'gradient' or 'categorized'.
      */
-    heatmapColorMode?: string;
+    heatmapColorMode: string;
     /**
      * A legend placement the chart editor saves next to `legend`, such as 'shown_below'. Charts ignore it and place the legend by `legend`.
      */
@@ -2087,7 +2087,7 @@ export interface ExplorationChartSettings {
     /**
      * Column that names each hexagon on a hierarchy chart.
      */
-    labelColumn?: string;
+    labelColumn: string;
     /**
      * Where the legend is shown. Usually 'hidden', 'shown_below', 'shown_below_with_statistics' or 'shown_right'.
      */
@@ -2095,7 +2095,7 @@ export interface ExplorationChartSettings {
     /**
      * Link a hierarchy chart opens when you click a hexagon, with `{{column}}` placeholders.
      */
-    linkTemplate?: string;
+    linkTemplate: string;
     /**
      * Column holding the location on a map chart.
      */
@@ -2103,7 +2103,7 @@ export interface ExplorationChartSettings {
     /**
      * What a map chart's tooltip names, either the closest city or country or the value as sent. Usually 'automatic' or 'original_value'.
      */
-    locationLabel?: string;
+    locationLabel: string;
     /**
      * Upper bound of a gauge, the goal value.
      */
@@ -2139,15 +2139,15 @@ export interface ExplorationChartSettings {
     /**
      * Map projection of a map chart, such as 'mercator'.
      */
-    projection?: string;
+    projection: string;
     /**
      * Seconds a published chart's results are cached, 3 by default.
      */
-    publishedCacheFor?: number;
+    publishedCacheFor: number;
     /**
      * Format a published chart is served in, 'json' by default.
      */
-    publishedFormat?: string;
+    publishedFormat: string;
     /**
      * Live tail row format of each source, by source ID.
      */
@@ -2155,11 +2155,11 @@ export interface ExplorationChartSettings {
     /**
      * Percentage of data the chart samples.
      */
-    sampling?: number;
+    sampling: number;
     /**
      * Color of each series, keyed by its `seriesName`, as a hex color such as `#22c55e`.
      */
-    seriesColors?: {[key: string]: string};
+    seriesColors: {[key: string]: string};
     /**
      * Column that splits the data into series. On a heatmap it's the Y axis column.
      */
@@ -2167,19 +2167,19 @@ export interface ExplorationChartSettings {
     /**
      * Whether `seriesUnit` is your own suffix.
      */
-    seriesCustomUnit?: boolean;
+    seriesCustomUnit: boolean;
     /**
      * Order the series are shown in, by name.
      */
-    seriesOrder?: string[];
+    seriesOrder: string[];
     /**
      * Unit of a heatmap's Y axis labels.
      */
-    seriesUnit?: string;
+    seriesUnit: string;
     /**
      * Whether a line chart also shows the previous period.
      */
-    showPreviousPeriod?: boolean;
+    showPreviousPeriod: boolean;
     /**
      * How series are stacked. Usually 'dont_stack', 'stack' or 'stack_to_100'.
      */
@@ -2203,7 +2203,7 @@ export interface ExplorationChartSettings {
     /**
      * How zero values are drawn, 'keep' or 'drop_disconnected'. Defaults to 'keep'.
      */
-    treatZeroValues?: string;
+    treatZeroValues: string;
     /**
      * Unit the values are shown in, such as 'percent', 'bytes' or 'ms'. Table charts use `columnUnits` instead.
      */
@@ -2211,7 +2211,7 @@ export interface ExplorationChartSettings {
     /**
      * Label and color of each cell value of a categorized heatmap.
      */
-    valueCategories?: {[key: string]: outputs.ExplorationChartSettingsValueCategories};
+    valueCategories: {[key: string]: outputs.ExplorationChartSettingsValueCategories};
     /**
      * Result columns that hold the values to chart.
      */
@@ -2219,7 +2219,7 @@ export interface ExplorationChartSettings {
     /**
      * Vertical lines drawn at values on the X axis, each with a label and color. A value is a time or a number, as the X axis reads it.
      */
-    xAxisAnnotations?: outputs.ExplorationChartSettingsXAxisAnnotation[];
+    xAxisAnnotations: outputs.ExplorationChartSettingsXAxisAnnotation[];
     /**
      * How the X axis is read. Usually 'time', `value` or 'category'.
      */
@@ -2227,19 +2227,19 @@ export interface ExplorationChartSettings {
     /**
      * Horizontal lines drawn at values on the Y axis, each with a label and color.
      */
-    yAxisAnnotations?: outputs.ExplorationChartSettingsYAxisAnnotation[];
+    yAxisAnnotations: outputs.ExplorationChartSettingsYAxisAnnotation[];
     /**
      * How a line chart fits its Y axis when no bounds are set. Usually 'include_zero' or 'fit_data'.
      */
-    yAxisAutoRange?: string;
+    yAxisAutoRange: string;
     /**
      * Highest value on the Y axis.
      */
-    yAxisMax?: number;
+    yAxisMax: number;
     /**
      * Lowest value on the Y axis.
      */
-    yAxisMin?: number;
+    yAxisMin: number;
     /**
      * Scale of the Y axis. Usually 'linear' or 'log'.
      */

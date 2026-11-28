@@ -7,7 +7,7 @@
 # pulumi_betterstack on PyPI and the better_stack account on NuGet.org trust this repository's
 # release.yml as their Trusted Publisher, and the job proves who it is with a GitHub OIDC token.
 # Maven Central has no trusted publishing, so the Java job runs in the "maven-central" environment
-# (v* tags only, with required reviewers: approving it is the Java release gate) and reads:
+# (v* tags only) and reads:
 #   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD  a Central Portal user token
 #   GPG_PRIVATE_KEY, GPG_PASSPHRASE                  the ASCII-armored signing key and its passphrase
 #
@@ -222,8 +222,12 @@ jobs:
         with:
           gradle-version: "8.14.3"
           cache-disabled: true
-      # The generated build publishes through the Central Portal's OSSRH staging API with the Portal
-      # user token, signs with the in-memory key, then closes and releases the staging repository.
+      # The generated build uploads through the Central Portal's OSSRH staging API with the Portal
+      # user token and signs with the in-memory key. Closing the staging repository hands it to the
+      # Portal as a deployment, which validates it and stops at VALIDATED. The step then publishes
+      # that deployment itself and waits until the version is on Maven Central, so no release waits
+      # on a person, and fails with the Portal's errors otherwise. A rerun publishes a deployment of
+      # this version that is still live instead of uploading it again.
       - name: Publish the Java package to Maven Central
         env:
           PUBLISH_REPO_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
@@ -232,5 +236,53 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           test -n "$PUBLISH_REPO_USERNAME" -a -n "$SIGNING_KEY" || { echo "::error::the maven-central environment lacks its secrets"; exit 1; }
-          gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
-            publishToSonatype closeAndReleaseSonatypeStagingRepository
+          pom="https://repo1.maven.org/maven2/com/betterstack/pulumi/$PACKAGE_VERSION/pulumi-$PACKAGE_VERSION.pom"
+          purl="pkg:maven/com.betterstack/pulumi@$PACKAGE_VERSION"
+          auth="Authorization: Bearer $(printf '%s:%s' "$PUBLISH_REPO_USERNAME" "$PUBLISH_REPO_PASSWORD" | base64 -w0)"
+          portal=https://central.sonatype.com/api/v1/publisher
+          on_central() { curl -fsS -o /dev/null "$pom" 2>/dev/null; }
+          status() { curl -fsS -X POST -H "$auth" "$portal/status?id=$1"; }
+          # Prints "<owner>/<ip>/<staging key> <deployment id>" for each staging repository of the namespace.
+          repositories() {
+            curl -fsS -H "$auth" "https://ossrh-staging-api.central.sonatype.com/manual/search/repositories?ip=any&profile_id=com.betterstack" \
+              | jq -r '.repositories[] | select(.portal_deployment_id) | "\(.key) \(.portal_deployment_id)"'
+          }
+          if on_central; then echo "com.betterstack:pulumi:$PACKAGE_VERSION is already on Maven Central"; exit 0; fi
+          # A deployment still in flight lists no purls yet, so one without them counts as this version.
+          # One that is PUBLISHING holds the version: the Portal fails any other deployment of it.
+          id=""
+          while read -r key dep; do
+            info="$(status "$dep")"
+            state="$(jq -r .deploymentState <<<"$info")"
+            purls="$(jq -r '.purls // [] | join(",")' <<<"$info")"
+            echo "Portal deployment $dep (${key##*/}): $state ${purls:-no purls yet}"
+            [ "$state" = FAILED ] && jq -c '.errors' <<<"$info"
+            case "$state:$purls" in
+              PUBLISHING:|PUBLISHING:*"$purl"*) id="$dep"; break ;;
+              PENDING:|VALIDATING:|VALIDATED:*"$purl"*|PENDING:*"$purl"*|VALIDATING:*"$purl"*) id="${id:-$dep}" ;;
+            esac
+          done < <(repositories)
+          if [ -z "$id" ]; then
+            gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
+              publishToSonatype closeSonatypeStagingRepository | tee "$RUNNER_TEMP/gradle.log"
+            key="$(grep -o "Created staging repository '[^']*'" "$RUNNER_TEMP/gradle.log" | cut -d"'" -f2)"
+            id="$(repositories | awk -v k="/$key" 'substr($1, length($1) - length(k) + 1) == k {print $2}')"
+            test -n "$id" || { echo "::error::the Central Portal has no deployment for staging repository $key"; exit 1; }
+          fi
+          for _ in $(seq 100); do
+            state="$(status "$id" | jq -r .deploymentState)" || state=unknown
+            echo "Portal deployment $id: $state"
+            case "$state" in
+              PUBLISHED) on_central && exit 0 ;;
+              VALIDATED)
+                code="$(curl -sS -o "$RUNNER_TEMP/publish.out" -w '%{http_code}' -X POST -H "$auth" "$portal/deployment/$id")"
+                case "$code" in 2??) ;; *) echo "::error::the Central Portal refused to publish deployment $id ($code): $(cat "$RUNNER_TEMP/publish.out")"; exit 1 ;; esac ;;
+              FAILED)
+                echo "::error::the Central Portal failed deployment $id of com.betterstack:pulumi:$PACKAGE_VERSION"
+                status "$id" | jq .errors
+                exit 1 ;;
+            esac
+            sleep 30
+          done
+          echo "::error::com.betterstack:pulumi:$PACKAGE_VERSION is not on Maven Central after 50 minutes: Portal deployment $id is $state. A rerun of this job waits on it again."
+          exit 1
