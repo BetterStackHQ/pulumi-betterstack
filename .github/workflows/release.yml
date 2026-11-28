@@ -242,23 +242,30 @@ jobs:
           portal=https://central.sonatype.com/api/v1/publisher
           on_central() { curl -fsS -o /dev/null "$pom" 2>/dev/null; }
           status() { curl -fsS -X POST -H "$auth" "$portal/status?id=$1"; }
-          # Prints "<staging key> <deployment id>" for each staging repository of the namespace.
+          # Prints "<owner>/<ip>/<staging key> <deployment id>" for each staging repository of the namespace.
           repositories() {
             curl -fsS -H "$auth" "https://ossrh-staging-api.central.sonatype.com/manual/search/repositories?ip=any&profile_id=com.betterstack" \
               | jq -r '.repositories[] | select(.portal_deployment_id) | "\(.key) \(.portal_deployment_id)"'
           }
           if on_central; then echo "com.betterstack:pulumi:$PACKAGE_VERSION is already on Maven Central"; exit 0; fi
+          # A deployment still in flight lists no purls yet, so one without them counts as this version.
           id=""
           while read -r key dep; do
-            line="$(status "$dep" | jq -r '"\(.deploymentState) \(.purls // [] | join(","))"')"
-            echo "Portal deployment $dep ($key): $line"
-            case "$line" in *FAILED*) ;; *"$purl"*) id="$dep" ;; esac
+            info="$(status "$dep")"
+            state="$(jq -r .deploymentState <<<"$info")"
+            purls="$(jq -r '.purls // [] | join(",")' <<<"$info")"
+            echo "Portal deployment $dep (${key##*/}): $state ${purls:-no purls yet}"
+            [ "$state" = FAILED ] && jq -c '.errors' <<<"$info"
+            case "$state:$purls" in
+              VALIDATED:*"$purl"*) id="$dep"; break ;;
+              PENDING:|VALIDATING:|PUBLISHING:|*:*"$purl"*) [ "$state" = FAILED ] || id="${id:-$dep}" ;;
+            esac
           done < <(repositories)
           if [ -z "$id" ]; then
             gradle -p sdk/java --no-daemon -Porg.gradle.java.installations.paths="$JAVA_HOME_11_X64" \
               publishToSonatype closeSonatypeStagingRepository | tee "$RUNNER_TEMP/gradle.log"
             key="$(grep -o "Created staging repository '[^']*'" "$RUNNER_TEMP/gradle.log" | cut -d"'" -f2)"
-            id="$(repositories | awk -v k="$key" '$1 == k {print $2}')"
+            id="$(repositories | awk -v k="/$key" 'substr($1, length($1) - length(k) + 1) == k {print $2}')"
             test -n "$id" || { echo "::error::the Central Portal has no deployment for staging repository $key"; exit 1; }
           fi
           for _ in $(seq 100); do
