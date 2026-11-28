@@ -249,6 +249,7 @@ jobs:
           }
           if on_central; then echo "com.betterstack:pulumi:$PACKAGE_VERSION is already on Maven Central"; exit 0; fi
           # A deployment still in flight lists no purls yet, so one without them counts as this version.
+          # One that is PUBLISHING holds the version: the Portal fails any other deployment of it.
           id=""
           while read -r key dep; do
             info="$(status "$dep")"
@@ -257,8 +258,8 @@ jobs:
             echo "Portal deployment $dep (${key##*/}): $state ${purls:-no purls yet}"
             [ "$state" = FAILED ] && jq -c '.errors' <<<"$info"
             case "$state:$purls" in
-              VALIDATED:*"$purl"*) id="$dep"; break ;;
-              PENDING:|VALIDATING:|PUBLISHING:|*:*"$purl"*) [ "$state" = FAILED ] || id="${id:-$dep}" ;;
+              PUBLISHING:|PUBLISHING:*"$purl"*) id="$dep"; break ;;
+              PENDING:|VALIDATING:|VALIDATED:*"$purl"*|PENDING:*"$purl"*|VALIDATING:*"$purl"*) id="${id:-$dep}" ;;
             esac
           done < <(repositories)
           if [ -z "$id" ]; then
@@ -273,7 +274,9 @@ jobs:
             echo "Portal deployment $id: $state"
             case "$state" in
               PUBLISHED) on_central && exit 0 ;;
-              VALIDATED) curl -fsS -X POST -H "$auth" "$portal/deployment/$id" ;;
+              VALIDATED)
+                code="$(curl -sS -o "$RUNNER_TEMP/publish.out" -w '%{http_code}' -X POST -H "$auth" "$portal/deployment/$id")"
+                case "$code" in 2??) ;; *) echo "::error::the Central Portal refused to publish deployment $id ($code): $(cat "$RUNNER_TEMP/publish.out")"; exit 1 ;; esac ;;
               FAILED)
                 echo "::error::the Central Portal failed deployment $id of com.betterstack:pulumi:$PACKAGE_VERSION"
                 status "$id" | jq .errors
@@ -281,5 +284,5 @@ jobs:
             esac
             sleep 30
           done
-          echo "::error::com.betterstack:pulumi:$PACKAGE_VERSION is not on Maven Central 50 minutes after its upload (Portal state: $state)"
+          echo "::error::com.betterstack:pulumi:$PACKAGE_VERSION is not on Maven Central after 50 minutes: Portal deployment $id is $state. A rerun of this job waits on it again."
           exit 1
