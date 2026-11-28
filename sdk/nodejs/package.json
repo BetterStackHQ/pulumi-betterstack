@@ -1,6 +1,6 @@
 {
     "name": "@better_stack/pulumi",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.",
     "keywords": [
         "betterstack",
@@ -31,7 +31,7 @@
     "pulumi": {
         "resource": true,
         "name": "betterstack",
-        "version": "1.4.2",
+        "version": "1.4.3",
         "server": "github://api.github.com/BetterStackHQ/pulumi-betterstack"
     }
 }

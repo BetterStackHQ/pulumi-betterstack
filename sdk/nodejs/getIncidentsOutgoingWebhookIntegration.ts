@@ -48,7 +48,7 @@ export interface GetIncidentsOutgoingWebhookIntegrationArgs {
  */
 export interface GetIncidentsOutgoingWebhookIntegrationResult {
     /**
-     * The saved request template, returned under 'included'. null when the webhook sends its default body.
+     * The saved request template, returned under 'included'. null when the webhook has no custom template.
      */
     readonly customWebhookTemplate: outputs.GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate;
     /**
@@ -76,7 +76,7 @@ export interface GetIncidentsOutgoingWebhookIntegrationResult {
      */
     readonly onIncidentAcknowledged: boolean;
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
      */
     readonly onIncidentComment: boolean;
     /**

@@ -40,6 +40,9 @@ func NewServer(ctx context.Context, sink LogSink, meta pftfbridge.ProviderMetada
 	info.P = capturingShim{shim}
 	applyRuntimeSingularLists(&info)
 
+	if sink != nil {
+		sink = returnedErrorSink{sink}
+	}
 	srv, err := pftfbridge.NewProviderServer(ctx, sink, info, meta)
 	if err != nil {
 		return nil, err

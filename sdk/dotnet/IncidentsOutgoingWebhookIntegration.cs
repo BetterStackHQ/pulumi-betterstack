@@ -124,7 +124,7 @@ namespace Pulumi.BetterStack
     public partial class IncidentsOutgoingWebhookIntegration : global::Pulumi.CustomResource
     {
         /// <summary>
-        /// The saved request template, returned under 'included'. null when the webhook sends its default body.
+        /// The saved request template, returned under 'included'. null when the webhook has no custom template.
         /// </summary>
         [Output("customWebhookTemplate")]
         public Output<Outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate> CustomWebhookTemplate { get; private set; } = null!;
@@ -160,7 +160,7 @@ namespace Pulumi.BetterStack
         public Output<bool> OnIncidentAcknowledged { get; private set; } = null!;
 
         /// <summary>
-        /// Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        /// Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         /// </summary>
         [Output("onIncidentComment")]
         public Output<bool> OnIncidentComment { get; private set; } = null!;
@@ -291,7 +291,7 @@ namespace Pulumi.BetterStack
         public Input<bool>? OnIncidentAcknowledged { get; set; }
 
         /// <summary>
-        /// Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        /// Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         /// </summary>
         [Input("onIncidentComment")]
         public Input<bool>? OnIncidentComment { get; set; }
@@ -341,7 +341,7 @@ namespace Pulumi.BetterStack
     public sealed class IncidentsOutgoingWebhookIntegrationState : global::Pulumi.ResourceArgs
     {
         /// <summary>
-        /// The saved request template, returned under 'included'. null when the webhook sends its default body.
+        /// The saved request template, returned under 'included'. null when the webhook has no custom template.
         /// </summary>
         [Input("customWebhookTemplate")]
         public Input<Inputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateGetArgs>? CustomWebhookTemplate { get; set; }
@@ -377,7 +377,7 @@ namespace Pulumi.BetterStack
         public Input<bool>? OnIncidentAcknowledged { get; set; }
 
         /// <summary>
-        /// Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        /// Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         /// </summary>
         [Input("onIncidentComment")]
         public Input<bool>? OnIncidentComment { get; set; }

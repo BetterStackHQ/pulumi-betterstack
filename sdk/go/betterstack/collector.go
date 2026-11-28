@@ -141,7 +141,7 @@ import (
 type Collector struct {
 	pulumi.CustomResourceState
 
-	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 	BlockedMetrics pulumi.StringArrayOutput `pulumi:"blockedMetrics"`
 	// VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
 	CollectorLogsTransformation pulumi.StringPtrOutput `pulumi:"collectorLogsTransformation"`
@@ -245,7 +245,7 @@ func GetCollector(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Collector resources.
 type collectorState struct {
-	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 	BlockedMetrics []string `pulumi:"blockedMetrics"`
 	// VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
 	CollectorLogsTransformation *string `pulumi:"collectorLogsTransformation"`
@@ -310,7 +310,7 @@ type collectorState struct {
 }
 
 type CollectorState struct {
-	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 	BlockedMetrics pulumi.StringArrayInput
 	// VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
 	CollectorLogsTransformation pulumi.StringPtrInput
@@ -379,7 +379,7 @@ func (CollectorState) ElementType() reflect.Type {
 }
 
 type collectorArgs struct {
-	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 	BlockedMetrics []string `pulumi:"blockedMetrics"`
 	// VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
 	CollectorLogsTransformation *string `pulumi:"collectorLogsTransformation"`
@@ -429,7 +429,7 @@ type collectorArgs struct {
 
 // The set of arguments for constructing a Collector resource.
 type CollectorArgs struct {
-	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+	// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 	BlockedMetrics pulumi.StringArrayInput
 	// VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
 	CollectorLogsTransformation pulumi.StringPtrInput
@@ -564,7 +564,7 @@ func (o CollectorOutput) ToCollectorOutputWithContext(ctx context.Context) Colle
 	return o
 }
 
-// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
 func (o CollectorOutput) BlockedMetrics() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Collector) pulumi.StringArrayOutput { return v.BlockedMetrics }).(pulumi.StringArrayOutput)
 }

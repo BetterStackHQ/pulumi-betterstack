@@ -24,14 +24,14 @@ public final class CollectorState extends com.pulumi.resources.ResourceArgs {
     public static final CollectorState Empty = new CollectorState();
 
     /**
-     * Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      * 
      */
     @Import(name="blockedMetrics")
     private @Nullable Output<List<String>> blockedMetrics;
 
     /**
-     * @return Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * @return Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      * 
      */
     public Optional<Output<List<String>>> blockedMetrics() {
@@ -543,7 +543,7 @@ public final class CollectorState extends com.pulumi.resources.ResourceArgs {
         }
 
         /**
-         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
          * 
          * @return builder
          * 
@@ -554,7 +554,7 @@ public final class CollectorState extends com.pulumi.resources.ResourceArgs {
         }
 
         /**
-         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
          * 
          * @return builder
          * 
@@ -564,7 +564,7 @@ public final class CollectorState extends com.pulumi.resources.ResourceArgs {
         }
 
         /**
-         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+         * @param blockedMetrics Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
          * 
          * @return builder
          * 

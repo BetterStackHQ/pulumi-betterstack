@@ -1,5 +1,5 @@
 {
-    "version": "1.4.2",
+    "version": "1.4.3",
     "name": "betterstack",
     "displayName": "Better Stack",
     "description": "A Pulumi package for managing errors, incidents and telemetry resources in Better Stack.",
@@ -18465,7 +18465,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).\n"
+                    "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.\n"
                 },
                 "collectorLogsTransformation": {
                     "type": "string",
@@ -18625,7 +18625,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).\n"
+                    "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.\n"
                 },
                 "collectorLogsTransformation": {
                     "type": "string",
@@ -18743,7 +18743,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).\n"
+                        "description": "Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.\n"
                     },
                     "collectorLogsTransformation": {
                         "type": "string",
@@ -25435,7 +25435,7 @@
             "properties": {
                 "customWebhookTemplate": {
                     "$ref": "#/types/betterstack:index/IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate:IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate",
-                    "description": "The saved request template, returned under 'included'. null when the webhook sends its default body.\n"
+                    "description": "The saved request template, returned under 'included'. null when the webhook has no custom template.\n"
                 },
                 "customWebhookTemplateAttributes": {
                     "$ref": "#/types/betterstack:index/IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes:IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes",
@@ -25459,7 +25459,7 @@
                 },
                 "onIncidentComment": {
                     "type": "boolean",
-                    "description": "Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
+                    "description": "Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
                 },
                 "onIncidentReopened": {
                     "type": "boolean",
@@ -25542,7 +25542,7 @@
                 },
                 "onIncidentComment": {
                     "type": "boolean",
-                    "description": "Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
+                    "description": "Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
                 },
                 "onIncidentReopened": {
                     "type": "boolean",
@@ -25587,7 +25587,7 @@
                 "properties": {
                     "customWebhookTemplate": {
                         "$ref": "#/types/betterstack:index/IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate:IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate",
-                        "description": "The saved request template, returned under 'included'. null when the webhook sends its default body.\n"
+                        "description": "The saved request template, returned under 'included'. null when the webhook has no custom template.\n"
                     },
                     "customWebhookTemplateAttributes": {
                         "$ref": "#/types/betterstack:index/IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes:IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes",
@@ -25620,7 +25620,7 @@
                     },
                     "onIncidentComment": {
                         "type": "boolean",
-                        "description": "Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
+                        "description": "Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n"
                     },
                     "onIncidentReopened": {
                         "type": "boolean",
@@ -33426,7 +33426,7 @@
                 "properties": {
                     "customWebhookTemplate": {
                         "$ref": "#/types/betterstack:index/getIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate:getIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate",
-                        "description": "The saved request template, returned under 'included'. null when the webhook sends its default body.\n"
+                        "description": "The saved request template, returned under 'included'. null when the webhook has no custom template.\n"
                     },
                     "customWebhookTemplateAttributes": {
                         "$ref": "#/types/betterstack:index/getIncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes:getIncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes",
@@ -33453,7 +33453,7 @@
                         "type": "boolean"
                     },
                     "onIncidentComment": {
-                        "description": "Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n",
+                        "description": "Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.\n",
                         "type": "boolean"
                     },
                     "onIncidentReopened": {

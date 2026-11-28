@@ -14,7 +14,7 @@ import java.util.Objects;
 @CustomType
 public final class GetIncidentsOutgoingWebhookIntegrationResult {
     /**
-     * @return The saved request template, returned under &#39;included&#39;. null when the webhook sends its default body.
+     * @return The saved request template, returned under &#39;included&#39;. null when the webhook has no custom template.
      * 
      */
     private GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate customWebhookTemplate;
@@ -49,7 +49,7 @@ public final class GetIncidentsOutgoingWebhookIntegrationResult {
      */
     private Boolean onIncidentAcknowledged;
     /**
-     * @return Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * @return Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     private Boolean onIncidentComment;
@@ -96,7 +96,7 @@ public final class GetIncidentsOutgoingWebhookIntegrationResult {
 
     private GetIncidentsOutgoingWebhookIntegrationResult() {}
     /**
-     * @return The saved request template, returned under &#39;included&#39;. null when the webhook sends its default body.
+     * @return The saved request template, returned under &#39;included&#39;. null when the webhook has no custom template.
      * 
      */
     public GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate customWebhookTemplate() {
@@ -145,7 +145,7 @@ public final class GetIncidentsOutgoingWebhookIntegrationResult {
         return this.onIncidentAcknowledged;
     }
     /**
-     * @return Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * @return Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     public Boolean onIncidentComment() {

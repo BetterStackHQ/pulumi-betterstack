@@ -114,7 +114,7 @@ export class Collector extends pulumi.CustomResource {
     }
 
     /**
-     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      */
     declare public readonly blockedMetrics: pulumi.Output<string[]>;
     /**
@@ -334,7 +334,7 @@ export class Collector extends pulumi.CustomResource {
  */
 export interface CollectorState {
     /**
-     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      */
     blockedMetrics?: pulumi.Input<pulumi.Input<string>[] | undefined>;
     /**
@@ -464,7 +464,7 @@ export interface CollectorState {
  */
 export interface CollectorArgs {
     /**
-     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      */
     blockedMetrics?: pulumi.Input<pulumi.Input<string>[] | undefined>;
     /**

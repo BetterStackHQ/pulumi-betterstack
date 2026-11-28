@@ -97,14 +97,14 @@ public final class IncidentsOutgoingWebhookIntegrationArgs extends com.pulumi.re
     }
 
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     @Import(name="onIncidentComment")
     private @Nullable Output<Boolean> onIncidentComment;
 
     /**
-     * @return Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * @return Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     public Optional<Output<Boolean>> onIncidentComment() {
@@ -362,7 +362,7 @@ public final class IncidentsOutgoingWebhookIntegrationArgs extends com.pulumi.re
         }
 
         /**
-         * @param onIncidentComment Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+         * @param onIncidentComment Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
          * 
          * @return builder
          * 
@@ -373,7 +373,7 @@ public final class IncidentsOutgoingWebhookIntegrationArgs extends com.pulumi.re
         }
 
         /**
-         * @param onIncidentComment Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+         * @param onIncidentComment Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
          * 
          * @return builder
          * 

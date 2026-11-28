@@ -120,7 +120,7 @@ namespace Pulumi.BetterStack
     public partial class Collector : global::Pulumi.CustomResource
     {
         /// <summary>
-        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         /// </summary>
         [Output("blockedMetrics")]
         public Output<ImmutableArray<string>> BlockedMetrics { get; private set; } = null!;
@@ -360,7 +360,7 @@ namespace Pulumi.BetterStack
         private InputList<string>? _blockedMetrics;
 
         /// <summary>
-        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         /// </summary>
         public InputList<string> BlockedMetrics
         {
@@ -524,7 +524,7 @@ namespace Pulumi.BetterStack
         private InputList<string>? _blockedMetrics;
 
         /// <summary>
-        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        /// Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         /// </summary>
         public InputList<string> BlockedMetrics
         {

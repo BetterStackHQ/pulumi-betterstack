@@ -177,14 +177,14 @@ import javax.annotation.Nullable;
 @ResourceType(type="betterstack:index/collector:Collector")
 public class Collector extends com.pulumi.resources.CustomResource {
     /**
-     * Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      * 
      */
     @Export(name="blockedMetrics", refs={List.class,String.class}, tree="[0,1]")
     private Output<List<String>> blockedMetrics;
 
     /**
-     * @return Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+     * @return Metric names marked as spam, which are dropped when they&#39;re ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
      * 
      */
     public Output<List<String>> blockedMetrics() {

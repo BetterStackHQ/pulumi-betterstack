@@ -44,7 +44,7 @@ class IncidentsOutgoingWebhookIntegrationArgs:
         :param pulumi.Input[_builtins.str] name: The integration's name, shown in the dashboard.
         :param pulumi.Input[_builtins.bool] notify_alongside_primary_responder: Whether to send the webhook alongside the primary responder when the incident has no escalation policy. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_acknowledged: Whether to send the webhook when an incident is acknowledged. Only for an 'incident_change' webhook. Defaults to true.
-        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_reopened: Whether to send the webhook when an incident is reopened. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_resolved: Whether to send the webhook when an incident is resolved. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_started: Whether to send the webhook when an incident starts. Only for an 'incident_change' webhook. Defaults to true.
@@ -161,7 +161,7 @@ class IncidentsOutgoingWebhookIntegrationArgs:
     @pulumi.getter(name="onIncidentComment")
     def on_incident_comment(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         """
         return pulumi.get(self, "on_incident_comment")
 
@@ -239,13 +239,13 @@ class _IncidentsOutgoingWebhookIntegrationState:
         """
         Input properties used for looking up and filtering IncidentsOutgoingWebhookIntegration resources.
 
-        :param pulumi.Input['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgs'] custom_webhook_template: The saved request template, returned under 'included'. null when the webhook sends its default body.
+        :param pulumi.Input['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgs'] custom_webhook_template: The saved request template, returned under 'included'. null when the webhook has no custom template.
         :param pulumi.Input['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributesArgs'] custom_webhook_template_attributes: Custom request method, headers, body and basic authentication. Without it, an 'incident_change' or 'monitor_change' webhook sends the incident or monitor under 'data', with what happened in 'event', such as 'started' or 'created'. An 'on_call_change' webhook then sends the on-call calendar's 'message', 'emails', 'on_holiday_emails', 'change', 'calendar_id', 'calendar_name' and 'primary_calendar' under 'data'. It comes back as `custom_webhook_template`. Better Stack never returns it, so Pulumi keeps the value you set.
         :param pulumi.Input[Union[_builtins.str, 'IncidentsOutgoingWebhookIntegrationMetadataApiVersion']] metadata_api_version: How the `$METADATA` variables in the URL and `body_template` render. Defaults to 'v3'. 'v2': Renders `$METADATA.<key>` as the key's last plain-text value. 'v3': Renders `$METADATA.<key>` as all the key's values joined by commas. `$METADATA_ARRAY` and `$METADATA.<key>.values` list each value with its type.
         :param pulumi.Input[_builtins.str] name: The integration's name, shown in the dashboard.
         :param pulumi.Input[_builtins.bool] notify_alongside_primary_responder: Whether to send the webhook alongside the primary responder when the incident has no escalation policy. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_acknowledged: Whether to send the webhook when an incident is acknowledged. Only for an 'incident_change' webhook. Defaults to true.
-        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_reopened: Whether to send the webhook when an incident is reopened. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_resolved: Whether to send the webhook when an incident is resolved. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_started: Whether to send the webhook when an incident starts. Only for an 'incident_change' webhook. Defaults to true.
@@ -290,7 +290,7 @@ class _IncidentsOutgoingWebhookIntegrationState:
     @pulumi.getter(name="customWebhookTemplate")
     def custom_webhook_template(self) -> pulumi.Input[Optional['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgs']]:
         """
-        The saved request template, returned under 'included'. null when the webhook sends its default body.
+        The saved request template, returned under 'included'. null when the webhook has no custom template.
         """
         return pulumi.get(self, "custom_webhook_template")
 
@@ -362,7 +362,7 @@ class _IncidentsOutgoingWebhookIntegrationState:
     @pulumi.getter(name="onIncidentComment")
     def on_incident_comment(self) -> pulumi.Input[Optional[_builtins.bool]]:
         """
-        Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         """
         return pulumi.get(self, "on_incident_comment")
 
@@ -579,7 +579,7 @@ class IncidentsOutgoingWebhookIntegration(pulumi.CustomResource):
         :param pulumi.Input[_builtins.str] name: The integration's name, shown in the dashboard.
         :param pulumi.Input[_builtins.bool] notify_alongside_primary_responder: Whether to send the webhook alongside the primary responder when the incident has no escalation policy. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_acknowledged: Whether to send the webhook when an incident is acknowledged. Only for an 'incident_change' webhook. Defaults to true.
-        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_reopened: Whether to send the webhook when an incident is reopened. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_resolved: Whether to send the webhook when an incident is resolved. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_started: Whether to send the webhook when an incident starts. Only for an 'incident_change' webhook. Defaults to true.
@@ -766,13 +766,13 @@ class IncidentsOutgoingWebhookIntegration(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Union['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgs', 'IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgsDict', 'outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate']] custom_webhook_template: The saved request template, returned under 'included'. null when the webhook sends its default body.
+        :param pulumi.Input[Union['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgs', 'IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateArgsDict', 'outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate']] custom_webhook_template: The saved request template, returned under 'included'. null when the webhook has no custom template.
         :param pulumi.Input[Union['IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributesArgs', 'IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributesArgsDict', 'outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes']] custom_webhook_template_attributes: Custom request method, headers, body and basic authentication. Without it, an 'incident_change' or 'monitor_change' webhook sends the incident or monitor under 'data', with what happened in 'event', such as 'started' or 'created'. An 'on_call_change' webhook then sends the on-call calendar's 'message', 'emails', 'on_holiday_emails', 'change', 'calendar_id', 'calendar_name' and 'primary_calendar' under 'data'. It comes back as `custom_webhook_template`. Better Stack never returns it, so Pulumi keeps the value you set.
         :param pulumi.Input[Union[_builtins.str, 'IncidentsOutgoingWebhookIntegrationMetadataApiVersion']] metadata_api_version: How the `$METADATA` variables in the URL and `body_template` render. Defaults to 'v3'. 'v2': Renders `$METADATA.<key>` as the key's last plain-text value. 'v3': Renders `$METADATA.<key>` as all the key's values joined by commas. `$METADATA_ARRAY` and `$METADATA.<key>.values` list each value with its type.
         :param pulumi.Input[_builtins.str] name: The integration's name, shown in the dashboard.
         :param pulumi.Input[_builtins.bool] notify_alongside_primary_responder: Whether to send the webhook alongside the primary responder when the incident has no escalation policy. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_acknowledged: Whether to send the webhook when an incident is acknowledged. Only for an 'incident_change' webhook. Defaults to true.
-        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        :param pulumi.Input[_builtins.bool] on_incident_comment: Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_reopened: Whether to send the webhook when an incident is reopened. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_resolved: Whether to send the webhook when an incident is resolved. Only for an 'incident_change' webhook. Defaults to true.
         :param pulumi.Input[_builtins.bool] on_incident_started: Whether to send the webhook when an incident starts. Only for an 'incident_change' webhook. Defaults to true.
@@ -807,7 +807,7 @@ class IncidentsOutgoingWebhookIntegration(pulumi.CustomResource):
     @pulumi.getter(name="customWebhookTemplate")
     def custom_webhook_template(self) -> pulumi.Output['outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate']:
         """
-        The saved request template, returned under 'included'. null when the webhook sends its default body.
+        The saved request template, returned under 'included'. null when the webhook has no custom template.
         """
         return pulumi.get(self, "custom_webhook_template")
 
@@ -855,7 +855,7 @@ class IncidentsOutgoingWebhookIntegration(pulumi.CustomResource):
     @pulumi.getter(name="onIncidentComment")
     def on_incident_comment(self) -> pulumi.Output[_builtins.bool]:
         """
-        Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+        Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
         """
         return pulumi.get(self, "on_incident_comment")
 

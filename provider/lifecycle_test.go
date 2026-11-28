@@ -597,7 +597,8 @@ func TestProtectedCollectorIsNotDeletedByADestroy(t *testing.T) {
 	defer mock.Close()
 
 	ctx := context.Background()
-	srv, err := NewServer(ctx, nil, providerMetadata(t))
+	logs := &recordingSink{}
+	srv, err := NewServer(ctx, logs, providerMetadata(t))
 	if err != nil {
 		t.Fatalf("NewServer: %v", err)
 	}
@@ -638,6 +639,15 @@ func TestProtectedCollectorIsNotDeletedByADestroy(t *testing.T) {
 	}
 	if strings.Contains(status.Convert(err).Message(), "deletion_protection = false") {
 		t.Errorf("the deletion protection error gives Terraform's fix under Pulumi: %q", status.Convert(err).Message())
+	}
+	// Said once: the bridge's own log line of the same error would repeat it in the other order.
+	if msg := status.Convert(err).Message(); strings.Count(msg, "Deletion protection is on") != 1 || strings.Count(msg, "irreversible action") != 1 {
+		t.Errorf("the deletion protection error must say it once, got %q", msg)
+	}
+	for _, line := range logs.errors() {
+		if strings.Contains(line, "Deletion protection is on") {
+			t.Errorf("the deletion protection error is logged as well as returned: %q", line)
+		}
 	}
 	if len(deletes) != 0 {
 		t.Fatalf("a protected collector reached the API: %v", deletes)

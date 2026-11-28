@@ -179,14 +179,14 @@ import javax.annotation.Nullable;
 @ResourceType(type="betterstack:index/incidentsOutgoingWebhookIntegration:IncidentsOutgoingWebhookIntegration")
 public class IncidentsOutgoingWebhookIntegration extends com.pulumi.resources.CustomResource {
     /**
-     * The saved request template, returned under &#39;included&#39;. null when the webhook sends its default body.
+     * The saved request template, returned under &#39;included&#39;. null when the webhook has no custom template.
      * 
      */
     @Export(name="customWebhookTemplate", refs={IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate.class}, tree="[0]")
     private Output<IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate> customWebhookTemplate;
 
     /**
-     * @return The saved request template, returned under &#39;included&#39;. null when the webhook sends its default body.
+     * @return The saved request template, returned under &#39;included&#39;. null when the webhook has no custom template.
      * 
      */
     public Output<IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate> customWebhookTemplate() {
@@ -263,14 +263,14 @@ public class IncidentsOutgoingWebhookIntegration extends com.pulumi.resources.Cu
         return this.onIncidentAcknowledged;
     }
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     @Export(name="onIncidentComment", refs={Boolean.class}, tree="[0]")
     private Output<Boolean> onIncidentComment;
 
     /**
-     * @return Whether to send the webhook when a comment is added to an incident. The default body then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
+     * @return Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a &#39;comment&#39; object, whose &#39;attributes&#39; hold the comment&#39;s &#39;content&#39;, &#39;created_at&#39;, &#39;updated_at&#39;, &#39;user_id&#39; and &#39;user_email&#39;. Only for an &#39;incident_change&#39; webhook. Defaults to true.
      * 
      */
     public Output<Boolean> onIncidentComment() {

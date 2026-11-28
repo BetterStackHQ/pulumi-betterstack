@@ -58,7 +58,7 @@ type LookupIncidentsOutgoingWebhookIntegrationArgs struct {
 
 // A collection of values returned by getIncidentsOutgoingWebhookIntegration.
 type LookupIncidentsOutgoingWebhookIntegrationResult struct {
-	// The saved request template, returned under 'included'. null when the webhook sends its default body.
+	// The saved request template, returned under 'included'. null when the webhook has no custom template.
 	CustomWebhookTemplate GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate `pulumi:"customWebhookTemplate"`
 	// Custom request method, headers, body and basic authentication. Without it, an 'incident_change' or 'monitor_change' webhook sends the incident or monitor under 'data', with what happened in 'event', such as 'started' or 'created'. An 'on_call_change' webhook then sends the on-call calendar's 'message', 'emails', 'on_holiday_emails', 'change', 'calendar_id', 'calendar_name' and 'primary_calendar' under 'data'. It comes back as `customWebhookTemplate`.
 	CustomWebhookTemplateAttributes GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplateAttributes `pulumi:"customWebhookTemplateAttributes"`
@@ -72,7 +72,7 @@ type LookupIncidentsOutgoingWebhookIntegrationResult struct {
 	NotifyAlongsidePrimaryResponder bool `pulumi:"notifyAlongsidePrimaryResponder"`
 	// Whether to send the webhook when an incident is acknowledged. Only for an 'incident_change' webhook. Defaults to true.
 	OnIncidentAcknowledged bool `pulumi:"onIncidentAcknowledged"`
-	// Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+	// Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
 	OnIncidentComment bool `pulumi:"onIncidentComment"`
 	// Whether to send the webhook when an incident is reopened. Only for an 'incident_change' webhook. Defaults to true.
 	OnIncidentReopened bool `pulumi:"onIncidentReopened"`
@@ -124,7 +124,7 @@ func (o LookupIncidentsOutgoingWebhookIntegrationResultOutput) ToLookupIncidents
 	return o
 }
 
-// The saved request template, returned under 'included'. null when the webhook sends its default body.
+// The saved request template, returned under 'included'. null when the webhook has no custom template.
 func (o LookupIncidentsOutgoingWebhookIntegrationResultOutput) CustomWebhookTemplate() GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplateOutput {
 	return o.ApplyT(func(v LookupIncidentsOutgoingWebhookIntegrationResult) GetIncidentsOutgoingWebhookIntegrationCustomWebhookTemplate {
 		return v.CustomWebhookTemplate
@@ -163,7 +163,7 @@ func (o LookupIncidentsOutgoingWebhookIntegrationResultOutput) OnIncidentAcknowl
 	return o.ApplyT(func(v LookupIncidentsOutgoingWebhookIntegrationResult) bool { return v.OnIncidentAcknowledged }).(pulumi.BoolOutput)
 }
 
-// Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+// Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
 func (o LookupIncidentsOutgoingWebhookIntegrationResultOutput) OnIncidentComment() pulumi.BoolOutput {
 	return o.ApplyT(func(v LookupIncidentsOutgoingWebhookIntegrationResult) bool { return v.OnIncidentComment }).(pulumi.BoolOutput)
 }

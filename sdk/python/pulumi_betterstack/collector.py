@@ -50,7 +50,7 @@ class CollectorArgs:
 
         :param pulumi.Input[_builtins.str] name: Collector name.
         :param pulumi.Input[Union[_builtins.str, 'CollectorPlatform']] platform: Where the collector runs. Can't be changed after the collector is created. Valid values: 'docker', 'swarm', 'kubernetes'.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         :param pulumi.Input[_builtins.str] collector_logs_transformation: VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_metrics_transformation: VRL program the collector runs on each metric on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_traces_transformation: VRL program the collector runs on each span on your hardware, before sending it to Better Stack. Remove the argument to clear it.
@@ -145,7 +145,7 @@ class CollectorArgs:
     @pulumi.getter(name="blockedMetrics")
     def blocked_metrics(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         """
         return pulumi.get(self, "blocked_metrics")
 
@@ -431,7 +431,7 @@ class _CollectorState:
         """
         Input properties used for looking up and filtering Collector resources.
 
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         :param pulumi.Input[_builtins.str] collector_logs_transformation: VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_metrics_transformation: VRL program the collector runs on each metric on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_traces_transformation: VRL program the collector runs on each span on your hardware, before sending it to Better Stack. Remove the argument to clear it.
@@ -530,7 +530,7 @@ class _CollectorState:
     @pulumi.getter(name="blockedMetrics")
     def blocked_metrics(self) -> pulumi.Input[Optional[Sequence[pulumi.Input[_builtins.str]]]]:
         """
-        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         """
         return pulumi.get(self, "blocked_metrics")
 
@@ -1007,7 +1007,7 @@ class Collector(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         :param pulumi.Input[_builtins.str] collector_logs_transformation: VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_metrics_transformation: VRL program the collector runs on each metric on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_traces_transformation: VRL program the collector runs on each span on your hardware, before sending it to Better Stack. Remove the argument to clear it.
@@ -1245,7 +1245,7 @@ class Collector(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        :param pulumi.Input[Sequence[pulumi.Input[_builtins.str]]] blocked_metrics: Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         :param pulumi.Input[_builtins.str] collector_logs_transformation: VRL program the collector runs on each log line on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_metrics_transformation: VRL program the collector runs on each metric on your hardware, before sending it to Better Stack. Remove the argument to clear it.
         :param pulumi.Input[_builtins.str] collector_traces_transformation: VRL program the collector runs on each span on your hardware, before sending it to Better Stack. Remove the argument to clear it.
@@ -1318,7 +1318,7 @@ class Collector(pulumi.CustomResource):
     @pulumi.getter(name="blockedMetrics")
     def blocked_metrics(self) -> pulumi.Output[Sequence[_builtins.str]]:
         """
-        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/).
+        Metric names marked as spam, which are dropped when they're ingested. Read more about [marking metrics as spam](https://betterstack.com/docs/logs/using-logtail/transforming-ingested-data/mark-metrics-as-spam/). Defaults to `[]`.
         """
         return pulumi.get(self, "blocked_metrics")
 

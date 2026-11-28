@@ -124,7 +124,7 @@ export class IncidentsOutgoingWebhookIntegration extends pulumi.CustomResource {
     }
 
     /**
-     * The saved request template, returned under 'included'. null when the webhook sends its default body.
+     * The saved request template, returned under 'included'. null when the webhook has no custom template.
      */
     declare public /*out*/ readonly customWebhookTemplate: pulumi.Output<outputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate>;
     /**
@@ -148,7 +148,7 @@ export class IncidentsOutgoingWebhookIntegration extends pulumi.CustomResource {
      */
     declare public readonly onIncidentAcknowledged: pulumi.Output<boolean>;
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
      */
     declare public readonly onIncidentComment: pulumi.Output<boolean>;
     /**
@@ -246,7 +246,7 @@ export class IncidentsOutgoingWebhookIntegration extends pulumi.CustomResource {
  */
 export interface IncidentsOutgoingWebhookIntegrationState {
     /**
-     * The saved request template, returned under 'included'. null when the webhook sends its default body.
+     * The saved request template, returned under 'included'. null when the webhook has no custom template.
      */
     customWebhookTemplate?: pulumi.Input<inputs.IncidentsOutgoingWebhookIntegrationCustomWebhookTemplate | undefined>;
     /**
@@ -270,7 +270,7 @@ export interface IncidentsOutgoingWebhookIntegrationState {
      */
     onIncidentAcknowledged?: pulumi.Input<boolean | undefined>;
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
      */
     onIncidentComment?: pulumi.Input<boolean | undefined>;
     /**
@@ -332,7 +332,7 @@ export interface IncidentsOutgoingWebhookIntegrationArgs {
      */
     onIncidentAcknowledged?: pulumi.Input<boolean | undefined>;
     /**
-     * Whether to send the webhook when a comment is added to an incident. The default body then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
+     * Whether to send the webhook when a comment is added to an incident. The body sent without a custom template then also has a 'comment' object, whose 'attributes' hold the comment's 'content', 'created_at', 'updated_at', 'user_id' and 'user_email'. Only for an 'incident_change' webhook. Defaults to true.
      */
     onIncidentComment?: pulumi.Input<boolean | undefined>;
     /**
